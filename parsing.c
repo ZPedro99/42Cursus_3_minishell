@@ -106,9 +106,9 @@ int	parsing(t_minishell *shell)
 		print_exp(shell);
 	if(string_comp(shell->command, "clear"))
 	{
-		pid = fork();
+		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
 		if (!pid)
-			execve("/usr/bin/clear", clear_test, env_copy(shell->env));
+			execve("/usr/bin/clear", clear_test, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
 	}
 	return (0);
 }
