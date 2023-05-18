@@ -63,6 +63,5 @@ char	**env_copy(t_list *lst);
 int		string_comp(char *s1, char *s2);
 void	print_exp(t_minishell *shell);
 
-se tas a ler isto es gay
 
 #endif
