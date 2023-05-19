@@ -62,6 +62,6 @@ void	print_env(t_minishell *shell);
 char	**env_copy(t_list *lst);
 int		string_comp(char *s1, char *s2);
 void	print_exp(t_minishell *shell);
-
+void	sort_exp(t_list *lst, t_list *head);
 
 #endif
