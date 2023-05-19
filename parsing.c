@@ -37,11 +37,11 @@ void	print_exp(t_minishell *shell)
 
 	temp = shell->exp;
 	sort_exp(temp, shell->exp);
-	while(temp)
+	/*while(temp)
 	{
 		printf("%s\n", ((t_env *)(temp->content))->info);
 		temp = temp->next;
-	}
+	}*/
 }
 
 int	len_compare(char *s1, char *s2)
@@ -53,19 +53,48 @@ int	len_compare(char *s1, char *s2)
 	return(ft_strlen(s1));
 }
 
-void	sort_exp(t_list *lst, t_list *head);
+void	sort_exp(t_list *lst, t_list *head)
 {
-	int	size;
+	int		size;
+	int		size_string;
+	char	**exp_array;
+	int		i;
+	char	*temp1;
+	char	*temp2;
 
-	size = len_compare((t_env *)(lst->content)->name, (t_env *)(lst->next->content)->name);
-	while(lst)
+	(void)head;
+	i = 0;
+	size = ft_lstsize(lst);
+	exp_array = (char **)malloc(sizeof(char *) * (size + 1));
+	while(i < size)
 	{
-		if(ft_strncmp((t_env *)(lst->content)->name, (t_env *)(lst->next->content)->name), size)
-		{
-
-		}
+		exp_array[i] = ((t_env *)(lst->content))->info;
+		i++;
+		lst = lst->next;
 	}
-
+	i = 0;
+	while(i < size - 1)
+	{
+		size_string = len_compare(exp_array[i], exp_array[i + 1]);
+		if(ft_strncmp(exp_array[i], exp_array[i + 1], size_string) > 0)
+		{
+			temp1 = ft_strdup(exp_array[i]);
+			temp2 = ft_strdup(exp_array[i + 1]);
+			free(exp_array[i]);
+			free(exp_array[i + 1]);
+			exp_array[i] = ft_strdup(temp2);
+			exp_array[i + 1] = ft_strdup(temp1);
+			i = 0;
+		}
+		else
+			i++;
+	}
+	i = 0;
+	while(i < size)
+	{
+		printf("%s\n", exp_array[i]);
+		i++;
+	}
 }
 
 char	**env_copy(t_list *lst)
@@ -106,9 +135,9 @@ int	parsing(t_minishell *shell)
 		print_exp(shell);
 	if(string_comp(shell->command, "clear"))
 	{
-		pid = fork();
+		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
 		if (!pid)
-			execve("/usr/bin/clear", clear_test, env_copy(shell->env));
+			execve("/usr/bin/clear", clear_test, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
 	}
 	return (0);
 }
