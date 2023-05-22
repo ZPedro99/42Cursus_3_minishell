@@ -28,7 +28,7 @@ t_list	*get_exp_vars(char **env)
 		temp = temp->next;
 		i++;
 	}
-	return(head);
+	return (head);
 }
 
 t_env	*create_exp_node(char *env)
@@ -38,36 +38,44 @@ t_env	*create_exp_node(char *env)
 	exp_var = malloc(sizeof(t_env));
 	exp_var->name = get_var_name(env);
 	exp_var->info = get_exp_info(env);
-	return(exp_var);
+	return (exp_var);
 }
 
 char	*get_exp_info(char *env)
 {
-	char	*exp;
 	char	*value;
-	char  *name;
-	char 	*temp1;
+	char	*name;
+	char	*temp1;
 	int		i;
-	int		j;
-	int		size;
-	int size1;
-	int x;
+	int		x;
+
 	i = 0;
-	j = 0;
 	x = 0;
-	size = 0;
-	size1 = 0;
-	while(env[i] != '=')
+	while (env[i] != '=')
 	{
 		i++;
 		x++;
 	}
-	size = ft_strlen(env + i);
-	size1= ft_strlen(env) - size;
-	value = malloc(sizeof(char) * (size + 3));
-	name = malloc(sizeof(char) * (size1 + 1));
+	value = malloc(sizeof(char) * ((ft_strlen(env + i)) + 3));
+	name = malloc(sizeof(char) * ((ft_strlen(env) - ft_strlen(env + i)) + 2));
+	name = get_name(name, env);
+	value = get_value(value, env, x);
+	temp1 = ft_strjoin("declare -x ", name);
+	free(name);
+	name = ft_strjoin(temp1, value);
+	free(temp1);
+	free(value);
+	return (name);
+}
+
+char	*get_name(char *name, char *env)
+{
+	int	i;
+	int	j;
+
 	i = 0;
-	while(env[i] != '=')
+	j = 0;
+	while (env[i] != '=')
 	{
 		name[j] = env[i];
 		i++;
@@ -76,59 +84,24 @@ char	*get_exp_info(char *env)
 	name[j] = '=';
 	j++;
 	name[j] = '\0';
-	i++;
-	j = 1;
-	value[0] = '"';
-	x++;
-	while(env[x] != '\0')
-	{
-		value[j] = env[x];
-		j++;
-		x++;
-	}
-	value[j] = '"';
-	j++;
-	value[j] = '\0';
-	
-	temp1 = ft_strjoin("declare -x ", name);
-	free(name);
-	exp = ft_strjoin(temp1, value);
-	free(temp1);
-	free(value);
-	return(exp);
+	return (name);
 }
 
-	/* char *exp;
-	char *temp;
-	int size;
-	int i;
-	int j;
+char	*get_value(char *value, char *env, int x)
+{
+	int	i;
 
-	i = 0;
-	j = 0;
-	size = 0;
-	
-	temp = ft_strjoin("declare -x ", env);
-	size = ft_strlen(temp);
-	exp = (char *)malloc(sizeof(char) * (size + 3));
-	i = 0;
-	j = 0;
-	while (temp[i])
+	i = 1;
+	value[0] = '"';
+	x++;
+	while (env[x] != '\0')
 	{
-		exp[j] = temp[i];
-		if (temp[i] == '=')
-		{
-			j++;
-			exp[j] = '"';
-			j++;
-		}
-		else
-			j++;
+		value[i] = env[x];
 		i++;
+		x++;
 	}
-	//j++;
-	exp[j] = '"';
-	j++;
-	exp[j] = '\0';
-	free(temp);
-	return(exp); */
+	value[i] = '"';
+	i++;
+	value[i] = '\0';
+	return (value);
+}

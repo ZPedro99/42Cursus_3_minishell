@@ -50,6 +50,8 @@ char	*get_var_name(char *env);
 t_list	*get_exp_vars(char **env);
 t_env	*create_exp_node(char *env);
 char	*get_exp_info(char *env);
+char	*get_name(char *name, char *env);
+char	*get_value(char *value, char *env, int x);
 
 //***********free***********//
 

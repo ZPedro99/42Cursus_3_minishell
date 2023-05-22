@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
-RFLAG = -lreadline
+RFLAG = -lreadline -fsanitize=address
 RM = rm -rf
 
 LIBFT = ./libft/libft.a

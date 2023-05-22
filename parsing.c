@@ -122,7 +122,7 @@ int	parsing(t_minishell *shell)
 	char	**clear_test;
 
 	clear_test = malloc(sizeof(char *) * 2);
-	clear_test[0] = shell->command;
+	clear_test[0] = ft_strdup(shell->command);
 	clear_test[1] = NULL;
 	if(string_comp(shell->command, "exit"))
 	{
@@ -138,6 +138,15 @@ int	parsing(t_minishell *shell)
 		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
 		if (!pid)
 			execve("/usr/bin/clear", clear_test, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
+		/*else
+		{
+			free(clear_test[0]);
+			free(clear_test[1]);
+			free(clear_test);
+		}*/
 	}
+	free(clear_test[0]);
+	free(clear_test[1]);
+	free(clear_test);
 	return (0);
 }
