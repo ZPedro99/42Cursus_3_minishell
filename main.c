@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/17 10:57:13 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:35:30 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	while(1)
 	{
 		shell.command = readline(shell.prompt);
+		add_history(shell.command);
 		if(parsing(&shell))
 			break;
 		wait(0);
