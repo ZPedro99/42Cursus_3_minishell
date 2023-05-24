@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/23 15:05:40 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/24 11:31:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
+	int			i;
 
+	i = 0;
 	(void)argv;
 	if (argc > 1)
 	{
@@ -34,9 +36,16 @@ int	main(int argc, char **argv, char **envp)
 		wait(0);
 		free(shell.command);
 	}
+	while(shell.command_splited[i])
+	{
+		free(shell.command_splited[i]);
+		i++;
+	}
+	free(shell.command);
+	free(shell.command_splited);
 	free(shell.prompt);
-	free_lists(shell.env);
-	free_lists(shell.exp);
+	free_env(shell.env);
+	free_exp(shell.exp);
 	shell.exp = NULL; // Set shell.exp to NULL to avoid double-freeing
 	return (0);
 }

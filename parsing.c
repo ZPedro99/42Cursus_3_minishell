@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/23 15:07:39 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/24 11:23:40 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,6 @@ void	print_exp(t_minishell *shell)
 
 	temp = shell->exp;
 	sort_exp(temp, shell->exp);
-	/*while(temp)
-	{
-		printf("%s\n", ((t_env *)(temp->content))->info);
-		temp = temp->next;
-	}*/
 }
 
 int	len_compare(char *s1, char *s2)
@@ -84,6 +79,8 @@ void	sort_exp(t_list *lst, t_list *head)
 			free(exp_array[i + 1]);
 			exp_array[i] = ft_strdup(temp2);
 			exp_array[i + 1] = ft_strdup(temp1);
+			free(temp1);
+			free(temp2);
 			i = 0;
 		}
 		else
@@ -93,8 +90,10 @@ void	sort_exp(t_list *lst, t_list *head)
 	while(i < size)
 	{
 		printf("%s\n", exp_array[i]);
+		free(exp_array[i]);
 		i++;
 	}
+	free(exp_array);
 }
 
 char	**env_copy(t_list *lst)
@@ -119,34 +118,35 @@ char	**env_copy(t_list *lst)
 int	parsing(t_minishell *shell)
 {
 	pid_t	pid;
-	char	**clear_test;
+	int		i;
 
-	clear_test = malloc(sizeof(char *) * 2);
-	clear_test[0] = shell->command;
-	clear_test[1] = NULL;
-	if(string_comp(shell->command, "exit"))
+	shell->command_splited = ft_split(shell->command, ' ');
+	if(string_comp(shell->command_splited[0], "exit"))
 	{
 		printf("%s\n", shell->command);
 		return (1);
 	}
-	if(string_comp(shell->command, "pwd"))
+	if(string_comp(shell->command_splited[0], "pwd"))
 		print_pwd(shell);
-	if(string_comp(shell->command, "env"))
+	if(string_comp(shell->command_splited[0], "env"))
 		print_env(shell);
-	if(string_comp(shell->command, "export"))
+	if(string_comp(shell->command_splited[0], "echo"))
+		print_echo(shell);
+	if(string_comp(shell->command_splited[0], "export"))
 		print_exp(shell);
-	if(string_comp(shell->command, "clear"))
+	if(string_comp(shell->command_splited[0], "clear"))
 	{
 		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
 		if (!pid)
-			execve("/usr/bin/clear", clear_test, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
-		/*else
-		{
-			free(clear_test[0]);
-			free(clear_test[1]);
-			free(clear_test);
-		}*/
+			execve("/usr/bin/clear", shell->command_splited, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
 	}
-	free(clear_test);
+	i = 0;
+	while(shell->command_splited[i])
+	{
+		free(shell->command_splited[i]);
+		i++;
+	}
+	free(shell->command_splited[i]);
+	free(shell->command_splited);
 	return (0);
 }

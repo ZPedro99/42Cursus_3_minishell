@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/23 15:03:29 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/24 11:31:56 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_minishell
 	char		*pwd;
 	char	*prompt;
 	char	*command;
+	char	**command_splited;
 }				t_minishell;
 
 typedef struct s_env
@@ -56,7 +57,8 @@ char	*get_value(char *value, char *env, int x);
 
 //***********free***********//
 
-void	free_lists(t_list *lst);
+void	free_env(t_list *lst);
+void	free_exp(t_list *lst);
 
 //***********parsing***********//
 
@@ -67,7 +69,10 @@ int		string_comp(char *s1, char *s2);
 void	print_exp(t_minishell *shell);
 void	sort_exp(t_list *lst, t_list *head);
 
-//***********pwd.c***********//
+//***********pwd***********//
 void	print_pwd(t_minishell *shell);
+
+//***********echo***********//
+void	print_echo(t_minishell *shell);
 
 #endif

@@ -1,46 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/24 11:31:34 by jomirand         ###   ########.fr       */
+/*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
+/*   Updated: 2023/05/24 10:57:33 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_env(t_list *lst)
+void	print_echo(t_minishell *shell)
 {
-	t_list	*temp;
-	t_list	*next;
+	char	**execute;
+	int		i;
 
-	temp = lst;
-	while(temp)
+	execute = ft_split(shell->command, ' ');
+	i = 1;
+	while(execute[i])
 	{
-		next = temp->next;
-		free(((t_env *)(temp->content))->name);
-		free(((t_env *)(temp->content))->info);
-		free(temp->content);
-		free(temp);
-		temp = next;
+		printf("%s ", execute[i]);
+		i++;
 	}
-}
-
-void	free_exp(t_list *lst)
-{
-	t_list	*temp;
-	t_list	*next;
-
-	temp = lst;
-	while(temp)
+	i = 0;
+	while(execute[i])
 	{
-		next = temp->next;
-		free(((t_env *)(temp->content))->name);
-		free(temp->content);
-		free(temp);
-		temp = next;
+		free(execute[i]);
+		i++;
 	}
+	free(execute);
+	printf("\n");
 }
