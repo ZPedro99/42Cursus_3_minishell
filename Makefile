@@ -6,7 +6,7 @@
 #    By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/05/19 16:03:41 by emsoares         ###   ########.fr        #
+#    Updated: 2023/05/23 15:07:24 by emsoares         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
-RFLAG = -lreadline -fsanitize=address
+RFLAG = -lreadline
 RM = rm -rf
 
 LIBFT = ./libft/libft.a
@@ -24,6 +24,7 @@ SRCS = main.c\
 		export.c\
 		free.c\
 		parsing.c\
+		pwd.c\
 
 
 OBJS = $(SRCS:%.c=%.o)

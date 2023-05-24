@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/19 15:35:30 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:05:40 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ int	main(int argc, char **argv, char **envp)
 	free(shell.prompt);
 	free_lists(shell.env);
 	free_lists(shell.exp);
+	shell.exp = NULL; // Set shell.exp to NULL to avoid double-freeing
 	return (0);
 }

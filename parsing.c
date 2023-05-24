@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/17 14:28:06 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:07:39 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,13 +122,15 @@ int	parsing(t_minishell *shell)
 	char	**clear_test;
 
 	clear_test = malloc(sizeof(char *) * 2);
-	clear_test[0] = ft_strdup(shell->command);
+	clear_test[0] = shell->command;
 	clear_test[1] = NULL;
 	if(string_comp(shell->command, "exit"))
 	{
 		printf("%s\n", shell->command);
 		return (1);
 	}
+	if(string_comp(shell->command, "pwd"))
+		print_pwd(shell);
 	if(string_comp(shell->command, "env"))
 		print_env(shell);
 	if(string_comp(shell->command, "export"))
@@ -145,8 +147,6 @@ int	parsing(t_minishell *shell)
 			free(clear_test);
 		}*/
 	}
-	free(clear_test[0]);
-	free(clear_test[1]);
 	free(clear_test);
 	return (0);
 }
