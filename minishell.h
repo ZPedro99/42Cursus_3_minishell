@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/25 09:51:04 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:07:44 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	print_pwd(t_minishell *shell);
 
 //***********echo***********//
 void	print_echo(t_minishell *shell);
-int		wordcount(char **s);
+int		wordcount(char *s, char c);
 int		check_flag(char *flag);
 int		counting_quote(char *str);
 

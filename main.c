@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/24 17:08:35 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:42:36 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
 	int			i;
-	int		count;
 
 	i = 0;
-	count = 0;
 	(void)argv;
 	if (argc > 1)
 	{
@@ -32,12 +30,16 @@ int	main(int argc, char **argv, char **envp)
 	while(1)
 	{
 		shell.command = readline(shell.prompt);
+		if(!*shell.command)
+			free(shell.command);
+		else
+		{
 		add_history(shell.command);
 		if(parsing(&shell))
 			break;
 		wait(0);
 		free(shell.command);
-		count++;
+		}
 	}
 	while(shell.command_splited[i])
 	{
@@ -48,9 +50,6 @@ int	main(int argc, char **argv, char **envp)
 	free(shell.command);
 	free(shell.prompt);
 	free_env(shell.env);
-	if(count == 0)
-		free_export(shell.exp);
-	else
-		free_export1(shell.exp);
+	free_export(shell.exp);
 	return (0);
 }

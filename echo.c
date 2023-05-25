@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/25 11:36:13 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:06:52 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ void	print_echo(t_minishell *shell)
 	int		quote_count;
 	char	nl;
 
-	execute = ft_split(shell->command, ' ');
-	argument_size = (wordcount(execute)) - 1;
+	argument_size = (wordcount(shell->command, ' ')) - 1;
 	if(!argument_size)
 	{
 		write(1, "\n", 1);
 		return ;
 	}
+	execute = ft_split(shell->command, ' ');
 	flag = check_flag(execute[1]);
 	if(flag == 0)
 	{
@@ -77,14 +77,23 @@ void	print_echo(t_minishell *shell)
 		printf("\n");
 }
 
-int	wordcount(char **s)
+int	wordcount(char *s, char c)
 {
 	int	i;
+	int	wordcount;
 
 	i = 0;
+	wordcount = 0;
 	while (s[i])
-		i++;
-	return (i);
+	{
+		while (s[i] && s[i] == c)
+			i++;
+		if (s[i])
+			wordcount++;
+		while (s[i] && s[i] != c)
+			i++;
+	}
+	return (wordcount);
 }
 
 int	check_flag(char *flag)

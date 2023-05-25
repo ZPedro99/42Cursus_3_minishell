@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/24 17:04:18 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:00:47 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	sort_exp(t_list *lst, t_list *head)
 	exp_array = (char **)malloc(sizeof(char *) * (size + 1));
 	while(i < size)
 	{
-		exp_array[i] = ((t_env *)(lst->content))->info;
+		exp_array[i] = ft_strdup(((t_env *)(lst->content))->info);
 		i++;
 		lst = lst->next;
 	}
