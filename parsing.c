@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/25 17:00:47 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:39:59 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,8 @@ int	parsing(t_minishell *shell)
 	}
 	if(string_comp(shell->command_splited[0], "pwd"))
 		print_pwd(shell);
+	if(string_comp(shell->command_splited[0], "cd"))
+		print_cd(shell);
 	if(string_comp(shell->command_splited[0], "env"))
 		print_env(shell);
 	if(string_comp(shell->command_splited[0], "echo"))
