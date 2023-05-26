@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/25 17:06:52 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:20:00 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ void	print_echo(t_minishell *shell)
 	char	**execute;
 	int		i;
 	int		argument_size;
-	int		flag;
 	int		j;
-	int		quote_count;
+	int		double_quote_count;
+	int		single_quote_count;
+	char	ignore;
 	char	nl;
 
 	argument_size = (wordcount(shell->command, ' ')) - 1;
@@ -29,13 +30,12 @@ void	print_echo(t_minishell *shell)
 		return ;
 	}
 	execute = ft_split(shell->command, ' ');
-	flag = check_flag(execute[1]);
-	if(flag == 0)
+	if(!check_flag(execute[1]))
 	{
 		nl = 'n';
 		i = 1;
 	}
-	if(flag == 1)
+	if(check_flag(execute[1]))
 	{
 		nl = 'y';
 		i = 2;
@@ -47,15 +47,26 @@ void	print_echo(t_minishell *shell)
 			i++;
 		else
 		{
-			quote_count = counting_quote(execute[i]);
+			double_quote_count = counting_quote(execute[i], '"');
+			single_quote_count = counting_quote(execute[i], '\'');
 			j = 0;
 			while(execute[i][j])
 			{
-				if((execute[i][j] == '"' || execute[i][j] == '\'') && quote_count % 2 == 0)
+				if((execute[i][0] == '"' && execute[i][ft_strlen(execute[i]) - 1] == '"') && double_quote_count % 2 == 0)
+				{
+					ignore = '"';
 					j++;
+				}
+				if((execute[i][0] == '\'' && execute[i][ft_strlen(execute[i]) - 1] == '\'') && single_quote_count % 2 == 0)
+				{
+					ignore = '\'';
+					j++;
+				}
 				while(execute[i][j])
 				{
-					if((execute[i][j] == '"' || execute[i][j] == '\''))
+					if(execute[i][j] == '"' && double_quote_count % 2 == 0 && ignore == '"')
+						break;
+					if(execute[i][j] == '\'' && single_quote_count % 2 == 0 && ignore == '\'')
 						break;
 					write(1, &execute[i][j], 1);
 					j++;
@@ -67,14 +78,14 @@ void	print_echo(t_minishell *shell)
 		}
 	}
 	i = 0;
+	if(!check_flag(execute[1]))
+		printf("\n");
 	while(execute[i])
 	{
 		free(execute[i]);
 		i++;
 	}
 	free(execute);
-	if(flag == 0)
-		printf("\n");
 }
 
 int	wordcount(char *s, char c)
@@ -114,7 +125,7 @@ int	check_flag(char *flag)
 	return (0);
 }
 
-int	counting_quote(char *str)
+int	counting_quote(char *str, char c)
 {
 	int	i;
 	int	quote_count;
@@ -123,7 +134,7 @@ int	counting_quote(char *str)
 	quote_count = 0;
 	while(str[i])
 	{
-		if(str[i] == '"' || str[i] == '\'')
+		if(str[i] == c)
 			quote_count++;
 		i++;
 	}
