@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/26 17:39:59 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/29 11:49:38 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,22 +126,24 @@ int	parsing(t_minishell *shell)
 		printf("%s\n", shell->command);
 		return (1);
 	}
-	if(string_comp(shell->command_splited[0], "pwd"))
+	else if(string_comp(shell->command_splited[0], "pwd"))
 		print_pwd(shell);
-	if(string_comp(shell->command_splited[0], "cd"))
+	else if(string_comp(shell->command_splited[0], "cd"))
 		print_cd(shell);
-	if(string_comp(shell->command_splited[0], "env"))
+	else if(string_comp(shell->command_splited[0], "env"))
 		print_env(shell);
-	if(string_comp(shell->command_splited[0], "echo"))
+	else if(string_comp(shell->command_splited[0], "echo"))
 		print_echo(shell);
-	if(string_comp(shell->command_splited[0], "export"))
+	else if(string_comp(shell->command_splited[0], "export"))
 		print_exp(shell);
-	if(string_comp(shell->command_splited[0], "clear"))
+	else if(string_comp(shell->command_splited[0], "clear"))
 	{
 		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
 		if (!pid)
 			execve("/usr/bin/clear", shell->command_splited, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
 	}
+	else
+		printf("%s: command not found\n", shell->command_splited[0]);
 	i = 0;
 	while(shell->command_splited[i])
 	{
