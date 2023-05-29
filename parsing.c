@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/29 11:49:38 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:47:49 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@ int	string_comp(char *s1, char *s2)
 void	print_env(t_minishell *shell)
 {
 	t_list	*temp;
-
+	char		*completa;
+	
 	temp = shell->env;
 	while(temp)
 	{
-		printf("%s\n", ((t_env *)(temp->content))->info);
+		completa = ft_strjoin(((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
+		printf("%s\n", completa);
+		free(completa);
 		temp = temp->next;
 	}
 }
