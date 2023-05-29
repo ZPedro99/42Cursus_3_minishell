@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
+#    By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/05/24 10:24:31 by jomirand         ###   ########.fr        #
+#    Updated: 2023/05/26 15:12:11 by emsoares         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS = main.c\
 		parsing.c\
 		pwd.c\
 		echo.c\
+		cd.c\
 
 OBJS = $(SRCS:%.c=%.o)
 

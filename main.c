@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/25 17:42:36 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:47:28 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_putstr_fd("invalid number of arguments!", 2);
 		return (1);
 	}
+	
 	shell.env = get_env_vars(envp);
 	shell.exp = get_exp_vars(envp);
 	get_prompt(&shell);
