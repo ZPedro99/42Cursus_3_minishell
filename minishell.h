@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/26 15:11:54 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:15:47 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ typedef struct s_env
 //***********env***********//
 
 t_list	*get_env_vars(char **env);
-void	get_prompt(t_minishell *shell);
-t_env	*create_env_node(char *env);
-char	*get_var_name(char *env);
-
+void		get_prompt(t_minishell *shell);
+t_env		*create_env_node(char *env);
+char		*get_var_name(char *env);
+char		*get_var_value(char *env);
 //***********export***********//
 
 t_list	*get_exp_vars(char **env);

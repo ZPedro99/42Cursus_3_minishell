@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 10:57:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/29 16:50:30 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:40:31 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_env	*create_env_node(char *env)
 
 	env_var = malloc(sizeof(t_env));
 	env_var->name = get_var_name(env);
-	env_var->info = ft_strdup(env);
+	env_var->info = get_var_value(env);
 	return(env_var);
 }
 
@@ -52,6 +52,31 @@ char	*get_var_name(char *env)
 	env_name = malloc(sizeof(char) * i + 1);
 	ft_strlcpy(env_name, env, i + 1);
 	return(env_name);
+}
+
+char	*get_var_value(char *env)
+{
+	int		i;
+	int		j;
+	char	*env_value;
+	int		size;
+
+	size = ft_strlen(env);
+	i = 0;
+	while(env[i] != '=')
+		i++;
+	env_value = malloc(sizeof(char) * (size - i + 2));
+	i++;
+	j = 1;
+	env_value[0] = '=';
+	while(env[i] != '\0')
+	{
+		env_value[j] = env[i];
+		j++;
+		i++;
+	}
+	env_value[j] = '\0';
+	return(env_value);
 }
 
 void	get_prompt(t_minishell *shell)
