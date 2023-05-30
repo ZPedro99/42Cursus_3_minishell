@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/30 12:45:51 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:57:03 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,18 @@ void	print_exp(t_minishell *shell)
 			}
 			temp = temp->next;
 		}
+		free(exp_line);
 		printf("%s\n", exp_line);
 		temp = shell->exp;
 		i++;
 	}
+	i = 0;
+	while(exp_array[i])
+	{
+		free(exp_array[i]);
+		i++;
+	}
+	free(exp_array);
 }
 
 int	len_compare(char *s1, char *s2)
@@ -93,6 +101,7 @@ char	**sort_exp(t_list *lst, t_list *head)
 		i++;
 		lst = lst->next;
 	}
+	exp_array[i] = 0;
 	i = 0;
 	while(i < size - 1)
 	{
