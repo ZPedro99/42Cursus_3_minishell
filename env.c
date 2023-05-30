@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 10:57:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/29 17:40:31 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/30 11:13:12 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,11 @@ char	*get_var_name(char *env)
 	i = 0;
 	while(env[i] != '=')
 		i++;
-	env_name = malloc(sizeof(char) * i + 1);
+	env_name = malloc(sizeof(char) * i + 2);
 	ft_strlcpy(env_name, env, i + 1);
+	env_name[i] = '=';
+	i++;
+	env_name[i] = '\0';
 	return(env_name);
 }
 
@@ -65,10 +68,9 @@ char	*get_var_value(char *env)
 	i = 0;
 	while(env[i] != '=')
 		i++;
-	env_value = malloc(sizeof(char) * (size - i + 2));
+	env_value = malloc(sizeof(char) * (size - i + 1));
 	i++;
-	j = 1;
-	env_value[0] = '=';
+	j = 0;
 	while(env[i] != '\0')
 	{
 		env_value[j] = env[i];

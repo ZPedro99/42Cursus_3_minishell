@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/29 17:15:47 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:20:31 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_env	*create_exp_node(char *env);
 char	*get_exp_info(char *env);
 char	*get_name(char *name, char *env);
 char	*get_value(char *value, char *env, int x);
+char	*get_exp_name(char *env);
 
 //***********free***********//
 
@@ -68,7 +69,7 @@ void	print_env(t_minishell *shell);
 char	**env_copy(t_list *lst);
 int		string_comp(char *s1, char *s2);
 void	print_exp(t_minishell *shell);
-void	sort_exp(t_list *lst, t_list *head);
+char	**sort_exp(t_list *lst, t_list *head);
 
 //***********pwd***********//
 void	print_pwd(t_minishell *shell);
@@ -81,5 +82,6 @@ int		counting_quote(char *str, char c);
 
 //***********cd***********//
 void	print_cd(t_minishell *shell);
+void	change_env(t_list *env, char *old_pwd, char *new_pwd);
 
 #endif

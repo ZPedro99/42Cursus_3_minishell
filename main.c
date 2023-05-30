@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/26 17:47:28 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/30 09:35:09 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	main(int argc, char **argv, char **envp)
 		ft_putstr_fd("invalid number of arguments!", 2);
 		return (1);
 	}
-	
 	shell.env = get_env_vars(envp);
 	shell.exp = get_exp_vars(envp);
 	get_prompt(&shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/29 17:03:23 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:00:04 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,39 +36,36 @@ t_env	*create_exp_node(char *env)
 	t_env	*exp_var;
 
 	exp_var = malloc(sizeof(t_env));
-	exp_var->name = get_var_name(env);
+	exp_var->name = get_exp_name(env);
 	exp_var->info = get_exp_info(env);
 	return (exp_var);
 }
 
 char	*get_exp_info(char *env)
 {
-	char	*value;
-	char	*name;
-	char	*temp1;
-	int		i;
-	int		x;
+	char	*info;
+	char	*initial_info;
 
-	i = 0;
-	x = 0;
-	while (env[i] != '=')
-	{
-		i++;
-		x++;
-	}
-	value = malloc(sizeof(char) * ((ft_strlen(env + i)) + 3));
-	name = malloc(sizeof(char) * ((ft_strlen(env) - ft_strlen(env + i)) + 2));
-	name = get_name(name, env);
-	value = get_value(value, env, x);
-	temp1 = ft_strjoin("declare -x ", name);
-	free(name);
-	name = ft_strjoin(temp1, value);
-	free(temp1);
-	free(value);
-	return (name);
+	info = get_var_value(env);
+	initial_info = ft_strjoin("\"", info);
+	free(info);
+	info = ft_strjoin(initial_info, "\"");
+	free(initial_info);
+	return(info);
 }
 
-char	*get_name(char *name, char *env)
+char	*get_exp_name(char *env)
+{
+	char	*name;
+	char	*initial_name;
+
+	initial_name = get_var_name(env);
+	name = ft_strjoin("declare -x ", initial_name);
+	free(initial_name);
+	return(name);
+}
+
+/* char	*get_name(char *name, char *env)
 {
 	int	i;
 	int	j;
@@ -85,9 +82,9 @@ char	*get_name(char *name, char *env)
 	j++;
 	name[j] = '\0';
 	return (name);
-}
+} */
 
-char	*get_value(char *value, char *env, int x)
+/* char	*get_value(char *value, char *env, int x)
 {
 	int	i;
 
@@ -104,4 +101,4 @@ char	*get_value(char *value, char *env, int x)
 	i++;
 	value[i] = '\0';
 	return (value);
-}
+} */

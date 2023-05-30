@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/29 17:47:49 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:45:51 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_env(t_minishell *shell)
 {
 	t_list	*temp;
 	char		*completa;
-	
+
 	temp = shell->env;
 	while(temp)
 	{
@@ -37,9 +37,32 @@ void	print_env(t_minishell *shell)
 void	print_exp(t_minishell *shell)
 {
 	t_list	*temp;
+	char	**exp_array;
+	char	*exp_line;
+	int		i;
+	int		size;
 
+	i = 0;
+	size = 0;
 	temp = shell->exp;
-	sort_exp(temp, shell->exp);
+	exp_array = sort_exp(temp, shell->exp);
+	while(exp_array[size])
+		size++;
+	while((size - 1) != i)
+	{
+		while(temp)
+		{
+			if(string_comp(exp_array[i], ((t_env *)(temp->content))->name))
+			{
+				exp_line = ft_strjoin(exp_array[i], ((t_env *)(temp->content))->info);
+				break;
+			}
+			temp = temp->next;
+		}
+		printf("%s\n", exp_line);
+		temp = shell->exp;
+		i++;
+	}
 }
 
 int	len_compare(char *s1, char *s2)
@@ -51,7 +74,7 @@ int	len_compare(char *s1, char *s2)
 	return(ft_strlen(s1));
 }
 
-void	sort_exp(t_list *lst, t_list *head)
+char	**sort_exp(t_list *lst, t_list *head)
 {
 	int		size;
 	int		size_string;
@@ -66,7 +89,7 @@ void	sort_exp(t_list *lst, t_list *head)
 	exp_array = (char **)malloc(sizeof(char *) * (size + 1));
 	while(i < size)
 	{
-		exp_array[i] = ft_strdup(((t_env *)(lst->content))->info);
+		exp_array[i] = ft_strdup(((t_env *)(lst->content))->name);
 		i++;
 		lst = lst->next;
 	}
@@ -90,13 +113,13 @@ void	sort_exp(t_list *lst, t_list *head)
 			i++;
 	}
 	i = 0;
-	while(i < size)
+	/* while(i < size)
 	{
 		printf("%s\n", exp_array[i]);
 		free(exp_array[i]);
 		i++;
-	}
-	free(exp_array);
+	} */
+	return (exp_array);
 }
 
 char	**env_copy(t_list *lst)
@@ -110,7 +133,7 @@ char	**env_copy(t_list *lst)
 	env_cpy = (char **)malloc(sizeof(char *) * ft_lstsize(lst) + 1);
 	while(temp)
 	{
-		env_cpy[i] = ft_strdup(((t_env *)(temp->content))->info);
+		env_cpy[i] = ft_strjoin(((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
 		//printf("%s\n", env_cpy[i]);
 		temp = temp->next;
 		i++;
