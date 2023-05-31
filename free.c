@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/25 16:08:39 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/05/31 09:50:34 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_env(t_list *lst)
 	t_list	*next;
 
 	temp = lst;
-	while(temp)
+	while (temp)
 	{
 		next = temp->next;
 		free(((t_env *)(temp->content))->name);
@@ -35,7 +35,7 @@ void	free_export(t_list *lst)
 	t_list	*next;
 
 	temp = lst;
-	while(temp)
+	while (temp)
 	{
 		next = temp->next;
 		free(((t_env *)(temp->content))->name);
@@ -52,7 +52,7 @@ void	free_export1(t_list *lst)
 	t_list	*next;
 
 	temp = lst;
-	while(temp)
+	while (temp)
 	{
 		next = temp->next;
 		free(((t_env *)(temp->content))->name);

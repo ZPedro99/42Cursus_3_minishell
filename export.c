@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/30 12:00:04 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/31 09:49:38 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*get_exp_info(char *env)
 	free(info);
 	info = ft_strjoin(initial_info, "\"");
 	free(initial_info);
-	return(info);
+	return (info);
 }
 
 char	*get_exp_name(char *env)
@@ -62,7 +62,7 @@ char	*get_exp_name(char *env)
 	initial_name = get_var_name(env);
 	name = ft_strjoin("declare -x ", initial_name);
 	free(initial_name);
-	return(name);
+	return (name);
 }
 
 /* char	*get_name(char *name, char *env)

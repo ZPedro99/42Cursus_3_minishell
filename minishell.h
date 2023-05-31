@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/30 12:20:31 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:04:30 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef struct s_minishell
 {
 	t_list	*env;
 	t_list	*exp;
-	char		*pwd;
+	char	**env_array;
+	char	*pwd;
 	char	*prompt;
 	char	*command;
 	char	**command_splited;
@@ -39,14 +40,17 @@ typedef struct s_env
 	char	*info;
 }				t_env;
 
+//***********main***********//
+
+void	read_command(t_minishell *shell);
 
 //***********env***********//
 
 t_list	*get_env_vars(char **env);
-void		get_prompt(t_minishell *shell);
-t_env		*create_env_node(char *env);
-char		*get_var_name(char *env);
-char		*get_var_value(char *env);
+void	get_prompt(t_minishell *shell);
+t_env	*create_env_node(char *env);
+char	*get_var_name(char *env);
+char	*get_var_value(char *env);
 //***********export***********//
 
 t_list	*get_exp_vars(char **env);
@@ -67,7 +71,6 @@ void	free_export1(t_list *lst);
 int		parsing(t_minishell *shell);
 void	print_env(t_minishell *shell);
 char	**env_copy(t_list *lst);
-int		string_comp(char *s1, char *s2);
 void	print_exp(t_minishell *shell);
 char	**sort_exp(t_list *lst, t_list *head);
 
@@ -82,6 +85,13 @@ int		counting_quote(char *str, char c);
 
 //***********cd***********//
 void	print_cd(t_minishell *shell);
-void	change_env(t_list *env, char *old_pwd, char *new_pwd);
+void	change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
+char	*join_quotes(char *str);
+char	*change_dir(t_list *env, char *str);
+
+//***********utils***********//
+
+int		string_comp(char *s1, char *s2);
+int		len_compare(char *s1, char *s2);
 
 #endif
