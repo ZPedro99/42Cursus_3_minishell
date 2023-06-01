@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/31 12:04:30 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/01 11:44:38 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,12 @@ char	*change_dir(t_list *env, char *str);
 
 int		string_comp(char *s1, char *s2);
 int		len_compare(char *s1, char *s2);
+
+//***********unset***********//
+
+void	do_unset(t_minishell *shell);
+char	*adjust_name_env(char *str);
+void	unset_env(t_minishell *shell, t_list *temp);
+void	unset_exp(t_minishell *shell, t_list *temp);
 
 #endif

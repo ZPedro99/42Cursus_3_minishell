@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/05/31 10:02:52 by jomirand         ###   ########.fr        #
+#    Updated: 2023/05/31 14:47:01 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS = main.c\
 		echo.c\
 		cd.c\
 		utils.c\
+		unset.c\
 
 OBJS = $(SRCS:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/31 10:03:47 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/01 12:37:17 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	print_exp(t_minishell *shell)
 	exp_array = sort_exp(temp, shell->exp);
 	while (exp_array[size])
 		size++;
-	while ((size - 1) != i)
+	while (size != i)
 	{
 		while (temp)
 		{
@@ -159,6 +159,8 @@ int	parsing(t_minishell *shell)
 		if (!pid)
 			execve("/usr/bin/clear", shell->command_splited, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
 	}
+	else if (string_comp(shell->command_splited[0], "unset"))
+		do_unset(shell);
 	else
 		printf("%s: command not found\n", shell->command_splited[0]);
 	i = 0;
