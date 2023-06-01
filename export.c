@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/31 09:49:38 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:01:43 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,38 @@ char	*get_exp_name(char *env)
 	name = ft_strjoin("declare -x ", initial_name);
 	free(initial_name);
 	return (name);
+}
+
+void	place_exp_var(t_minishell *shell, char *str)
+{
+	int value;
+
+	value = ft_search(str, '=');
+	if (value == 0) //so tenho de colocar no export sem o =
+	{
+		ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
+		return ;
+	}
+	if (value == 1) //colocar export + env
+	{
+		ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
+		ft_lstadd_back(&shell->env, ft_lstnew(create_env_node(str)));
+		return ;
+	}
+}
+
+int	ft_search(char *str, char c)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			return(1);
+		i++;
+	}
+	return (0);
 }
 
 /* char	*get_name(char *name, char *env)

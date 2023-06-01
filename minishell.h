@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/01 11:44:38 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:01:58 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ char	*get_exp_info(char *env);
 char	*get_name(char *name, char *env);
 char	*get_value(char *value, char *env, int x);
 char	*get_exp_name(char *env);
-
+void	place_exp_var(t_minishell *shell, char *str);
+int		ft_search(char *str, char c);
 //***********free***********//
 
 void	free_env(t_list *lst);
