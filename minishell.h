@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/02 11:19:14 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:44:38 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char	*get_value(char *value, char *env, int x);
 char	*get_exp_name(char *env);
 void	place_exp_var(t_minishell *shell, char *str);
 int		ft_search(char *str, char c);
+void	ft_change_value(t_minishell *shell, char *str, char *exp_name);
+int	ft_check_dup(t_minishell *shell, char *str);
 
 //***********free***********//
 
@@ -80,6 +82,7 @@ void	print_env(t_minishell *shell);
 char	**env_copy(t_list *lst);
 void	print_exp(t_minishell *shell);
 char	**sort_exp(t_list *lst, t_list *head);
+void	check_args(char **command, t_minishell *shell);
 
 //***********pwd***********//
 void	print_pwd(t_minishell *shell);
