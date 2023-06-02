@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/05/31 09:50:34 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:18:45 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,24 @@ void	free_export1(t_list *lst)
 		free(temp);
 		temp = next;
 	}
+}
+
+void	free_struct(t_minishell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->command_splited[i])
+	{
+		free(shell->command_splited[i]);
+		i++;
+	}
+	free(shell->command_splited);
+	free(shell->command);
+	free(shell->prompt);
+	free(shell->pwd);
+	free(shell->old_pwd);
+	free(shell->home);
+	free_env(shell->env);
+	free_export(shell->exp);
 }

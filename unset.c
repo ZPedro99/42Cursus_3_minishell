@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 14:35:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/01 14:59:28 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:04:26 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	do_unset(t_minishell *shell)
 	i = 1;
 	while (shell->command_splited[i])
 	{
-		unset_env(shell, shell->env);
-		unset_exp(shell, shell->exp);
+		unset_env(shell, shell->env, i);
+		unset_exp(shell, shell->exp, i);
 		i++;
 	}
 }
@@ -44,13 +44,13 @@ char	*adjust_name_exp(char *str)
 	return (final_str);
 }
 
-void	unset_env(t_minishell *shell, t_list *temp)
+void	unset_env(t_minishell *shell, t_list *temp, int i)
 {
 	char	*var_name_adjust;
 	t_list	*previous;
-	int		i;
+	/* int		i;
 
-	i = 1;
+	i = 1; */
 	previous = 0;
 	var_name_adjust = adjust_name_env(shell->command_splited[i]);
 	while (!string_comp(((t_env *)(temp->content))->name, var_name_adjust))
@@ -67,13 +67,13 @@ void	unset_env(t_minishell *shell, t_list *temp)
 	//temp->next = temp->next->next;
 }
 
-void	unset_exp(t_minishell *shell, t_list *temp)
+void	unset_exp(t_minishell *shell, t_list *temp, int i)
 {
 	char	*var_name_adjust;
 	t_list	*previous;
-	int		i;
+	/* int		i;
 
-	i = 1;
+	i = 1; */
 	previous = 0;
 	var_name_adjust = adjust_name_exp(shell->command_splited[i]);
 	while (!string_comp(((t_env *)(temp->content))->name, var_name_adjust))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/01 14:01:58 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:19:14 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ typedef struct s_minishell
 	t_list	*exp;
 	char	**env_array;
 	char	*pwd;
+	char	*old_pwd;
 	char	*prompt;
 	char	*command;
 	char	**command_splited;
+	char	*home;
 }				t_minishell;
 
 typedef struct s_env
@@ -43,6 +45,7 @@ typedef struct s_env
 //***********main***********//
 
 void	read_command(t_minishell *shell);
+void	obtain_vars(t_minishell *shell);
 
 //***********env***********//
 
@@ -51,6 +54,7 @@ void	get_prompt(t_minishell *shell);
 t_env	*create_env_node(char *env);
 char	*get_var_name(char *env);
 char	*get_var_value(char *env);
+
 //***********export***********//
 
 t_list	*get_exp_vars(char **env);
@@ -61,11 +65,13 @@ char	*get_value(char *value, char *env, int x);
 char	*get_exp_name(char *env);
 void	place_exp_var(t_minishell *shell, char *str);
 int		ft_search(char *str, char c);
+
 //***********free***********//
 
 void	free_env(t_list *lst);
 void	free_export(t_list *lst);
 void	free_export1(t_list *lst);
+void	free_struct(t_minishell *shell);
 
 //***********parsing***********//
 
@@ -99,7 +105,7 @@ int		len_compare(char *s1, char *s2);
 
 void	do_unset(t_minishell *shell);
 char	*adjust_name_env(char *str);
-void	unset_env(t_minishell *shell, t_list *temp);
-void	unset_exp(t_minishell *shell, t_list *temp);
+void	unset_env(t_minishell *shell, t_list *temp, int i);
+void	unset_exp(t_minishell *shell, t_list *temp, int i);
 
 #endif
