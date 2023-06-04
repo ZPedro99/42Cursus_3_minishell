@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/01 14:01:43 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:54:22 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,21 @@ char	*get_exp_name(char *env)
 void	place_exp_var(t_minishell *shell, char *str)
 {
 	int value;
-
+	
 	value = ft_search(str, '=');
-	if (value == 0) //so tenho de colocar no export sem o =
+	if(ft_check_dup(shell, str) == 1)
 	{
-		ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
-		return ;
-	}
-	if (value == 1) //colocar export + env
-	{
-		ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
-		ft_lstadd_back(&shell->env, ft_lstnew(create_env_node(str)));
-		return ;
+		if (value == 0) //so tenho de colocar no export sem o =
+		{
+			ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
+			return ;
+		}
+		if (value == 1) //colocar export + env
+		{
+			ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
+			ft_lstadd_back(&shell->env, ft_lstnew(create_env_node(str)));
+			return ;
+		}	
 	}
 }
 
@@ -97,6 +100,82 @@ int	ft_search(char *str, char c)
 	return (0);
 }
 
+int	ft_check_dup(t_minishell *shell, char *str)
+{
+	t_list *head;
+	char	*temp;
+	char	*name;
+	int	i;
+	int	j;
+	head = shell->exp;
+	
+	i = 0;
+	j = 0;
+	while (str[i] != '\0' && str[i] != '=')
+		i++;
+	temp = malloc(sizeof(char) * (i + 2));
+	while (j < i)
+	{
+		temp[j] = str[j];
+		j++;
+	}
+	temp[j] = '=';
+	j++;
+	temp[j] = '\0';
+	name = ft_strjoin("declare -x ", temp);
+	free(temp);
+	while (head)
+	{
+		if (string_comp(((t_env *)(head->content))->name, name))
+		{
+			ft_change_value(shell, str, name);
+			return (0);
+		}
+		head = head->next;
+	}
+	free(name);
+	return (1);
+}
+
+void	ft_change_value(t_minishell *shell, char *str, char *exp_name)
+{
+	char	*exp_value;
+	char	*temp;
+	t_list *temp_exp;
+	
+	int	i = 0;
+	int	j = 0;
+	int size;
+
+	size = ft_strlen(str);
+	while (str[i] != '=' && str[i] != '\0')
+		i++;
+	if(str[i] == '\0')
+		temp = NULL;
+	else
+	{
+		temp = malloc(sizeof(char) * (size - i + 1));
+		i++;
+		while(str[i] != '\0')
+		{
+			temp[j] = str[i];
+			i++;
+			j++;
+		}
+		temp[j] = '\0';
+	}
+	exp_value = ft_strjoin("\"", temp);
+	free(temp);
+	temp = ft_strjoin(exp_value, "\"");
+	temp_exp = shell->exp;
+	while (!string_comp(((t_env *)(temp_exp->content))->name, exp_name))
+		temp_exp = temp_exp->next;
+	free(((t_env *)(temp_exp->content))->info);
+	((t_env *)(temp_exp->content))->info = ft_strdup(temp);
+	free(temp);
+	free(exp_name);
+	free(exp_value);
+}
 /* char	*get_name(char *name, char *env)
 {
 	int	i;

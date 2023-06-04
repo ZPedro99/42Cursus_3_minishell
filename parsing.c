@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/01 12:43:19 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:42:11 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,7 @@ int	parsing(t_minishell *shell)
 	else if (string_comp(shell->command_splited[0], "echo"))
 		print_echo(shell);
 	else if (string_comp(shell->command_splited[0], "export"))
-	{
-		if(shell->command_splited[1] != NULL)
-			place_exp_var(shell, shell->command_splited[1]);
-		else
-			print_exp(shell);
-	}
+		check_args(shell->command_splited, shell);
 	else if (string_comp(shell->command_splited[0], "clear"))
 	{
 		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
@@ -177,4 +172,21 @@ int	parsing(t_minishell *shell)
 	free(shell->command_splited[i]);
 	free(shell->command_splited);
 	return (0);
+}
+
+void	check_args(char **command, t_minishell *shell)
+{
+	int	i;
+
+	i = 1;
+	while (command[i] != NULL)
+		i++;
+	if(i == 1)
+		print_exp(shell);
+	if(i == 2)
+		place_exp_var(shell, shell->command_splited[1]);
+	if(i > 2)
+	{
+		printf("Invalid command!\n");
+	}
 }
