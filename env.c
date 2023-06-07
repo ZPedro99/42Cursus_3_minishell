@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 10:57:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/02 10:20:13 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/07 14:25:45 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,12 @@ char	*get_var_name(char *env)
 	char	*env_name;
 
 	i = 0;
-	while (env[i] != '=')
+	if(ft_search(env, '=') == 0)
+	{
+		env_name = ft_strdup(env);
+		return(env_name);
+	}
+	while (env[i] != '=' && env[i] != '\0')
 		i++;
 	env_name = malloc(sizeof(char) * i + 2);
 	ft_strlcpy(env_name, env, i + 1);
@@ -66,11 +71,16 @@ char	*get_var_value(char *env)
 
 	size = ft_strlen(env);
 	i = 0;
+	j = 0;
+	if(ft_search(env, '=') == 0)
+	{
+		env_value=ft_strdup("");
+		return(env_value);
+	}
 	while (env[i] != '=')
 		i++;
 	env_value = malloc(sizeof(char) * (size - i + 1));
 	i++;
-	j = 0;
 	while (env[i] != '\0')
 	{
 		env_value[j] = env[i];

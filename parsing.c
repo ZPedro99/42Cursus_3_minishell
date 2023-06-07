@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 10:18:51 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/07 14:38:19 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	print_exp(t_minishell *shell)
 			temp = temp->next;
 		}
 		printf("%s\n", exp_line);
-		free(exp_line);
+		//free(exp_line);
 		temp = shell->exp;
 		i++;
 	}
@@ -152,12 +152,7 @@ int	parsing(t_minishell *shell)
 	else if (string_comp(shell->command_splited[0], "echo"))
 		print_echo(shell);
 	else if (string_comp(shell->command_splited[0], "export"))
-	{
-		if(shell->command_splited[1] != NULL)
-			place_exp_var(shell, shell->command_splited[1]);
-		else
-			print_exp(shell);
-	}
+		check_args(shell->command_splited, shell);
 	else if (string_comp(shell->command_splited[0], "clear"))
 	{
 		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
@@ -183,4 +178,55 @@ int	parsing(t_minishell *shell)
 	free(shell->command_splited[i]);
 	free(shell->command_splited);
 	return (0);
+}
+
+void	check_args(char **command, t_minishell *shell)
+{
+	int	i;
+
+	i = 1;
+	while (command[i] != NULL)
+		i++;
+	if(i == 1)
+		print_exp(shell);
+	if(i >= 2)
+	{
+		i = 1;
+		while(command[i])
+		{
+			if(check_exp_input(command[i]) == 0)
+				printf("minishell: export: `%s': not a valid identifier\n", command[i]);
+			else
+				place_exp_var(shell, shell->command_splited[i]);
+			i++;
+		}
+	}
+}
+
+int	check_exp_input(char *str)
+{
+	int i;
+	char *temp;
+	
+	temp = get_var_name(str);
+	if (ft_search(temp, '=') == 1)
+		temp = ft_strtrim(temp, "=");
+	if ((ft_isalpha(temp[0]) == 0) && temp[0] != '_')
+	{
+		free(temp);
+		return (0);
+	}	
+	i = 0;
+	while (temp[i])
+	{
+		if ((ft_isalnum(temp[i]) == 1) || temp[i] == '_' )
+			i++;
+		else
+		{
+			free(temp);
+			return (0);
+		}
+	}
+	free(temp);
+	return (1);
 }

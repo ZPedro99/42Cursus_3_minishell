@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 11:36:48 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/07 14:34:47 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,11 @@ char	*get_value(char *value, char *env, int x);
 char	*get_exp_name(char *env);
 void	place_exp_var(t_minishell *shell, char *str);
 int		ft_search(char *str, char c);
-
+void	change_value_exp(t_minishell *shell, char *str, char *exp_name);
+int	ft_check_dup(t_minishell *shell, char *str);
+int	ft_check_dup2(t_minishell *shell, char *str);
+int	ft_check_exp(t_minishell *shell, char *str);
+void	change_value_env(t_minishell *shell, char *str, char *name);
 //***********free***********//
 
 void	free_env(t_list *lst);
@@ -82,6 +86,8 @@ void	print_env(t_minishell *shell);
 char	**env_copy(t_list *lst);
 void	print_exp(t_minishell *shell);
 char	**sort_exp(t_list *lst, t_list *head);
+void	check_args(char **command, t_minishell *shell);
+int		check_exp_input(char *str);
 
 //***********pwd***********//
 void	print_pwd(t_minishell *shell);
