@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 11:39:54 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/07 14:35:43 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ void	obtain_vars(t_minishell *shell)
 			shell->old_pwd = ft_strdup(((t_env *)(temp->content))->info);
 		if (string_comp(((t_env *)(temp->content))->name, "HOME="))
 			shell->home = ft_strdup(((t_env *)(temp->content))->info);
-		if (string_comp(((t_env *)(temp->content))->name, "PATH="))
-			shell->paths = save_paths(((t_env *)(temp->content)));
+		/* if (string_comp(((t_env *)(temp->content))->name, "PATH="))
+			shell->paths = save_paths(((t_env *)(temp->content))); */
 		temp = temp->next;
 	}
 }
 
-char	**save_paths(t_env *path)
+/* char	**save_paths(t_env *path)
 {
 	
-}
+} */
