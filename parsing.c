@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 14:38:19 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/07 15:05:08 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	print_exp(t_minishell *shell)
 			temp = temp->next;
 		}
 		printf("%s\n", exp_line);
-		//free(exp_line);
+		free(exp_line);
 		temp = shell->exp;
 		i++;
 	}
@@ -205,12 +205,17 @@ void	check_args(char **command, t_minishell *shell)
 
 int	check_exp_input(char *str)
 {
-	int i;
-	char *temp;
-	
+	int		i;
+	char	*temp;
+	char	*temp1;
 	temp = get_var_name(str);
 	if (ft_search(temp, '=') == 1)
-		temp = ft_strtrim(temp, "=");
+	{
+		temp1 = ft_strdup(temp);
+		free(temp);
+		temp = ft_strtrim(temp1, "=");
+		free(temp1);
+	}
 	if ((ft_isalpha(temp[0]) == 0) && temp[0] != '_')
 	{
 		free(temp);
