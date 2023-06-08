@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 15:11:06 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:15:35 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,19 @@ typedef struct s_env
 }				t_env;
 
 //***********main***********//
-
-void	read_command(t_minishell *shell);
+int		main(int argc, char **argv, char **envp);
 void	obtain_vars(t_minishell *shell);
+void	get_prompt(t_minishell *shell);
+char	*get_prompt2(int i, int j, char *temp);
+void	read_command(t_minishell *shell);
 
 //***********env***********//
-
 t_list	*get_env_vars(char **env);
-void	get_prompt(t_minishell *shell);
 t_env	*create_env_node(char *env);
 char	*get_var_name(char *env);
 char	*get_var_value(char *env);
 
 //***********export***********//
-
 t_list	*get_exp_vars(char **env);
 t_env	*create_exp_node(char *env);
 char	*get_exp_info(char *env);
@@ -72,15 +71,14 @@ int	ft_check_dup(t_minishell *shell, char *str);
 int	ft_check_dup2(t_minishell *shell, char *str);
 int	ft_check_exp(t_minishell *shell, char *str);
 void	change_value_env(t_minishell *shell, char *str, char *name);
-//***********free***********//
 
+//***********free***********//
 void	free_env(t_list *lst);
 void	free_export(t_list *lst);
 void	free_export1(t_list *lst);
 void	free_struct(t_minishell *shell);
 
 //***********parsing***********//
-
 int		parsing(t_minishell *shell);
 void	print_env(t_minishell *shell);
 char	**env_copy(t_list *lst);
@@ -102,8 +100,8 @@ int		check_dollar_sign(t_minishell *shell);
 //***********cd***********//
 void	print_cd(t_minishell *shell);
 void	change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
+void	change_exp(t_list *exp, char *old_pwd, char *new_pwd);
 char	*change_dir(t_list *env, char *str);
-
 //***********cd2***********//
 void	change_dir_home(t_minishell *shell);
 void	change_dir_minus(t_minishell *shell);
