@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:08:13 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/06 09:34:50 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:10:11 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,87 +14,24 @@
 
 void	print_cd(t_minishell *shell)
 {
-	//char	*pwd_atual;
-	char	*dir_change;
-
-	dir_change = NULL;
 	if ((shell->command_splited[1] == 0) || (string_comp(shell->command_splited[1], "~")))
 	{
-		free(shell->pwd);
-		free(shell->old_pwd);
-		shell->pwd = getcwd(0, 0);
-		shell->old_pwd = ft_strdup(shell->pwd);
-		//printf("PWD antigo: %s\n", pwd_antigo);
-		free(shell->pwd);
-		//dir_change = change_dir(shell->env, "HOME=");
-		chdir(shell->home);
-		shell->pwd = getcwd(0, 0);
-		//pwd_atual = ft_strdup(shell->pwd);
-		//printf("PWD atual: %s\n", pwd_atual);
-		change_env_and_exp(shell->env, shell->exp, shell->old_pwd, shell->pwd);
-		//free(pwd_antigo);
-		//free(pwd_atual);
-		//free(shell->pwd);
-		//free(dir_change);
-		return ;
+		change_dir_home(shell);
+		return;
 	}
 	if (string_comp(shell->command_splited[1], "-"))
 	{
-		free(shell->pwd);
-		shell->pwd = getcwd(0, 0);
-		//printf("PWD antigo: %s\n", pwd_antigo);
-		//free(shell->pwd);
-		//dir_change = change_dir(shell->env, "OLDPWD=");
-		chdir(shell->old_pwd);
-		free(shell->old_pwd);
-		shell->old_pwd = ft_strdup(shell->pwd);
-		free(shell->pwd);
-		shell->pwd = getcwd(0, 0);
-		//pwd_atual = ft_strdup(shell->pwd);
-		//printf("PWD atual: %s\n", pwd_atual);
-		change_env_and_exp(shell->env, shell->exp, shell->old_pwd, shell->pwd);
-		//free(pwd_antigo);
-		//free(pwd_atual);
-		//free(shell->pwd);
-		//free(dir_change);
+		change_dir_minus(shell);
 		return ;
 	}
 	else if (string_comp(shell->command_splited[1], ".."))
 	{
-		free(shell->pwd);
-		free(shell->old_pwd);
-		shell->pwd = getcwd(0, 0);
-		shell->old_pwd = ft_strdup(shell->pwd);
-		//printf("PWD antigo: %s\n", pwd_antigo);
-		free(shell->pwd);
-		chdir("..");
-		shell->pwd = getcwd(0, 0);
-		//pwd_atual = ft_strdup(shell->pwd);
-		//printf("PWD atual: %s\n", pwd_atual);
-		change_env_and_exp(shell->env, shell->exp, shell->old_pwd, shell->pwd);
-		//free(pwd_antigo);
-		//free(pwd_atual);
-		//free(shell->pwd);
+		change_dir_dotdot(shell);
 		return ;
 	}
 	else
 	{
-		shell->pwd = getcwd(0, 0);
-		shell->old_pwd = ft_strdup(shell->pwd);
-		//printf("PWD antigo: %s\n", pwd_antigo);
-		free(shell->pwd);
-		if (chdir(shell->command_splited[1]) == -1)
-		{
-			printf("%s: No such file or directory\n", shell->command_splited[1]);
-			return ;
-		}
-		shell->pwd = getcwd(0, 0);
-		//pwd_atual = ft_strdup(shell->pwd);
-		//printf("PWD atual: %s\n", pwd_atual);
-		change_env_and_exp(shell->env, shell->exp, shell->old_pwd, shell->pwd);
-		//free(pwd_antigo);
-		//free(pwd_atual);
-		//free(shell->pwd);
+		change_dir_rest(shell);
 		return ;
 	}
 }

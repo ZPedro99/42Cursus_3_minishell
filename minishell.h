@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 14:34:47 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:11:06 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,11 @@ void	print_cd(t_minishell *shell);
 void	change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
 char	*change_dir(t_list *env, char *str);
 
+//***********cd2***********//
+void	change_dir_home(t_minishell *shell);
+void	change_dir_minus(t_minishell *shell);
+void	change_dir_dotdot(t_minishell *shell);
+void	change_dir_rest(t_minishell *shell);
 //***********utils***********//
 
 int		string_comp(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 14:35:43 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:15:18 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
-	int			i;
 
-	i = 0;
 	(void)argv;
 	if (argc > 1)
 	{
