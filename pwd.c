@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 14:58:53 by emsoares          #+#    #+#             */
-/*   Updated: 2023/05/23 15:22:49 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:19:42 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	print_pwd(t_minishell *shell)
 {
+	free (shell->pwd);
 	shell->pwd = getcwd(0, 0);
 	printf("%s\n", shell->pwd);
-	free (shell->pwd);
 }
 
 /* -When buf is NULL (or 0), and size is 0, getcwd returns
