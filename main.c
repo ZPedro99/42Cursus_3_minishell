@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 14:15:18 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:15:11 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,68 @@ int	main(int argc, char **argv, char **envp)
 	read_command(&shell);
 	free_struct(&shell);
 	return (0);
+}
+
+void	obtain_vars(t_minishell *shell)
+{
+	t_list	*temp;
+
+	temp = shell->env;
+	while (temp)
+	{
+		if (string_comp(((t_env *)(temp->content))->name, "PWD="))
+			shell->pwd = ft_strdup(((t_env *)(temp->content))->info);
+		if (string_comp(((t_env *)(temp->content))->name, "OLDPWD="))
+			shell->old_pwd = ft_strdup(((t_env *)(temp->content))->info);
+		if (string_comp(((t_env *)(temp->content))->name, "HOME="))
+			shell->home = ft_strdup(((t_env *)(temp->content))->info);
+		/* if (string_comp(((t_env *)(temp->content))->name, "PATH="))
+			shell->paths = save_paths(((t_env *)(temp->content))); */
+		temp = temp->next;
+	}
+}
+
+void	get_prompt(t_minishell *shell)
+{
+	char	*username;
+	char	*seat;
+	char	*temp;
+	int		i;
+	int		j;
+
+	username = getenv("USER");
+	temp = getenv("SESSION_MANAGER");
+	i = 0;
+	while (temp[i] != '/')
+		i++;
+	i++;
+	j = i;
+	while (temp[j] != '.')
+		j++;
+	seat = get_prompt2(i, j, temp);
+	shell->prompt = ft_strjoin(username, seat);
+	free(seat);
+}
+
+char	*get_prompt2(int i, int j, char *temp)
+{
+	char	*seat;
+
+	seat = malloc(sizeof(char) * (j - i) + 4);
+	j = 1;
+	seat[0] = '@';
+	while (temp[i] != '.')
+	{
+		seat[j] = temp[i];
+		i++;
+		j++;
+	}
+	seat[j] = '>';
+	j++;
+	seat[j] = ' ';
+	j++;
+	seat[j] = '\0';
+	return (seat);
 }
 
 void	read_command(t_minishell *shell)
@@ -56,27 +118,3 @@ void	read_command(t_minishell *shell)
 	}
 	rl_clear_history();
 }
-
-void	obtain_vars(t_minishell *shell)
-{
-	t_list *temp;
-
-	temp = shell->env;
-	while (temp)
-	{
-		if (string_comp(((t_env *)(temp->content))->name, "PWD="))
-			shell->pwd = ft_strdup(((t_env *)(temp->content))->info);
-		if (string_comp(((t_env *)(temp->content))->name, "OLDPWD="))
-			shell->old_pwd = ft_strdup(((t_env *)(temp->content))->info);
-		if (string_comp(((t_env *)(temp->content))->name, "HOME="))
-			shell->home = ft_strdup(((t_env *)(temp->content))->info);
-		/* if (string_comp(((t_env *)(temp->content))->name, "PATH="))
-			shell->paths = save_paths(((t_env *)(temp->content))); */
-		temp = temp->next;
-	}
-}
-
-/* char	**save_paths(t_env *path)
-{
-	
-} */

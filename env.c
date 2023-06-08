@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 10:57:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 14:51:18 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:09:58 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ char	*get_var_name(char *env)
 	char	*env_name;
 
 	i = 0;
-	if(ft_search(env, '=') == 0)
+	if (ft_search(env, '=') == 0)
 	{
 		env_name = ft_strdup(env);
-		return(env_name);
+		return (env_name);
 	}
 	while (env[i] != '=' && env[i] != '\0')
 		i++;
@@ -72,10 +72,10 @@ char	*get_var_value(char *env)
 	size = ft_strlen(env);
 	i = 0;
 	j = 0;
-	if(ft_search(env, '=') == 0)
+	if (ft_search(env, '=') == 0)
 	{
-		env_value=ft_strdup("");
-		return(env_value);
+		env_value = ft_strdup("");
+		return (env_value);
 	}
 	while (env[i] != '=')
 		i++;
@@ -89,39 +89,4 @@ char	*get_var_value(char *env)
 	}
 	env_value[j] = '\0';
 	return (env_value);
-}
-
-void	get_prompt(t_minishell *shell)
-{
-	char	*username;
-	char	*seat;
-	char	*temp;
-	int		i;
-	int		j;
-
-	username = getenv("USER");
-	temp = getenv("SESSION_MANAGER");
-	i = 0;
-	while (temp[i] != '/')
-		i++;
-	i++;
-	j = i;
-	while (temp[j] != '.')
-		j++;
-	seat = malloc(sizeof(char) * (j - i) + 4);
-	j = 1;
-	seat[0] = '@';
-	while (temp[i] != '.')
-	{
-		seat[j] = temp[i];
-		i++;
-		j++;
-	}
-	seat[j] = '>';
-	j++;
-	seat[j] = ' ';
-	j++;
-	seat[j] = '\0';
-	shell->prompt = ft_strjoin(username, seat);
-	free(seat);
 }

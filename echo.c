@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 10:58:04 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:53:32 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	print_echo(t_minishell *shell)
 		{
 			double_quote_count = counting_quote(execute[i], '"');
 			single_quote_count = counting_quote(execute[i], '\'');
-			//printf("double quotes count: %d\nsingle quotes count: %d\n", double_quote_count, single_quote_count);
 			j = 0;
 			while (execute[i][j])
 			{
