@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 17:15:35 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/09 10:50:10 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ typedef struct s_env
 //***********main***********//
 int		main(int argc, char **argv, char **envp);
 void	obtain_vars(t_minishell *shell);
-void	get_prompt(t_minishell *shell);
-char	*get_prompt2(int i, int j, char *temp);
 void	read_command(t_minishell *shell);
+char	**save_paths(char *paths);
+int	number_of_paths(char *paths);
 
 //***********env***********//
 t_list	*get_env_vars(char **env);
@@ -86,6 +86,7 @@ void	print_exp(t_minishell *shell);
 char	**sort_exp(t_list *lst, t_list *head);
 void	check_args(char **command, t_minishell *shell);
 int		check_exp_input(char *str);
+void	other_commands(t_minishell *shell);
 
 //***********pwd***********//
 void	print_pwd(t_minishell *shell);
@@ -112,6 +113,8 @@ void	change_dir_rest(t_minishell *shell);
 int		string_comp(char *s1, char *s2);
 int		len_compare(char *s1, char *s2);
 char	*join_quotes(char *str);
+void	get_prompt(t_minishell *shell);
+char	*get_prompt2(int i, int j, char *temp);
 
 //***********unset***********//
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 17:15:11 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:44:21 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,53 +45,10 @@ void	obtain_vars(t_minishell *shell)
 			shell->old_pwd = ft_strdup(((t_env *)(temp->content))->info);
 		if (string_comp(((t_env *)(temp->content))->name, "HOME="))
 			shell->home = ft_strdup(((t_env *)(temp->content))->info);
-		/* if (string_comp(((t_env *)(temp->content))->name, "PATH="))
-			shell->paths = save_paths(((t_env *)(temp->content))); */
+		if (string_comp(((t_env *)(temp->content))->name, "PATH="))
+			shell->paths = save_paths(((t_env *)(temp->content))->info);
 		temp = temp->next;
 	}
-}
-
-void	get_prompt(t_minishell *shell)
-{
-	char	*username;
-	char	*seat;
-	char	*temp;
-	int		i;
-	int		j;
-
-	username = getenv("USER");
-	temp = getenv("SESSION_MANAGER");
-	i = 0;
-	while (temp[i] != '/')
-		i++;
-	i++;
-	j = i;
-	while (temp[j] != '.')
-		j++;
-	seat = get_prompt2(i, j, temp);
-	shell->prompt = ft_strjoin(username, seat);
-	free(seat);
-}
-
-char	*get_prompt2(int i, int j, char *temp)
-{
-	char	*seat;
-
-	seat = malloc(sizeof(char) * (j - i) + 4);
-	j = 1;
-	seat[0] = '@';
-	while (temp[i] != '.')
-	{
-		seat[j] = temp[i];
-		i++;
-		j++;
-	}
-	seat[j] = '>';
-	j++;
-	seat[j] = ' ';
-	j++;
-	seat[j] = '\0';
-	return (seat);
 }
 
 void	read_command(t_minishell *shell)
@@ -112,9 +69,41 @@ void	read_command(t_minishell *shell)
 			add_history(shell->command);
 			if (parsing(shell))
 				break ;
-			wait(0);
 			free(shell->command);
 		}
+		//printf("passei\n");
 	}
 	rl_clear_history();
+}
+
+char	**save_paths(char *paths)
+{
+	char	**paths_array;
+	int		i;
+
+	(void)i;
+	i = 0;
+	paths_array = ft_split(paths, ':');
+	/* while (paths_array[i])
+	{
+		printf("%s\n", paths_array[i]);
+		i++;
+	} */
+	return (paths_array);
+}
+
+int	number_of_paths(char *paths)
+{
+	int	number;
+	int	i;
+
+	number = 1;
+	i = 0;
+	while (paths[i])
+	{
+		if (paths[i] == ':')
+			number++;
+		i++;
+	}
+	return (number);
 }

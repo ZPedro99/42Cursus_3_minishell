@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:05:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 14:57:55 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/09 10:15:50 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_signals(void)
 	sigaddset(&sa.sa_mask, SIGINT);
 	sa.sa_handler = &sighand;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	sighand(int signal)
@@ -31,10 +31,5 @@ void	sighand(int signal)
 		printf("\n");
 		rl_on_new_line();
 		rl_redisplay();
-	}
-	if (signal == SIGQUIT)
-	{
-		printf("exit\n");
-		exit(0);
 	}
 }

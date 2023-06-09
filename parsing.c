@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/07 15:05:08 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:51:25 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,13 @@ char	**env_copy(t_list *lst)
 		temp = temp->next;
 		i++;
 	}
+	//env_cpy[i] = 0;
 	return (env_cpy);
 }
 
 int	parsing(t_minishell *shell)
 {
-	pid_t	pid;
+	//pid_t	pid;
 	int		i;
 
 	shell->command_splited = ft_split(shell->command, ' ');
@@ -153,7 +154,9 @@ int	parsing(t_minishell *shell)
 		print_echo(shell);
 	else if (string_comp(shell->command_splited[0], "export"))
 		check_args(shell->command_splited, shell);
-	else if (string_comp(shell->command_splited[0], "clear"))
+	else if (string_comp(shell->command_splited[0], "unset"))
+		do_unset(shell);
+	/* else if (string_comp(shell->command_splited[0], "clear"))
 	{
 		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
 		if (!pid)
@@ -165,10 +168,10 @@ int	parsing(t_minishell *shell)
 		if (!pid)
 			execve("/usr/bin/ls", shell->command_splited, env_copy(shell->env));
 	}
-	else if (string_comp(shell->command_splited[0], "unset"))
-		do_unset(shell);
 	else
-		printf("%s: command not found\n", shell->command_splited[0]);
+		printf("%s: command not found\n", shell->command_splited[0]); */
+	else
+		other_commands(shell);
 	i = 0;
 	while (shell->command_splited[i])
 	{
@@ -220,7 +223,7 @@ int	check_exp_input(char *str)
 	{
 		free(temp);
 		return (0);
-	}	
+	}
 	i = 0;
 	while (temp[i])
 	{
@@ -234,4 +237,32 @@ int	check_exp_input(char *str)
 	}
 	free(temp);
 	return (1);
+}
+
+void	other_commands(t_minishell *shell)
+{
+	int	i;
+	char	*complete_path;
+	char	*temp;
+	pid_t	pid;
+
+	i = 0;
+	while (shell->paths[i])
+	{
+		temp = ft_strjoin("/", shell->command_splited[0]);
+		complete_path = ft_strjoin(shell->paths[i], temp);
+		free(temp);
+		if (!access(complete_path, X_OK))
+		{
+			pid = fork();
+			if(!pid)
+				execve(complete_path, shell->command_splited, env_copy(shell->env));
+			wait(0);
+			free(complete_path);
+			break ;
+		}
+		free(complete_path);
+		i++;
+	}
+	printf("%s: command not found\n", shell->command_splited[0]);
 }

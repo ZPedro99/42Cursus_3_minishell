@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 10:03:08 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/06 09:34:45 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/09 10:18:39 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,47 @@ char	*join_quotes(char *str)
 	i++;
 	temp[i] = '\0';
 	return(temp);
+}
+
+void	get_prompt(t_minishell *shell)
+{
+	char	*username;
+	char	*seat;
+	char	*temp;
+	int		i;
+	int		j;
+
+	username = getenv("USER");
+	temp = getenv("SESSION_MANAGER");
+	i = 0;
+	while (temp[i] != '/')
+		i++;
+	i++;
+	j = i;
+	while (temp[j] != '.')
+		j++;
+	seat = get_prompt2(i, j, temp);
+	shell->prompt = ft_strjoin(username, seat);
+	free(seat);
+}
+
+char	*get_prompt2(int i, int j, char *temp)
+{
+	char	*seat;
+
+	seat = malloc(sizeof(char) * (j - i) + 4);
+	j = 1;
+	seat[0] = '@';
+	while (temp[i] != '.')
+	{
+		seat[j] = temp[i];
+		i++;
+		j++;
+	}
+	seat[j] = '>';
+	j++;
+	seat[j] = ' ';
+	j++;
+	seat[j] = '\0';
+	return (seat);
 }
