@@ -6,7 +6,7 @@
 #    By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/08 15:11:17 by emsoares         ###   ########.fr        #
+#    Updated: 2023/06/09 15:18:30 by emsoares         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ LIBFT = ./libft/libft.a
 SRCS = main.c\
 		env.c\
 		export.c\
+		export2.c\
 		free.c\
 		parsing.c\
 		pwd.c\
@@ -29,6 +30,7 @@ SRCS = main.c\
 		cd.c\
 		cd2.c\
 		utils.c\
+		utils2.c\
 		unset.c\
 		signals.c\
 

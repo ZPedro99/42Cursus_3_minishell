@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 12:44:21 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/09 14:38:08 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,6 @@ char	**save_paths(char *paths)
 	(void)i;
 	i = 0;
 	paths_array = ft_split(paths, ':');
-	/* while (paths_array[i])
-	{
-		printf("%s\n", paths_array[i]);
-		i++;
-	} */
 	return (paths_array);
 }
 
