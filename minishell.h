@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 10:50:10 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/09 15:19:53 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,16 @@ char	*get_var_value(char *env);
 t_list	*get_exp_vars(char **env);
 t_env	*create_exp_node(char *env);
 char	*get_exp_info(char *env);
-char	*get_name(char *name, char *env);
-char	*get_value(char *value, char *env, int x);
 char	*get_exp_name(char *env);
 void	place_exp_var(t_minishell *shell, char *str);
-int		ft_search(char *str, char c);
-void	change_value_exp(t_minishell *shell, char *str, char *exp_name);
+
+//***********export2***********//
 int	ft_check_dup(t_minishell *shell, char *str);
+void	change_value_exp(t_minishell *shell, char *str, char *exp_name);
+void	change_value_env(t_minishell *shell, char *str, char *name);
 int	ft_check_dup2(t_minishell *shell, char *str);
 int	ft_check_exp(t_minishell *shell, char *str);
-void	change_value_env(t_minishell *shell, char *str, char *name);
+
 
 //***********free***********//
 void	free_env(t_list *lst);
@@ -115,6 +115,9 @@ int		len_compare(char *s1, char *s2);
 char	*join_quotes(char *str);
 void	get_prompt(t_minishell *shell);
 char	*get_prompt2(int i, int j, char *temp);
+
+//***********utils2***********//
+int		ft_search(char *str, char c);
 
 //***********unset***********//
 
