@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 12:51:25 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/09 14:09:16 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,14 +122,14 @@ char	**env_copy(t_list *lst)
 
 	i = 0;
 	temp = lst;
-	env_cpy = (char **)malloc(sizeof(char *) * ft_lstsize(lst) + 1);
+	env_cpy = (char **)malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
 	while (temp)
 	{
 		env_cpy[i] = ft_strjoin(((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
 		temp = temp->next;
 		i++;
 	}
-	//env_cpy[i] = 0;
+	env_cpy[i] = 0;
 	return (env_cpy);
 }
 
@@ -241,11 +241,13 @@ int	check_exp_input(char *str)
 
 void	other_commands(t_minishell *shell)
 {
-	int	i;
+	int		i;
 	char	*complete_path;
 	char	*temp;
 	pid_t	pid;
+	static int		x;
 
+	x = -1;
 	i = 0;
 	while (shell->paths[i])
 	{
@@ -254,6 +256,7 @@ void	other_commands(t_minishell *shell)
 		free(temp);
 		if (!access(complete_path, X_OK))
 		{
+			x = 0;
 			pid = fork();
 			if(!pid)
 				execve(complete_path, shell->command_splited, env_copy(shell->env));
@@ -264,5 +267,6 @@ void	other_commands(t_minishell *shell)
 		free(complete_path);
 		i++;
 	}
-	printf("%s: command not found\n", shell->command_splited[0]);
+	if(x == -1)
+		printf("%s: command not found\n", shell->command_splited[0]); //esta a printar errado
 }
