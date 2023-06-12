@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 16:53:32 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/12 12:44:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,95 +14,35 @@
 
 void	print_echo(t_minishell *shell)
 {
-	char	**execute;
+	int		ret;
 	int		i;
-	int		argument_size;
-	int		j;
-	int		double_quote_count;
-	int		single_quote_count;
-	char	ignore;
-	char	nl;
+	int		flag;
+	int		word_num;
 
-	if (check_dollar_sign(shell))
-		return ;
-	argument_size = (wordcount(shell->command, ' ')) - 1;
-	if (!argument_size)
+	i = 1;
+	word_num = wordcount(shell->command, ' ');
+	while(shell->command_splited[i])
 	{
-		write(1, "\n", 1);
-		return ;
-	}
-	execute = ft_split(shell->command, ' ');
-	if(execute[1][0] == '(' || execute[1][0] == ')')
-	{
-		ft_putstr_fd("Error: cant cope with parenthesis on first position\n", 2);
-		return ;
-	}
-	if (!check_flag(execute[1]))
-	{
-		nl = 'n';
-		i = 1;
-	}
-	if (check_flag(execute[1]))
-	{
-		nl = 'y';
-		i = 2;
-	}
-	j = 0;
-	while (execute[i])
-	{
-		if (check_flag(execute[i]) == 1 && nl == 'y')
-			i++;
+		if(shell->command_splited[i][0] == '$')
+		{
+			ret = check_dollar_sign(shell->command_splited[i], shell);
+			if(ret == 1)
+				i++;
+			if(!ret)
+				i++;
+		}
 		else
 		{
-			double_quote_count = counting_quote(execute[i], '"');
-			single_quote_count = counting_quote(execute[i], '\'');
-			j = 0;
-			while (execute[i][j])
-			{
-				if (execute[i][0] == '"' && double_quote_count % 2 != 0)
-				{
-					ft_putstr_fd("double quotes impar\n", 2);
-					return ;
-				}
-				if (execute[i][0] == '\'' && double_quote_count % 2 != 0)
-				{
-					ft_putstr_fd("single quotes impar\n", 2);
-					return ;
-				}
-				if ((execute[i][0] == '"' && execute[i][ft_strlen(execute[i]) - 1] == '"') && double_quote_count % 2 == 0)
-				{
-					ignore = '"';
-					j++;
-				}
-				if ((execute[i][0] == '\'' && execute[i][ft_strlen(execute[i]) - 1] == '\'') && single_quote_count % 2 == 0)
-				{
-					ignore = '\'';
-					j++;
-				}
-				while (execute[i][j])
-				{
-					if (execute[i][j] == '"' && double_quote_count % 2 == 0 && ignore == '"')
-						break ;
-					if (execute[i][j] == '\'' && single_quote_count % 2 == 0 && ignore == '\'')
-						break ;
-					write(1, &execute[i][j], 1);
-					j++;
-				}
-				if (i != argument_size)
-					write(1, " ", 1);
-			}
-		i++;
+			flag = print_normal_words(shell->command_splited[i]);
+			i++;
 		}
+		if(i < word_num && !string_comp(shell->command_splited[i - 1], "-n"))
+			printf(" ");
 	}
-	i = 0;
-	if (!check_flag(execute[1]))
+	if(!flag)
 		printf("\n");
-	while (execute[i])
-	{
-		free(execute[i]);
-		i++;
-	}
-	free(execute);
+	if(flag == 1)
+		return ;
 }
 
 int	wordcount(char *s, char c)
@@ -158,7 +98,7 @@ int	counting_quote(char *str, char c)
 	return (quote_count);
 }
 
-int	check_dollar_sign(t_minishell *shell)
+int	check_dollar_sign(char *str, t_minishell *shell)
 {
 	int	i;
 	int	j;
@@ -168,27 +108,85 @@ int	check_dollar_sign(t_minishell *shell)
 
 	i = 0;
 	j = 0;
-	while (shell->command_splited[i])
+	name = malloc(sizeof(char) * ft_strlen(str) + 1);
+	len = ft_strlen(str);
+	while(j < (len - 1))
 	{
-		if (shell->command_splited[i][0] == '$')
-		{
-			name = malloc(sizeof(char) * ft_strlen(shell->command_splited[i]) + 1);
-			len = ft_strlen(shell->command_splited[i]);
-			while(j < (len - 1))
-			{
-				name[j] = shell->command_splited[i][j + 1];
-				j++;
-			}
-			name[j] = '=';
-			temp = shell->env;
-			while(!string_comp(((t_env *)(temp->content))->name, name))
-				temp = temp->next;
-			if (!temp)
-				return (0);
-			printf("%s\n", ((t_env *)(temp->content))->info);
-			free(name);
-		}
-		i++;
+		name[j] = str[j + 1];
+		j++;
 	}
-	return (1);
+	name[j] = '=';
+	temp = shell->env;
+	while(temp != NULL)
+	{
+		if(string_comp(((t_env *)(temp->content))->name, name))
+		{
+			printf("%s", ((t_env *)(temp->content))->info);
+			free(name);
+			return (1);
+		}
+		temp = temp->next;
+	}
+	if (!temp)
+	{
+		free(name);
+		return (0);
+	}
+	free(name);
+	return (0);
+}
+
+int	print_normal_words(char *str)
+{
+	static int	flag;
+	int		c;
+	int		double_quote_count;
+	int		single_quote_count;
+	char	ignore;
+	char	*print;
+
+	if(str[0] == '(' || str[0] == ')')
+	{
+		ft_putstr_fd("Error: cant cope with parenthesis on first position\n", 2);
+		return (1);
+	}
+	if(string_comp(str, "-n"))
+	{
+		flag = 1;
+		return (1);
+	}
+	c = 0;
+	double_quote_count = counting_quote(str, '"');
+	single_quote_count = counting_quote(str, '\'');
+	ignore = 0;
+	if (str[c] == '"' && double_quote_count % 2 != 0)
+	{
+		ft_putstr_fd("double quotes impar", 2);
+		return (2);
+	}
+	if (str[c] == '\'' && single_quote_count % 2 != 0)
+	{
+		ft_putstr_fd("single quotes impar", 2);
+		return (2);
+	}
+	if ((str[c] == '"' && str[ft_strlen(str) - 1] == '"') && double_quote_count % 2 == 0)
+		ignore = '"';
+	if ((str[c] == '\'' && str[ft_strlen(str) - 1] == '\'') && single_quote_count % 2 == 0)
+		ignore = '\'';
+	if (double_quote_count % 2 == 0 && ignore == '"')
+	{
+		print = ft_strtrim(str, "\"");
+		printf("%s", print);
+		free(print);
+		return (flag);
+	}
+	if (single_quote_count % 2 == 0 && ignore == '\'')
+	{
+		print = ft_strtrim(str, "'");
+		printf("%s", print);
+		free(print);
+		return (flag);
+	}
+	printf("%s", str);
+	return(flag);
 }

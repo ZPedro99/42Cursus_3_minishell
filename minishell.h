@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 15:19:53 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/12 12:25:37 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ void	print_echo(t_minishell *shell);
 int		wordcount(char *s, char c);
 int		check_flag(char *flag);
 int		counting_quote(char *str, char c);
-int		check_dollar_sign(t_minishell *shell);
+int		check_dollar_sign(char *str, t_minishell *shell);
+int		print_normal_words(char *str);
 
 //***********cd***********//
 void	print_cd(t_minishell *shell);
