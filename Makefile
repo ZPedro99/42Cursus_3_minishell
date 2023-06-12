@@ -6,7 +6,7 @@
 #    By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/09 15:18:30 by emsoares         ###   ########.fr        #
+#    Updated: 2023/06/12 15:09:58 by emsoares         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS = main.c\
 		parsing.c\
 		pwd.c\
 		echo.c\
+		echo_utils.c\
 		cd.c\
 		cd2.c\
 		utils.c\
