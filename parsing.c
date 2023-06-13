@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 14:07:59 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:27:24 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int	parsing(t_minishell *shell)
 	int		status;
 
 	status = 0;
+	i = 0;
 	shell->command_splited = ft_split(shell->command, ' ');
 	pid = fork();
 	if(!pid)
@@ -147,8 +148,6 @@ int	parsing(t_minishell *shell)
 		if (string_comp(shell->command_splited[0], "exit"))
 		{
 			printf("%s\n", shell->command_splited[0]);
-			//free_struct(shell);
-			//return (1);
 			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "pwd"))
@@ -168,39 +167,27 @@ int	parsing(t_minishell *shell)
 		else if (string_comp(shell->command_splited[0], "echo"))
 		{
 			print_echo(shell);
+			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "export"))
 			check_args(shell->command_splited, shell);
 		else if (string_comp(shell->command_splited[0], "unset"))
 			do_unset(shell);
 		else
-			other_commands(shell);
-		i = 0;
-		while (shell->command_splited[i])
 		{
-			free(shell->command_splited[i]);
-			i++;
+			other_commands(shell);
+			exit(0);
 		}
-		free(shell->command_splited[i]);
-		free(shell->command_splited);
+		free_splited(shell);
 	}
 	wait(&status);
 	if (string_comp(shell->command_splited[0], "exit"))
 	{
-		//printf("%s\n", shell->command_splited[0]);
-	/* 	i = 0;
-		while (shell->command_splited[i])
-		{
-			free(shell->command_splited[i]);
-			i++;
-		}
-		//free(shell->command_splited);
-		free(shell->command_splited[i]);
-		//return (1);
-		//g_exit_status = 10;*/
-		free_struct(shell); 
+		free_struct(shell);
 		exit(g_exit_status);
 	}
+	if(shell->command_splited)
+		free_splited(shell);
 	get_exit_status(status);
 	return (0);
 }
@@ -271,23 +258,26 @@ void	other_commands(t_minishell *shell)
 
 	x = -1;
 	i = 0;
-	while (shell->paths[i])
+	if(execve(shell->command_splited[0], shell->command_splited, env_copy(shell->env)))
 	{
-		temp = ft_strjoin("/", shell->command_splited[0]);
-		complete_path = ft_strjoin(shell->paths[i], temp);
-		free(temp);
-		if (!access(complete_path, X_OK))
+		while (shell->paths[i])
 		{
-			x = 0;
-			pid = fork();
-			if(!pid)
-				execve(complete_path, shell->command_splited, env_copy(shell->env));
-			wait(0);
+			temp = ft_strjoin("/", shell->command_splited[0]);
+			complete_path = ft_strjoin(shell->paths[i], temp);
+			free(temp);
+			if (!access(complete_path, X_OK))
+			{
+				x = 0;
+				pid = fork();
+				if(!pid)
+					execve(complete_path, shell->command_splited, env_copy(shell->env));
+				wait(0);
+				free(complete_path);
+				break ;
+			}
 			free(complete_path);
-			break ;
+			i++;
 		}
-		free(complete_path);
-		i++;
 	}
 	if(x == -1)
 	{

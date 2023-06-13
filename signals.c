@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:05:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 10:15:50 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:28:24 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ void	sighand(int signal)
 		printf("\n");
 		rl_on_new_line();
 		rl_redisplay();
+		g_exit_status = 130;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/12 15:13:37 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:16:03 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 	{
 		if (shell->command_splited[i][0] == '$')
 		{
+			if(shell->command_splited[i][1] == '?')
+			{
+				printf("%d", g_exit_status);
+				return(0);
+			}
 			ret = check_dollar_sign(shell->command_splited[i], shell);
 			if (ret == 1)
 				i++;
