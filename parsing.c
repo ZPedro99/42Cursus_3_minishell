@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 14:09:16 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:56:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,51 +135,65 @@ char	**env_copy(t_list *lst)
 
 int	parsing(t_minishell *shell)
 {
-	//pid_t	pid;
+	pid_t	pid;
 	int		i;
+	int		status;
 
+	status = 0;
 	shell->command_splited = ft_split(shell->command, ' ');
+	pid = fork();
+	if(!pid)
+	{
+		if (string_comp(shell->command_splited[0], "exit"))
+		{
+			printf("%s\n", shell->command_splited[0]);
+			//free_struct(shell);
+			//return (1);
+			exit(0);
+		}
+		else if (string_comp(shell->command_splited[0], "pwd"))
+		{
+			print_pwd(shell);
+			exit(0);
+		}
+		else if (string_comp(shell->command_splited[0], "cd"))
+		{
+			print_cd(shell);
+			exit(0);
+		}
+		else if (string_comp(shell->command_splited[0], "env"))
+		{
+			print_env(shell);
+		}
+		else if (string_comp(shell->command_splited[0], "echo"))
+		{
+			print_echo(shell);
+		}
+		else if (string_comp(shell->command_splited[0], "export"))
+			check_args(shell->command_splited, shell);
+		else if (string_comp(shell->command_splited[0], "unset"))
+			do_unset(shell);
+		else
+			other_commands(shell);
+		i = 0;
+		while (shell->command_splited[i])
+		{
+			free(shell->command_splited[i]);
+			i++;
+		}
+		free(shell->command_splited[i]);
+		free(shell->command_splited);
+	}
 	if (string_comp(shell->command_splited[0], "exit"))
 	{
-		printf("%s\n", shell->command);
-		return (1);
+		//printf("%s\n", shell->command_splited[0]);
+		//free_struct(shell);
+		//return (1);
+		//g_exit_status = 10;
+		exit(g_exit_status);
 	}
-	else if (string_comp(shell->command_splited[0], "pwd"))
-		print_pwd(shell);
-	else if (string_comp(shell->command_splited[0], "cd"))
-		print_cd(shell);
-	else if (string_comp(shell->command_splited[0], "env"))
-		print_env(shell);
-	else if (string_comp(shell->command_splited[0], "echo"))
-		print_echo(shell);
-	else if (string_comp(shell->command_splited[0], "export"))
-		check_args(shell->command_splited, shell);
-	else if (string_comp(shell->command_splited[0], "unset"))
-		do_unset(shell);
-	/* else if (string_comp(shell->command_splited[0], "clear"))
-	{
-		pid = fork(); //criamos um fork que e um processo child para que o programa continue a correr depois de executarmos o execve
-		if (!pid)
-			execve("/usr/bin/clear", shell->command_splited, env_copy(shell->env)); //funcao serve para executar um programa ja existente e no final fecha o programa
-	}
-	else if (string_comp(shell->command_splited[0], "ls"))
-	{
-		pid = fork();
-		if (!pid)
-			execve("/usr/bin/ls", shell->command_splited, env_copy(shell->env));
-	}
-	else
-		printf("%s: command not found\n", shell->command_splited[0]); */
-	else
-		other_commands(shell);
-	i = 0;
-	while (shell->command_splited[i])
-	{
-		free(shell->command_splited[i]);
-		i++;
-	}
-	free(shell->command_splited[i]);
-	free(shell->command_splited);
+	wait(&status);
+	get_exit_status(status);
 	return (0);
 }
 
@@ -268,5 +282,8 @@ void	other_commands(t_minishell *shell)
 		i++;
 	}
 	if(x == -1)
-		printf("%s: command not found\n", shell->command_splited[0]); //esta a printar errado
+	{
+		//printf("%s: command not found\n", shell->command_splited[0]);
+		perror("Error");
+	}
 }

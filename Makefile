@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+         #
+#    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/12 15:09:58 by emsoares         ###   ########.fr        #
+#    Updated: 2023/06/13 12:34:03 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS = main.c\
 		utils2.c\
 		unset.c\
 		signals.c\
+		exit.c\
 
 OBJS = $(SRCS:%.c=%.o)
 

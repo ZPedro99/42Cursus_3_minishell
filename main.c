@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 14:38:08 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:37:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_exit_status;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -29,7 +31,7 @@ int	main(int argc, char **argv, char **envp)
 	get_prompt(&shell);
 	read_command(&shell);
 	free_struct(&shell);
-	return (0);
+	return (g_exit_status);
 }
 
 void	obtain_vars(t_minishell *shell)

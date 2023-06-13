@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/12 15:12:51 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:32:49 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <signal.h>
+
+extern int	g_exit_status;
 
 typedef struct s_minishell
 {
@@ -43,6 +45,7 @@ typedef struct s_env
 	char	*name;
 	char	*info;
 }				t_env;
+
 
 //***********main***********//
 int			main(int argc, char **argv, char **envp);
@@ -134,5 +137,9 @@ void		unset_exp(t_minishell *shell, t_list *temp, int i);
 
 void		handle_signals(void);
 void		sighand(int signal);
+
+//***********exit***********//
+
+void	get_exit_status(int status);
 
 #endif

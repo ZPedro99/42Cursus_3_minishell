@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd2.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 15:00:18 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/09 14:32:13 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:51:11 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	change_dir_rest(t_minishell *shell)
 	free(shell->pwd);
 	if (chdir(shell->command_splited[1]) == -1)
 	{
-		printf("%s: No such file or directory\n", shell->command_splited[1]);
+		//printf("%s: No such file or directory\n", shell->command_splited[1]);
 		return ;
 	}
 	shell->pwd = getcwd(0, 0);
