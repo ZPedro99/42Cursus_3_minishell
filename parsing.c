@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 12:56:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:07:59 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,15 +184,23 @@ int	parsing(t_minishell *shell)
 		free(shell->command_splited[i]);
 		free(shell->command_splited);
 	}
+	wait(&status);
 	if (string_comp(shell->command_splited[0], "exit"))
 	{
 		//printf("%s\n", shell->command_splited[0]);
-		//free_struct(shell);
+	/* 	i = 0;
+		while (shell->command_splited[i])
+		{
+			free(shell->command_splited[i]);
+			i++;
+		}
+		//free(shell->command_splited);
+		free(shell->command_splited[i]);
 		//return (1);
-		//g_exit_status = 10;
+		//g_exit_status = 10;*/
+		free_struct(shell); 
 		exit(g_exit_status);
 	}
-	wait(&status);
 	get_exit_status(status);
 	return (0);
 }
