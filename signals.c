@@ -18,7 +18,7 @@ void	handle_signals(void)
 
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
-	sigaddset(&sa.sa_mask, SIGINT);
+	//sigaddset(&sa.sa_mask, SIGINT);
 	sa.sa_handler = &sighand;
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);

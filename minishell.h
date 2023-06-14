@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 15:16:35 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 09:54:21 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void		free_export(t_list *lst);
 void		free_export1(t_list *lst);
 void		free_struct(t_minishell *shell);
 void		free_splited(t_minishell *shell);
+void		free_copies(char **copy);
 
 //***********parsing***********//
 int			parsing(t_minishell *shell);

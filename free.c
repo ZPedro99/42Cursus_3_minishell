@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 15:10:01 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 10:01:54 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,18 @@ void	free_splited(t_minishell *shell)
 	}
 	free(shell->command_splited[i]);
 	free(shell->command_splited);
+}
+
+void	free_copies(char **copy)
+{
+	int	i;
+
+	i = 0;
+	while(copy[i])
+	{
+		free(copy[i]);
+		i++;
+	}
+	free(copy[i]);
+	free(copy);
 }

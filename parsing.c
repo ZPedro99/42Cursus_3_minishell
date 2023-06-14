@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 17:27:24 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 10:10:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ int	parsing(t_minishell *shell)
 		else if (string_comp(shell->command_splited[0], "env"))
 		{
 			print_env(shell);
+			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "echo"))
 		{
@@ -170,9 +171,15 @@ int	parsing(t_minishell *shell)
 			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "export"))
+		{
 			check_args(shell->command_splited, shell);
+			exit(0);
+		}
 		else if (string_comp(shell->command_splited[0], "unset"))
+		{
 			do_unset(shell);
+			exit(0);
+		}
 		else
 		{
 			other_commands(shell);
@@ -252,30 +259,37 @@ void	other_commands(t_minishell *shell)
 {
 	int		i;
 	char	*complete_path;
-	char	*temp;
+	char	**temp;
 	pid_t	pid;
 	static int		x;
 
 	x = -1;
 	i = 0;
-	if(execve(shell->command_splited[0], shell->command_splited, env_copy(shell->env)))
+	temp = env_copy(shell->env);
+	if(execve(shell->command_splited[0], shell->command_splited, temp))
 	{
+		free_copies(temp);
 		while (shell->paths[i])
 		{
-			temp = ft_strjoin("/", shell->command_splited[0]);
-			complete_path = ft_strjoin(shell->paths[i], temp);
-			free(temp);
+			temp = malloc(sizeof(char *) * 2);
+			temp[0] = ft_strjoin("/", shell->command_splited[0]);
+			temp[1] = 0;
+			complete_path = ft_strjoin(shell->paths[i], temp[0]);
+			free_copies(temp);
+			temp = env_copy(shell->env);
 			if (!access(complete_path, X_OK))
 			{
 				x = 0;
 				pid = fork();
 				if(!pid)
-					execve(complete_path, shell->command_splited, env_copy(shell->env));
+					execve(complete_path, shell->command_splited, temp);
 				wait(0);
 				free(complete_path);
+				free_copies(temp);
 				break ;
 			}
 			free(complete_path);
+			free_copies(temp);
 			i++;
 		}
 	}

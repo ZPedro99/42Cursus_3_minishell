@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 15:16:03 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 10:49:33 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	print_echo(t_minishell *shell)
 	ret = 0;
 	word_num = wordcount(shell->command, ' ');
 	flag = print_echo2(shell, word_num, ret);
-	if (!flag)
+	if (flag != 1)
 		printf("\n");
 	if (flag == 1)
 		return ;
@@ -83,20 +83,28 @@ int	print_normal_words(char *str)
 	double_quote_count = counting_quote(str, '"');
 	single_quote_count = counting_quote(str, '\'');
 	ignore = 0;
-	if (str[c] == '"' && double_quote_count % 2 != 0)
-	{
-		ft_putstr_fd("double quotes impar", 2);
-		return (2);
-	}
-	if (str[c] == '\'' && single_quote_count % 2 != 0)
-	{
-		ft_putstr_fd("single quotes impar", 2);
-		return (2);
-	}
 	if ((str[c] == '"' && str[ft_strlen(str) - 1] == '"') && double_quote_count % 2 == 0)
 		ignore = '"';
 	if ((str[c] == '\'' && str[ft_strlen(str) - 1] == '\'') && single_quote_count % 2 == 0)
 		ignore = '\'';
+	if ((str[c] == '"' && str[ft_strlen(str) - 1] != '"') && double_quote_count % 2 != 0)
+		ignore = '"';
+	if ((str[c] == '\'' && str[ft_strlen(str) - 1] != '\'') && single_quote_count % 2 != 0)
+		ignore = '\'';
+	if ((str[c] == '"' && str[ft_strlen(str) - 1] == '"') && double_quote_count % 2 != 0)
+		ignore = '"';
+	if ((str[c] == '\'' && str[ft_strlen(str) - 1] == '\'') && single_quote_count % 2 != 0)
+		ignore = '\'';
+	if (ignore == '"' && (double_quote_count % 2 != 0 || double_quote_count == 1))
+	{
+		ft_putstr_fd("double quotes impar", 2);
+		return (2);
+	}
+	if (ignore == '\'' && (single_quote_count % 2 != 0 || single_quote_count == 1))
+	{
+		ft_putstr_fd("single quotes impar", 2);
+		return (2);
+	}
 	if (double_quote_count % 2 == 0 && ignore == '"')
 	{
 		print = ft_strtrim(str, "\"");
