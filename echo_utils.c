@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 15:07:45 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/12 15:08:56 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/13 21:55:43 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,8 @@ char	*get_dup_str(char *str)
 {
 	char	*name;
 	int		len;
-	int		i;
 	int		j;
 
-	i = 0;
 	j = 0;
 	name = malloc(sizeof(char) * ft_strlen(str) + 1);
 	len = ft_strlen(str);

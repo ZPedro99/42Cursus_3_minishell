@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 09:54:21 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 14:05:56 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,17 @@ void		print_pwd(t_minishell *shell);
 void		print_echo(t_minishell *shell);
 int			print_echo2(t_minishell *shell, int	word_num, int ret);
 int			print_normal_words(char *str);
-
+int			check_pairs(char *str, int quote_count, char quote_type);
+int			print_trimmed_string(char *str, int quote_count, char quote_type, int flag);
 //***********echo_utils***********//
 int			wordcount(char *s, char c);
 int			check_flag(char *flag);
 int			counting_quote(char *str, char c);
 int			check_dollar_sign(char *str, t_minishell *shell);
 char		*get_dup_str(char *str);
+
+//***********echo_utils2***********//
+int			ft_echo_es(t_minishell *shell, int i);
 
 //***********cd***********//
 void		print_cd(t_minishell *shell);
