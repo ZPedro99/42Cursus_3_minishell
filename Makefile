@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+         #
+#    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/13 22:29:30 by emsoares         ###   ########.fr        #
+#    Updated: 2023/06/14 15:17:49 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

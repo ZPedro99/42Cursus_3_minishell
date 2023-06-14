@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 22:52:54 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:22:45 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 {
 	int	flag;
 	int	i;
+	char	*new_str;
 
 	i = 1;
 	flag = 0;
@@ -38,15 +39,22 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 	{
 		if (shell->command_splited[i][0] == '$')
 		{
-			if (ft_echo_es(shell, i) == 0)
-				return (0);
+			ft_echo_es(shell, i);
 			ret = check_dollar_sign(shell->command_splited[i], shell);
 			if (ret == 1 || !ret)
 				i++;
 		}
 		else
 		{
+			new_str = quote_remover(shell->command_splited[i]);
+			if(!new_str)
+				return (0);
+			printf("%s", new_str);
+			break ;
+			/* if(!check_quote_pairs(new_str))
+				perror("minishell"); */
 			flag = print_normal_words(shell->command_splited[i]);
+			free(new_str);
 			i++;
 		}
 		if (i < word_num && !string_comp(shell->command_splited[i - 1], "-n"))
@@ -116,6 +124,122 @@ int	print_trimmed_string(char *str, int quote_count, char quote_type, int flag)
 	}
 	return (0);
 }
+
+char	*quote_remover(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+	int		double_quote_count;
+	int		single_quote_count;
+	int		len;
+
+
+	i =0;
+	j = 0;
+	double_quote_count = 0;
+	single_quote_count = 0;
+	len = ft_strlen(str);
+	if (str[i] == '"' && str[ft_strlen(str) - 1] == '"')
+	{
+		new_str = malloc(sizeof(char) * (ft_strlen(str) - 2 + 1));
+		while(j <= len)
+		{
+			if(str[j] == '"')
+			{
+				while(str[j] == '"')
+				{
+					double_quote_count++;
+					j++;
+				}
+			}
+			if(str[j] == '\'')
+			{
+				while(str[j] == '\'')
+				{
+					single_quote_count++;
+					new_str[i] = str[j];
+					i++;
+					j++;
+				}
+			}
+			new_str[i] = str[j];
+			j++;
+			i++;
+		}
+		if(double_quote_count % 2 != 0 || (single_quote_count > 1 && single_quote_count % 2 != 0))
+		{
+			printf("Error! unclosed double quotes!");
+			return (0);
+		}
+	}
+	else if (str[i] == '\'' && str[ft_strlen(str) - 1] == '\'')
+	{
+		new_str = malloc(sizeof(char) * (ft_strlen(str) - 2 + 1));
+		while(str[j])
+		{
+			if(str[j] == '\'')
+			{
+				while(str[j] == '\'')
+				{
+					single_quote_count++;
+					j++;
+				}
+			}
+			if(str[j] == '"')
+			{
+				while(str[j] == '"')
+				{
+					double_quote_count++;
+					new_str[i] = str[j];
+					i++;
+					j++;
+				}
+			}
+			while(str[j] == '\'')
+			{
+				single_quote_count++;
+				j++;
+			}
+			new_str[i] = str[j];
+			j++;
+			i++;
+		}
+		if(single_quote_count % 2 != 0 || (double_quote_count > 1 && double_quote_count % 2 != 0))
+		{
+			printf("Error! unclosed single quotes!");
+			return (0);
+		}
+	}
+	else if(str[i] == '"' && str[ft_strlen(str) - 1] != '"')
+	{
+			printf("Error! unclosed double quotes2!");
+			return (0);
+	}
+	else if(str[i] == '\'' && str[ft_strlen(str) - 1] != '\'')
+	{
+			printf("Error! unclosed single quotes2!");
+			return (0);
+	}
+	else if(str[i] != '"' && str[ft_strlen(str) - 1] == '"')
+	{
+			printf("Error! unclosed double quotes2!");
+			return (0);
+	}
+	else if(str[i] != '\'' && str[ft_strlen(str) - 1] == '\'')
+	{
+			printf("Error! unclosed single quotes2!");
+			return (0);
+	}
+	else
+		return (str);
+	return (new_str);
+}
+
+/* int	check_quote_pairs(char *str)
+{
+
+} */
 
 /* int	print_normal_words(char *str)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 14:07:11 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:46:08 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,13 @@ int	parsing(t_minishell *shell)
 {
 	pid_t	pid;
 	int		status;
+	//char	*new_command;
+	//char	*command;
 
-	status = 0;
-	shell->command_splited = ft_split(shell->command, ' ');
+	//status = 0;
+	//shell->command_splited = ft_split(shell->command, ' ');
+	//command = quote_remover(shell->command_splited[0]);
+	//new_command = ft_strtrim(command, "\0");
 	pid = fork();
 	if(!pid)
 	{
@@ -160,6 +164,7 @@ int	parsing(t_minishell *shell)
 		else if (string_comp(shell->command_splited[0], "env"))
 		{
 			print_env(shell);
+			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "echo"))
 		{
@@ -167,9 +172,12 @@ int	parsing(t_minishell *shell)
 			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "export"))
+		{
 			check_args(shell->command_splited, shell);
-		else if (string_comp(shell->command_splited[0], "unset"))
-			do_unset(shell);
+			exit(0);
+		}
+		/* else if (string_comp(shell->command_splited[0], "unset"))
+			do_unset(shell); */
 		else
 		{
 			other_commands(shell);
@@ -178,6 +186,8 @@ int	parsing(t_minishell *shell)
 		free_splited(shell);
 	}
 	wait(&status);
+	if (string_comp(shell->command_splited[0], "unset"))
+		do_unset(shell);
 	if (string_comp(shell->command_splited[0], "cd"))
 	{
 		print_cd(shell);

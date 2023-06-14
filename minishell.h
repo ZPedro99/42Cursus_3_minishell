@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 14:05:56 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/14 14:26:23 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int			print_echo2(t_minishell *shell, int	word_num, int ret);
 int			print_normal_words(char *str);
 int			check_pairs(char *str, int quote_count, char quote_type);
 int			print_trimmed_string(char *str, int quote_count, char quote_type, int flag);
+char		*quote_remover(char *str);
 //***********echo_utils***********//
 int			wordcount(char *s, char c);
 int			check_flag(char *flag);
