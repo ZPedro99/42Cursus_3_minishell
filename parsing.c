@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 16:46:08 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 18:05:47 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,41 +137,39 @@ int	parsing(t_minishell *shell)
 {
 	pid_t	pid;
 	int		status;
-	//char	*new_command;
-	//char	*command;
+	char	*command;
 
-	//status = 0;
-	//shell->command_splited = ft_split(shell->command, ' ');
-	//command = quote_remover(shell->command_splited[0]);
-	//new_command = ft_strtrim(command, "\0");
+	status = 0;
+	shell->command_splited = ft_split(shell->command, ' ');
+	command = remove_quotes(shell->command_splited[0]);
 	pid = fork();
 	if(!pid)
 	{
-		if (string_comp(shell->command_splited[0], "exit"))
+		if (string_comp(command, "exit"))
 		{
-			printf("%s\n", shell->command_splited[0]);
+			printf("%s\n", command);
 			exit(0);
 		}
-		else if (string_comp(shell->command_splited[0], "pwd"))
+		else if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
 			exit(0);
 		}
-		else if (string_comp(shell->command_splited[0], "cd"))
+		else if (string_comp(command, "cd"))
 		{
 			exit(0);
 		}
-		else if (string_comp(shell->command_splited[0], "env"))
+		else if (string_comp(command, "env"))
 		{
 			print_env(shell);
 			exit(0);
 		}
-		else if (string_comp(shell->command_splited[0], "echo"))
+		else if (string_comp(command, "echo"))
 		{
 			print_echo(shell);
 			exit(0);
 		}
-		else if (string_comp(shell->command_splited[0], "export"))
+		else if (string_comp(command, "export"))
 		{
 			check_args(shell->command_splited, shell);
 			exit(0);
@@ -186,13 +184,13 @@ int	parsing(t_minishell *shell)
 		free_splited(shell);
 	}
 	wait(&status);
-	if (string_comp(shell->command_splited[0], "unset"))
+	if (string_comp(command, "unset"))
 		do_unset(shell);
-	if (string_comp(shell->command_splited[0], "cd"))
+	if (string_comp(command, "cd"))
 	{
 		print_cd(shell);
 	}
-	if (string_comp(shell->command_splited[0], "exit"))
+	if (string_comp(command, "exit"))
 	{
 		free_struct(shell);
 		exit(g_exit_status);
@@ -302,4 +300,30 @@ void	other_commands(t_minishell *shell)
 		//printf("%s: command not found\n", shell->command_splited[0]);
 		perror("other commands");
 	}
+}
+
+char	*remove_quotes(char *command)
+{
+	char *str;
+	int i;
+	int j;
+	int len;
+
+	i = 1;
+	j = 0;
+	len = strlen(command);
+	if (len >= 2 && (command[0] == '"' || command[0] == '\'') && command[len - 1] == command[0])
+	{
+		str = malloc(sizeof(char) * (len - 1));
+	while(i < len - 1)
+	{
+		str[j] = command[i];
+			i++;
+			j++;
+	}
+	str[j] = '\0';
+		return (str);
+	}
+	str = ft_strdup(command);
+	return (str);
 }

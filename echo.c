@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 16:22:45 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 18:01:16 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 		else
 		{
 			new_str = quote_remover(shell->command_splited[i]);
+			handle_quotes(new_str);
+			/* if(string_comp(new_str, shell->command_splited[i]))
+				free(new_str); */
 			if(!new_str)
 				return (0);
-			printf("%s", new_str);
 			break ;
 			/* if(!check_quote_pairs(new_str))
 				perror("minishell"); */
@@ -129,111 +131,98 @@ char	*quote_remover(char *str)
 {
 	int		i;
 	int		j;
-	char	*new_str;
-	int		double_quote_count;
-	int		single_quote_count;
 	int		len;
+	char	*new_str;
 
-
-	i =0;
+	i = 0;
 	j = 0;
-	double_quote_count = 0;
-	single_quote_count = 0;
 	len = ft_strlen(str);
-	if (str[i] == '"' && str[ft_strlen(str) - 1] == '"')
+	new_str = malloc(sizeof(char) * (len - 2 + 1));
+	if(str[i] == '"' && str[len - 1] == '"')
 	{
-		new_str = malloc(sizeof(char) * (ft_strlen(str) - 2 + 1));
-		while(j <= len)
+		while(str[i])
 		{
-			if(str[j] == '"')
-			{
-				while(str[j] == '"')
-				{
-					double_quote_count++;
-					j++;
-				}
-			}
-			if(str[j] == '\'')
-			{
-				while(str[j] == '\'')
-				{
-					single_quote_count++;
-					new_str[i] = str[j];
-					i++;
-					j++;
-				}
-			}
-			new_str[i] = str[j];
-			j++;
+			if(i == 0 || i == len - 1)
+				i++;
+			if(i == len)
+				break;
+			new_str[j] = str[i];
 			i++;
-		}
-		if(double_quote_count % 2 != 0 || (single_quote_count > 1 && single_quote_count % 2 != 0))
-		{
-			printf("Error! unclosed double quotes!");
-			return (0);
-		}
-	}
-	else if (str[i] == '\'' && str[ft_strlen(str) - 1] == '\'')
-	{
-		new_str = malloc(sizeof(char) * (ft_strlen(str) - 2 + 1));
-		while(str[j])
-		{
-			if(str[j] == '\'')
-			{
-				while(str[j] == '\'')
-				{
-					single_quote_count++;
-					j++;
-				}
-			}
-			if(str[j] == '"')
-			{
-				while(str[j] == '"')
-				{
-					double_quote_count++;
-					new_str[i] = str[j];
-					i++;
-					j++;
-				}
-			}
-			while(str[j] == '\'')
-			{
-				single_quote_count++;
-				j++;
-			}
-			new_str[i] = str[j];
 			j++;
-			i++;
 		}
-		if(single_quote_count % 2 != 0 || (double_quote_count > 1 && double_quote_count % 2 != 0))
+	}
+	if(str[i] == '\'' && str[len - 1] == '\'')
+	{
+		while(str[i])
 		{
-			printf("Error! unclosed single quotes!");
-			return (0);
+			if(i == 0 || i == len - 1)
+				i++;
+			if(i == len)
+				break;
+			new_str[j] = str[i];
+			i++;
+			j++;
 		}
-	}
-	else if(str[i] == '"' && str[ft_strlen(str) - 1] != '"')
-	{
-			printf("Error! unclosed double quotes2!");
-			return (0);
-	}
-	else if(str[i] == '\'' && str[ft_strlen(str) - 1] != '\'')
-	{
-			printf("Error! unclosed single quotes2!");
-			return (0);
-	}
-	else if(str[i] != '"' && str[ft_strlen(str) - 1] == '"')
-	{
-			printf("Error! unclosed double quotes2!");
-			return (0);
-	}
-	else if(str[i] != '\'' && str[ft_strlen(str) - 1] == '\'')
-	{
-			printf("Error! unclosed single quotes2!");
-			return (0);
 	}
 	else
-		return (str);
-	return (new_str);
+		return(str);
+	return(new_str);
+}
+
+void	handle_quotes(char *str)
+{
+	int		i;
+	int		flag;
+	char	ignore;
+
+	i = 0;
+	while(str[i])
+	{
+		if(str[i] == '"')
+		{
+			ignore = '"';
+			break;
+		}
+		if(str[i] == '\'')
+		{
+			ignore = '\'';
+			break;
+		}
+		i++;
+	}
+	i = 0;
+	flag = 0;
+	while(str[i])
+	{
+		if(str[i] == ignore)
+		{
+			if(flag)
+			{
+				flag = 0;
+				i++;
+			}
+			if(!flag && str[i] == ignore)
+			{
+				flag = 1;
+				i++;
+			}
+		}
+		else
+			i++;
+	}
+	if(flag)
+		printf("unclosed quotes!");
+	if(!flag)
+	{
+		i = 0;
+		while(str[i])
+		{
+			while(str[i] == ignore)
+				i++;
+			write(1, &str[i], 1);
+			i++;
+		}
+	}
 }
 
 /* int	check_quote_pairs(char *str)
