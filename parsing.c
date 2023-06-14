@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 10:10:32 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/14 14:07:11 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,9 @@ char	**env_copy(t_list *lst)
 int	parsing(t_minishell *shell)
 {
 	pid_t	pid;
-	int		i;
 	int		status;
 
 	status = 0;
-	i = 0;
 	shell->command_splited = ft_split(shell->command, ' ');
 	pid = fork();
 	if(!pid)
@@ -157,13 +155,11 @@ int	parsing(t_minishell *shell)
 		}
 		else if (string_comp(shell->command_splited[0], "cd"))
 		{
-			print_cd(shell);
 			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "env"))
 		{
 			print_env(shell);
-			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "echo"))
 		{
@@ -171,15 +167,9 @@ int	parsing(t_minishell *shell)
 			exit(0);
 		}
 		else if (string_comp(shell->command_splited[0], "export"))
-		{
 			check_args(shell->command_splited, shell);
-			exit(0);
-		}
 		else if (string_comp(shell->command_splited[0], "unset"))
-		{
 			do_unset(shell);
-			exit(0);
-		}
 		else
 		{
 			other_commands(shell);
@@ -188,6 +178,10 @@ int	parsing(t_minishell *shell)
 		free_splited(shell);
 	}
 	wait(&status);
+	if (string_comp(shell->command_splited[0], "cd"))
+	{
+		print_cd(shell);
+	}
 	if (string_comp(shell->command_splited[0], "exit"))
 	{
 		free_struct(shell);
@@ -296,6 +290,6 @@ void	other_commands(t_minishell *shell)
 	if(x == -1)
 	{
 		//printf("%s: command not found\n", shell->command_splited[0]);
-		perror("Error");
+		perror("other commands");
 	}
 }

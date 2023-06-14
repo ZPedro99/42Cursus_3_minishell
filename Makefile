@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
+#    By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/13 12:34:03 by jomirand         ###   ########.fr        #
+#    Updated: 2023/06/13 22:29:30 by emsoares         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS = main.c\
 		pwd.c\
 		echo.c\
 		echo_utils.c\
+		echo_utils2.c\
 		cd.c\
 		cd2.c\
 		utils.c\
