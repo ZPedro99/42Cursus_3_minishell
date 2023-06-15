@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 18:05:47 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:28:43 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,8 @@ int	parsing(t_minishell *shell)
 	status = 0;
 	shell->command_splited = ft_split(shell->command, ' ');
 	command = remove_quotes(shell->command_splited[0]);
+	if(!command)
+		return (0);
 	pid = fork();
 	if(!pid)
 	{
@@ -308,22 +310,32 @@ char	*remove_quotes(char *command)
 	int i;
 	int j;
 	int len;
+	int	quote_counter;
 
-	i = 1;
+	i = 0;
 	j = 0;
+	quote_counter = 0;
 	len = strlen(command);
-	if (len >= 2 && (command[0] == '"' || command[0] == '\'') && command[len - 1] == command[0])
+	if(check_closed_quotes(command))
 	{
-		str = malloc(sizeof(char) * (len - 1));
-	while(i < len - 1)
+		printf("Error\n");
+		return (0);
+	}
+	while(command[j])
 	{
+		if(command[j] == '"' || command[j] == '\'')
+			quote_counter++;
+		j++;
+	}
+	j = 0;
+	str = malloc(sizeof(char) * ((ft_strlen(command) - quote_counter) + 1));
+	while(i < len)
+	{
+		while(command[i] == '"' || command[i] == '\'')
+			i++;
 		str[j] = command[i];
 			i++;
 			j++;
 	}
-	str[j] = '\0';
-		return (str);
-	}
-	str = ft_strdup(command);
-	return (str);
+	return(str);
 }

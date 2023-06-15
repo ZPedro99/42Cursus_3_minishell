@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 18:05:30 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:20:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int			print_normal_words(char *str);
 int			check_pairs(char *str, int quote_count, char quote_type);
 int			print_trimmed_string(char *str, int quote_count, char quote_type, int flag);
 char		*quote_remover(char *str);
-void	handle_quotes(char *str);
+void		handle_quotes(char *str);
+int			check_closed_quotes(char *str);
 
 //***********echo_utils***********//
 int			wordcount(char *s, char c);

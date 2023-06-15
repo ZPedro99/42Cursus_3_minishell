@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 18:01:16 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/15 16:48:36 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_echo(t_minishell *shell)
 	word_num = wordcount(shell->command, ' ');
 	flag = print_echo2(shell, word_num, ret);
 	if (!flag)
-		printf("\n");
+		write(1, "\n", 1);
 	if (flag == 1)
 		return ;
 }
@@ -31,12 +31,14 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 {
 	int	flag;
 	int	i;
+	int	j;
 	char	*new_str;
 
 	i = 1;
 	flag = 0;
 	while (shell->command_splited[i])
 	{
+		j = i;
 		if (shell->command_splited[i][0] == '$')
 		{
 			ft_echo_es(shell, i);
@@ -46,26 +48,41 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 		}
 		else
 		{
+			if(i == 1 && string_comp(shell->command_splited[i], "-n"))
+			{
+				flag = 1;
+				i++;
+			}
+			while(shell->command_splited[i])
+			{
+				if(check_closed_quotes(shell->command_splited[i]))
+				{
+					write(1, "Error", 5);
+					return (0);
+				}
+				i++;
+			}
+			i = j;
 			new_str = quote_remover(shell->command_splited[i]);
+			if(!new_str)
+				return (0);
 			handle_quotes(new_str);
 			/* if(string_comp(new_str, shell->command_splited[i]))
 				free(new_str); */
-			if(!new_str)
-				return (0);
-			break ;
+			//break ;
 			/* if(!check_quote_pairs(new_str))
 				perror("minishell"); */
-			flag = print_normal_words(shell->command_splited[i]);
+			//flag = print_normal_words(shell->command_splited[i]);
 			free(new_str);
 			i++;
 		}
-		if (i < word_num && !string_comp(shell->command_splited[i - 1], "-n"))
-			printf(" ");
+		if (i < word_num)
+			write(1, " ", 1);
 	}
 	return (flag);
 }
 
-int	print_normal_words(char *str)
+/* int	print_normal_words(char *str)
 {
 	static int	flag;
 	int			double_quote_count;
@@ -125,20 +142,29 @@ int	print_trimmed_string(char *str, int quote_count, char quote_type, int flag)
 		return (flag);
 	}
 	return (0);
-}
+} */
 
 char	*quote_remover(char *str)
 {
 	int		i;
 	int		j;
 	int		len;
+	int		quote_counter;
 	char	*new_str;
 
 	i = 0;
 	j = 0;
+	quote_counter = 0;
 	len = ft_strlen(str);
 	new_str = malloc(sizeof(char) * (len - 2 + 1));
-	if(str[i] == '"' && str[len - 1] == '"')
+	while(str[i])
+	{
+		if(str[i] == '"' || str[i] == '\'')
+			quote_counter++;
+		i++;
+	}
+	i = 0;
+	if(quote_counter == 2 && str[i] == '"' && str[len - 1] == '"')
 	{
 		while(str[i])
 		{
@@ -151,7 +177,7 @@ char	*quote_remover(char *str)
 			j++;
 		}
 	}
-	if(str[i] == '\'' && str[len - 1] == '\'')
+	if(quote_counter == 2 && str[i] == '\'' && str[len - 1] == '\'')
 	{
 		while(str[i])
 		{
@@ -163,6 +189,16 @@ char	*quote_remover(char *str)
 			i++;
 			j++;
 		}
+	}
+	if(quote_counter == 2 && str[i] == '"' && str[len - 1] == '\'')
+	{
+		printf("error on quotes");
+		return(0);
+	}
+	if(quote_counter == 2 && str[i] == '\'' && str[len - 1] == '"')
+	{
+		printf("error on quotes");
+		return(0);
 	}
 	else
 		return(str);
@@ -173,62 +209,107 @@ void	handle_quotes(char *str)
 {
 	int		i;
 	int		flag;
+	int		hold;
+	int		temp;
 	char	ignore;
 
 	i = 0;
-	while(str[i])
+	flag = 0;
+	ignore = 0;
+	hold = 0;
+	/* if(check_closed_quotes(str))
 	{
-		if(str[i] == '"')
+		printf("unclosed quotes!");
+		return ;
+	} */
+	/* while(str[i])
+	{
+		if (str[i] == '(' || str[i] == ')')
 		{
-			ignore = '"';
-			break;
-		}
-		if(str[i] == '\'')
-		{
-			ignore = '\'';
-			break;
+			ft_putstr_fd("Error: cant cope with parenthesis on first position\n", 2);
+			return ;
 		}
 		i++;
-	}
+	} */
 	i = 0;
-	flag = 0;
 	while(str[i])
 	{
+		if(str[i] == '"' && ignore == 0)
+			ignore = '"';
+		if(str[i] == '\'' && ignore == 0)
+			ignore = '\'';
 		if(str[i] == ignore)
 		{
 			if(flag)
 			{
 				flag = 0;
+				temp = i;
+				i = hold + 1;
+				hold = temp;
+				//print_string(str, i, hold);
+				while(i < hold)
+				{
+					write(1, &str[i], 1);
+					i++;
+				}
+				ignore = 0;
 				i++;
+				if(str[i] == '\0')
+					return ;
 			}
 			if(!flag && str[i] == ignore)
+			{
+				hold = i;
+				flag = 1;
+				i++;
+			}
+		}
+		else if (!ignore)
+		{
+			write(1, &str[i], 1);
+			i++;
+		}
+		else
+			i++;
+	}
+}
+
+int	check_closed_quotes(char *str)
+{
+	int		i;
+	int		flag;
+	char	ignore;
+
+	i = 0;
+	flag = 0;
+	ignore = 0;
+	while(str[i])
+	{
+		if(str[i] == '"' && ignore == 0)
+			ignore = '"';
+		else if(str[i] == '\'' && ignore == 0)
+			ignore = '\'';
+		else if(str[i] == ignore)
+		{
+			if(flag && str[i] == ignore)
+			{
+				flag = 0;
+				ignore = 0;
+				i++;
+			}
+			if(str[i] && !flag && str[i] == ignore)
 			{
 				flag = 1;
 				i++;
 			}
 		}
+		else if(flag == 0 && (str[i] == ')' || str[i] == '('))
+			return (1);
 		else
 			i++;
 	}
-	if(flag)
-		printf("unclosed quotes!");
-	if(!flag)
-	{
-		i = 0;
-		while(str[i])
-		{
-			while(str[i] == ignore)
-				i++;
-			write(1, &str[i], 1);
-			i++;
-		}
-	}
+	return(flag);
 }
-
-/* int	check_quote_pairs(char *str)
-{
-
-} */
 
 /* int	print_normal_words(char *str)
 {
