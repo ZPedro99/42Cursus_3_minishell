@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/19 15:45:21 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/20 00:03:51 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ int	check_args(char **command, t_minishell *shell)
 {
 	int	i;
 	int	x;
+	char	*str;
 
 	i = 1;
 	x = 0;
@@ -230,19 +231,129 @@ int	check_args(char **command, t_minishell *shell)
 		i = 1;
 		while(command[i])
 		{
-			if(check_exp_input(command[i]) == 0)
+			if(check_exp_quotes(command[i]) == 0)
 			{
-				x = 1;
-				printf("minishell: export: `%s': not a valid identifier\n", command[i]);
+				printf("Error in export variable, check quotes!\n");//se tiver quotes diferentes
 			}
-			else
-				place_exp_var(shell, shell->command_splited[i]);
+			if(check_exp_quotes(command[i]) == -1)
+			{
+				printf("Error in export variable, quote must have their pair!\n");
+				return (1);
+			}
+			if(check_exp_quotes(command[i]) == 1)
+			{
+				str = quote_remover_exp(command[i]);
+				if(check_exp_input(str) == 0)
+				{
+					x = 1;
+					free(str);
+					printf("minishell: export: `%s': not a valid identifier\n", str);
+				}
+				else
+					place_exp_var(shell, str);
+				free(str);
+			}
 			i++;
 		}
 	}
 	if (x == 0)
 		return (0);
 	return (1);
+}
+
+int	check_exp_quotes(char *original)
+{
+	int i;
+	
+	i = 0;
+	while (original[i])
+	{
+		if (original[i] == '"' || original[i] == '\'')
+		{
+			if (check_equal(original, i) == 0)
+				return (0);
+			if (check_equal(original, i) == -1)
+				return (-1);
+			if (check_equal(original, i) == 1)
+				return (1);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	check_equal(char *str, int i)
+{
+	char temp;
+	int count;
+
+	count = 0;
+	temp = str[i];
+	if(temp == '\'')
+	{
+			while(str[i])
+			{
+				if (str[i] == '"')
+					return(0);
+				if (str[i] == '\'')
+					count++;
+				i++;
+			}
+			if(count % 2 == 0)
+				return (1);
+			else
+				return (-1);
+	}
+	else if(temp == '"')
+	{
+		while(str[i])
+		{
+			if (str[i] == '\'')
+				return(0);
+			if (str[i] == '"')
+				count++;
+			i++;
+		}
+		if(count % 2 == 0)
+			return (1);
+		else
+			return (-1);
+	}
+	return(0);
+}
+
+char *quote_remover_exp(char *str)
+{
+	int	i;
+	char *new;
+	char temp;
+	int j;
+
+	j = 0;
+	i = 0;
+	while(str[i] != '\'' && str[i] != '"' && '\0')
+		i++;
+	if (str[i] == '\0')
+	{
+		new = ft_strdup(str);
+		return (new);
+	}
+	temp = str[i];
+	new = malloc(sizeof(char) * (ft_strlen(str) - counting_quote(str, temp) + 1));
+	i = 0;
+	while(str[i] != '\0')
+	{
+		if (str[i] == temp)
+			i++;
+		else
+		{
+			new[j] = str[i];
+			i++;
+			j++;
+		}
+	}
+	new[j] = '\0';
+	return (new);
 }
 
 int	check_exp_input(char *str)
