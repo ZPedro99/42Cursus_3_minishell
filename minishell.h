@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/15 11:20:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/19 10:07:37 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <signal.h>
+# include <limits.h>
 
 extern int	g_exit_status;
 
@@ -61,7 +62,7 @@ char		*get_var_name(char *env);
 char		*get_var_value(char *env);
 
 //***********export***********//
-t_list	*get_exp_vars(char **env);
+t_list		*get_exp_vars(char **env);
 t_env		*create_exp_node(char *env);
 char		*get_exp_info(char *env);
 char		*get_exp_name(char *env);
@@ -84,13 +85,13 @@ void		free_copies(char **copy);
 
 //***********parsing***********//
 int			parsing(t_minishell *shell);
-void		print_env(t_minishell *shell);
+int			print_env(t_minishell *shell);
 char		**env_copy(t_list *lst);
 void		print_exp(t_minishell *shell);
 char		**sort_exp(t_list *lst, t_list *head);
-void		check_args(char **command, t_minishell *shell);
+int			check_args(char **command, t_minishell *shell);
 int			check_exp_input(char *str);
-void		other_commands(t_minishell *shell);
+int			other_commands(t_minishell *shell);
 char		*remove_quotes(char *command);
 
 //***********pwd***********//
@@ -117,7 +118,7 @@ char		*get_dup_str(char *str);
 int			ft_echo_es(t_minishell *shell, int i);
 
 //***********cd***********//
-void		print_cd(t_minishell *shell);
+int			print_cd(t_minishell *shell);
 void		change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
 void		change_exp(t_list *exp, char *old_pwd, char *new_pwd);
 char		*change_dir(t_list *env, char *str);
@@ -125,7 +126,7 @@ char		*change_dir(t_list *env, char *str);
 void		change_dir_home(t_minishell *shell);
 void		change_dir_minus(t_minishell *shell);
 void		change_dir_dotdot(t_minishell *shell);
-void		change_dir_rest(t_minishell *shell);
+int			change_dir_rest(t_minishell *shell);
 //***********utils***********//
 
 int			string_comp(char *s1, char *s2);
@@ -140,9 +141,13 @@ int			ft_search(char *str, char c);
 //***********unset***********//
 
 void		do_unset(t_minishell *shell);
+int			only_exp(char *str, t_minishell *shell);
+char		*adjust_name_exp(char *str);
 char		*adjust_name_env(char *str);
 void		unset_env(t_minishell *shell, t_list *temp, int i);
 void		unset_exp(t_minishell *shell, t_list *temp, int i);
+void		unset_only_exp(t_minishell *shell, t_list *temp, int i);
+
 
 //***********signals***********//
 
@@ -150,7 +155,13 @@ void		handle_signals(void);
 void		sighand(int signal);
 
 //***********exit***********//
-
 void	get_exit_status(int status);
-
+int		ft_exit_status(t_minishell *shell);
+int		ft_word_count(char **str);
+int		check_arg(char *str);
+long long		ft_atol(const char *str);
+/* static char	*posnum(char *str, long long n, int len);
+static char	*negnum(char *str, long long n, int len);
+static int	int_len(long long n) */;
+char	*ft_ltoa(long long n);
 #endif

@@ -6,14 +6,14 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/14 15:17:49 by jomirand         ###   ########.fr        #
+#    Updated: 2023/06/19 11:19:51 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = cc -g
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 RFLAG = -lreadline
 RM = rm -rf
 

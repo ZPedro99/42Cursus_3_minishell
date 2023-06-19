@@ -15,14 +15,50 @@
 void	do_unset(t_minishell *shell)
 {
 	int		i;
+	int		count;
 
+	count = 0;
+	i = 0;
+	count = ft_word_count(shell->command_splited);
 	i = 1;
-	while (shell->command_splited[i])
+	while (i <= count)
 	{
-		unset_env(shell, shell->env, i);
-		unset_exp(shell, shell->exp, i);
+		while (shell->command_splited[i])
+		{
+			if (ft_check_dup2(shell, shell->command_splited[i]) == 1)
+				break;
+			if (only_exp(shell->command_splited[i], shell) == 1)
+				unset_only_exp(shell, shell->exp, i);
+			else
+			{
+				unset_env(shell, shell->env, i);
+				unset_exp(shell, shell->exp, i);
+			}
+			i++;
+		}
 		i++;
 	}
+	return ;
+}
+
+int	only_exp(char *str, t_minishell *shell)
+{
+	char *str_adjusted;
+	t_list	*head;
+
+	head = shell->exp;
+	str_adjusted = ft_strjoin("declare -x ", str);
+	while (head)
+	{
+		if (string_comp(((t_env *)(head->content))->name, str_adjusted))
+		{
+			free(str_adjusted);
+			return (1);
+		}
+		head = head->next;
+	}
+	free(str_adjusted);
+	return(0);
 }
 
 char	*adjust_name_env(char *str)
@@ -88,4 +124,26 @@ void	unset_exp(t_minishell *shell, t_list *temp, int i)
 	free(temp);
 	free(var_name_adjust);
 	//temp->next = temp->next->next;
+}
+
+void	unset_only_exp(t_minishell *shell, t_list *temp, int i)
+{
+	char	*var_name_adjust;
+	t_list	*previous;
+	/* int		i;
+
+	i = 1; */
+	previous = 0;
+	var_name_adjust = ft_strjoin("declare -x ", shell->command_splited[i]);
+	while (!string_comp(((t_env *)(temp->content))->name, var_name_adjust))
+	{
+		previous = temp;
+		temp = temp->next;
+	}
+	previous->next = temp->next;
+	free(((t_env *)(temp->content))->name);
+	//free(((t_env *)(temp->content))->info);
+	free(((t_env *)(temp->content)));
+	free(temp);
+	free(var_name_adjust);
 }

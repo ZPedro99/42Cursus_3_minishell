@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/09 14:47:02 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:49:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_check_dup(t_minishell *shell, char *str)
 	int	i;
 	int	j;
 	head = shell->exp;
-	
+
 	i = 0;
 	j = 0;
 	while (str[i] != '\0' && str[i] != '=')
@@ -55,7 +55,7 @@ void	change_value_exp(t_minishell *shell, char *str, char *exp_name)
 	char	*exp_value;
 	char	*temp;
 	t_list *temp_exp;
-	
+
 	int	i = 0;
 	int	j = 0;
 	int size;
@@ -94,7 +94,7 @@ void	change_value_env(t_minishell *shell, char *str, char *name)
 {
 	char	*temp;
 	t_list *temp_env;
-	
+
 	int	i = 0;
 	int	j = 0;
 	int size;
@@ -195,11 +195,12 @@ int	ft_check_exp(t_minishell *shell, char *str)
 		{
 		previous->next = head->next;
 		free(((t_env *)(head->content))->name);
-		free(((t_env *)(head->content))->info);
+		if(string_comp(((t_env *)(head->content))->info, ""))
+			free(((t_env *)(head->content))->info);
 		free(((t_env *)(head->content)));
 		free(temp2);
 		return(0);
-		}	
+		}
 	}
 	free(temp2);
 	return(0);

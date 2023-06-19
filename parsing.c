@@ -3,22 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/15 17:28:43 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:31:10 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(t_minishell *shell)
+int	print_env(t_minishell *shell)
 {
 	t_list	*temp;
-	char	*complete;
-	char	*name;
-	char	*info;
+	char		*complete;
+	char		*name;
+	char		*info;
+	int			i;
 
+	i = 0;
+	while(shell->command_splited[i])
+		i++;
+	if(i >= 2)
+	{
+		printf("Error in env\n");
+		return (127);
+	}
 	temp = shell->env;
 	while (temp)
 	{
@@ -31,13 +40,14 @@ void	print_env(t_minishell *shell)
 		free(info);
 		temp = temp->next;
 	}
+	return (0);
 }
 
 void	print_exp(t_minishell *shell)
 {
 	t_list	*temp;
 	char	**exp_array;
-	char	*exp_line;
+	//char	*exp_line;
 	int		i;
 	int		size;
 
@@ -53,13 +63,13 @@ void	print_exp(t_minishell *shell)
 		{
 			if (string_comp(exp_array[i], ((t_env *)(temp->content))->name))
 			{
-				exp_line = ft_strjoin(exp_array[i], ((t_env *)(temp->content))->info);
+				//exp_line = ft_strjoin(exp_array[i], ((t_env *)(temp->content))->info);
 				break ;
 			}
 			temp = temp->next;
 		}
-		printf("%s\n", exp_line);
-		free(exp_line);
+		printf("%s%s\n", ((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
+		//free(exp_line);
 		temp = shell->exp;
 		i++;
 	}
@@ -142,16 +152,11 @@ int	parsing(t_minishell *shell)
 	status = 0;
 	shell->command_splited = ft_split(shell->command, ' ');
 	command = remove_quotes(shell->command_splited[0]);
-	if(!command)
-		return (0);
 	pid = fork();
 	if(!pid)
 	{
 		if (string_comp(command, "exit"))
-		{
-			printf("%s\n", command);
 			exit(0);
-		}
 		else if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
@@ -161,10 +166,12 @@ int	parsing(t_minishell *shell)
 		{
 			exit(0);
 		}
+		else if (string_comp(command, "unset"))
+			exit(0);
 		else if (string_comp(command, "env"))
 		{
-			print_env(shell);
-			exit(0);
+			g_exit_status = print_env(shell);
+			exit(g_exit_status);
 		}
 		else if (string_comp(command, "echo"))
 		{
@@ -172,42 +179,48 @@ int	parsing(t_minishell *shell)
 			exit(0);
 		}
 		else if (string_comp(command, "export"))
-		{
-			check_args(shell->command_splited, shell);
 			exit(0);
-		}
-		/* else if (string_comp(shell->command_splited[0], "unset"))
-			do_unset(shell); */
 		else
 		{
-			other_commands(shell);
-			exit(0);
+			if(other_commands(shell) == 0) //exit status ok
+				exit(0);
+			exit(g_exit_status);
 		}
 		free_splited(shell);
 	}
 	wait(&status);
-	if (string_comp(command, "unset"))
+	get_exit_status(status);
+	 if (string_comp(command, "export"))
+		g_exit_status = check_args(shell->command_splited, shell);
+	else if (string_comp(command, "unset"))
 		do_unset(shell);
-	if (string_comp(command, "cd"))
+	else if (string_comp(command, "cd"))
 	{
-		print_cd(shell);
+		g_exit_status = print_cd(shell);
 	}
-	if (string_comp(command, "exit"))
+	else if (string_comp(command, "exit"))
 	{
-		free_struct(shell);
-		exit(g_exit_status);
+		if (ft_exit_status(shell) != 1)
+		{
+			free(command);
+			free_struct(shell);
+			exit(g_exit_status);
+		}
 	}
+	free(command);
 	if(shell->command_splited)
 		free_splited(shell);
-	get_exit_status(status);
+	//get_exit_status(status);
 	return (0);
 }
 
-void	check_args(char **command, t_minishell *shell)
+int	check_args(char **command, t_minishell *shell)
 {
 	int	i;
+	int	x;
 
 	i = 1;
+	x = 0;
 	while (command[i] != NULL)
 		i++;
 	if(i == 1)
@@ -218,12 +231,18 @@ void	check_args(char **command, t_minishell *shell)
 		while(command[i])
 		{
 			if(check_exp_input(command[i]) == 0)
+			{
+				x = 1;
 				printf("minishell: export: `%s': not a valid identifier\n", command[i]);
+			}
 			else
 				place_exp_var(shell, shell->command_splited[i]);
 			i++;
 		}
 	}
+	if (x == 0)
+		return (0);
+	return (1);
 }
 
 int	check_exp_input(char *str)
@@ -259,7 +278,7 @@ int	check_exp_input(char *str)
 	return (1);
 }
 
-void	other_commands(t_minishell *shell)
+int	other_commands(t_minishell *shell)
 {
 	int		i;
 	char	*complete_path;
@@ -299,9 +318,10 @@ void	other_commands(t_minishell *shell)
 	}
 	if(x == -1)
 	{
-		//printf("%s: command not found\n", shell->command_splited[0]);
 		perror("other commands");
+		g_exit_status = 127; //nao esta a assumir !!!!
 	}
+	return (x);
 }
 
 char	*remove_quotes(char *command)
@@ -310,32 +330,22 @@ char	*remove_quotes(char *command)
 	int i;
 	int j;
 	int len;
-	int	quote_counter;
 
-	i = 0;
+	i = 1;
 	j = 0;
-	quote_counter = 0;
 	len = strlen(command);
-	if(check_closed_quotes(command))
+	if (len >= 2 && (command[0] == '"' || command[0] == '\'') && command[len - 1] == command[0])
 	{
-		printf("Error\n");
-		return (0);
-	}
-	while(command[j])
+		str = malloc(sizeof(char) * (len - 1));
+	while(i < len - 1)
 	{
-		if(command[j] == '"' || command[j] == '\'')
-			quote_counter++;
-		j++;
-	}
-	j = 0;
-	str = malloc(sizeof(char) * ((ft_strlen(command) - quote_counter) + 1));
-	while(i < len)
-	{
-		while(command[i] == '"' || command[i] == '\'')
-			i++;
 		str[j] = command[i];
 			i++;
 			j++;
 	}
-	return(str);
+	str[j] = '\0';
+		return (str);
+	}
+	str = ft_strdup(command);
+	return (str);
 }

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:04:14 by string            #+#    #+#             */
-/*   Updated: 2022/11/11 16:04:29 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:28:11 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 int	ft_isdigit(int c)
-
 {
 	if (c >= 48 && c <= 57)
 		return (1);

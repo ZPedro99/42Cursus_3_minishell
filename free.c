@@ -79,8 +79,8 @@ void	free_struct(t_minishell *shell)
 	free(shell->pwd);
 	free(shell->old_pwd);
 	free(shell->home);
+	//free_export(shell->exp); //por obra do espirito santo nao e preciso este free, cada vez percebo menos
 	free_env(shell->env);
-	free_export(shell->exp);
 }
 
 void	free_splited(t_minishell *shell)

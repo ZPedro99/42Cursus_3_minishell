@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export2.c                                          :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:45:06 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/09 14:46:01 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:53:31 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ t_env	*create_exp_node(char *env)
 	exp_var->name = get_exp_name(env);
 	if(ft_search(env, '=') == 0)
 	{
-		exp_var->info = NULL;
-		return(exp_var);	
+		exp_var->info = " ";
+		return(exp_var);
 	}
 	exp_var->info = get_exp_info(env);
 	return (exp_var);
@@ -73,7 +73,7 @@ char	*get_exp_name(char *env)
 void	place_exp_var(t_minishell *shell, char *str)
 {
 	int value;
-	
+
 	value = ft_search(str, '=');
 	if (value == 0)
 	{
@@ -93,6 +93,6 @@ void	place_exp_var(t_minishell *shell, char *str)
 				ft_lstadd_back(&shell->env, ft_lstnew(create_env_node(str)));
 			}
 			return ;
-		}	
+		}
 	}
 }
