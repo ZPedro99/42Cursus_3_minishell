@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/19 11:49:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/19 17:13:35 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,13 +193,14 @@ int	ft_check_exp(t_minishell *shell, char *str)
 		}
 		else
 		{
-		previous->next = head->next;
-		free(((t_env *)(head->content))->name);
-		if(string_comp(((t_env *)(head->content))->info, ""))
-			free(((t_env *)(head->content))->info);
-		free(((t_env *)(head->content)));
-		free(temp2);
-		return(0);
+			previous->next = head->next;
+			free(((t_env *)(head->content))->name);
+			if(string_comp(((t_env *)(head->content))->info, " "))
+				free(((t_env *)(head->content))->info);
+			free(((t_env *)(head->content)));
+			free(head);
+			free(temp2);
+			return(0);
 		}
 	}
 	free(temp2);

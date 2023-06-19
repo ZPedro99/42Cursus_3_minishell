@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:45:06 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/19 11:53:31 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/19 16:43:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_env	*create_exp_node(char *env)
 	exp_var->name = get_exp_name(env);
 	if(ft_search(env, '=') == 0)
 	{
-		exp_var->info = " ";
+		exp_var->info = ft_strdup(" ");
 		return(exp_var);
 	}
 	exp_var->info = get_exp_info(env);
@@ -72,7 +72,7 @@ char	*get_exp_name(char *env)
 
 void	place_exp_var(t_minishell *shell, char *str)
 {
-	int value;
+	int	value;
 
 	value = ft_search(str, '=');
 	if (value == 0)
