@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/19 10:07:37 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/19 23:19:05 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <limits.h>
+#	include <stdarg.h>
 
 extern int	g_exit_status;
 
@@ -93,7 +94,9 @@ int			check_args(char **command, t_minishell *shell);
 int			check_exp_input(char *str);
 int			other_commands(t_minishell *shell);
 char		*remove_quotes(char *command);
-
+int	check_exp_quotes(char *original);
+int			check_equal(char *str, int i);
+char 	*quote_remover_exp(char *original);
 //***********pwd***********//
 void		print_pwd(t_minishell *shell);
 
