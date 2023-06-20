@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 21:18:30 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:32:36 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	rl_clear_history();
+	shell.pipes = 0;
 	shell.env = get_env_vars(envp);
 	shell.exp = get_exp_vars(envp);
 	obtain_vars(&shell);
@@ -69,8 +70,16 @@ void	read_command(t_minishell *shell)
 		else
 		{
 			add_history(shell->command);
-			if (parsing(shell))
-				break ;
+			if(counting_pipes(shell) == 0)
+			{
+				if (parsing(shell))
+					break ;
+			}
+			else
+			{
+				if(multi_commands(shell))
+					break ;
+			}
 			free(shell->command);
 		}
 	}

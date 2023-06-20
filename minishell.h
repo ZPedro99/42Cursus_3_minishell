@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 11:05:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:56:08 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ typedef struct s_minishell
 	char	**command_splited;
 	char	*home;
 	char	**paths;
+	int		pipes;
+	int		*pipes_fd;
+	int		stdin_fd;
+	int		stdout_fd;
 }				t_minishell;
 
 typedef struct s_env
@@ -148,6 +152,7 @@ char		*get_prompt2(int i, int j, char *temp);
 
 //***********utils2***********//
 int			ft_search(char *str, char c);
+int			counting_pipes(t_minishell *shell);
 
 //***********unset***********//
 
@@ -175,4 +180,10 @@ long long		ft_atol(const char *str);
 static char	*negnum(char *str, long long n, int len);
 static int	int_len(long long n) */;
 char	*ft_ltoa(long long n);
+
+//***********multi_commands***********//
+
+int		multi_commands(t_minishell *shell);
+int		pipe_creation(t_minishell *shell);
+
 #endif

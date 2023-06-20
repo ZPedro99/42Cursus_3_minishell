@@ -1,41 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   multi_commands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/20 15:37:58 by jomirand         ###   ########.fr       */
+/*   Created: 2023/06/20 14:36:20 by jomirand          #+#    #+#             */
+/*   Updated: 2023/06/20 16:52:51 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_search(char *str, char c)
-{
-	int i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == c)
-			return(1);
-		i++;
-	}
-	return (0);
-}
-
-int	counting_pipes(t_minishell *shell)
+int	multi_commands(t_minishell *shell)
 {
 	int	i;
 
+	pipe_creation(shell);
+	shell->stdin_fd = STDIN_FILENO;
+	shell->stdout_fd = STDOUT_FILENO;
 	i = 0;
-	while(shell->command[i])
+	shell->command_splited = ft_split(shell->command, '|');
+	return (0);
+}
+
+int	pipe_creation(t_minishell *shell)
+{
+	int i;
+
+	shell->pipes_fd = malloc(sizeof(int) * (shell->pipes * 2));
+	i = 0;
+	if(pipe(shell->pipes_fd + (2 * i)) < 0)
 	{
-		if(shell->command[i] == '|')
-			shell->pipes++;
-		i++;
+		ft_putstr_fd("Error while creating pipes", 2);
+		return (1);
 	}
-	return(shell->pipes);
+	return (0);
 }

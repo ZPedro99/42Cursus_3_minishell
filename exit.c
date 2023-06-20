@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/15 16:13:48 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/20 11:46:54 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,19 @@ int	ft_exit_status(t_minishell *shell)
 	{
 		num = ft_atol(shell->command_splited[1]);
 		str = ft_ltoa(num);
-		if (ft_strncmp(str, shell->command_splited[1], ft_strlen(str)) != 0)
+		/* if (ft_strncmp(str, shell->command_splited[1], ft_strlen(str)) != 0)
 		{
 			printf("exit\n");
 			printf("minishell: %s: numeric argument required\n", shell->command_splited[1]);
 			g_exit_status = 2;
 			free(str);
 			return (g_exit_status);
-		}
-		else
-		{
-			free(str);
-			printf("exit\n");
-			num = ft_atol(shell->command_splited[1]);
-			g_exit_status = (num % 256);
-			return (g_exit_status);
-		}
+		} */
+		free(str);
+		printf("exit\n");
+		num = ft_atol(shell->command_splited[1]);
+		g_exit_status = (num % 256);
+		return (g_exit_status);
 	}
 	return (0);
 }
@@ -90,8 +87,8 @@ int	check_arg(char *str)
 	int	i;
 
 	i = 0;
-	if (str[i] == '-')
-		i = 1;	
+	if (str[i] == '-' || str[i] == '+')
+		i = 1;
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
@@ -120,7 +117,7 @@ long long	ft_atol(const char *str)
 		i++;
 	}
 	else if (str[i] == '+')
-	i++;
+		i++;
 	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
 	{
 		result *= 10;

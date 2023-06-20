@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/20 11:04:46 by jomirand         ###   ########.fr        #
+#    Updated: 2023/06/20 14:37:07 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRCS = main.c\
 		unset.c\
 		signals.c\
 		exit.c\
+		multi_commands.c\
 
 OBJS = $(SRCS:%.c=%.o)
 
