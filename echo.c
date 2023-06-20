@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/19 11:23:30 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/20 10:00:57 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ char	*quote_remover(char *str)
 			i++;
 			j++;
 		}
+		return(new_str);
 	}
 	if(quote_counter == 2 && str[i] == '\'' && str[len - 1] == '\'')
 	{
@@ -123,6 +124,7 @@ char	*quote_remover(char *str)
 			i++;
 			j++;
 		}
+		return(new_str);
 	}
 	if(quote_counter == 2 && str[i] == '"' && str[len - 1] == '\'')
 	{
@@ -134,12 +136,8 @@ char	*quote_remover(char *str)
 		printf("error on quotes");
 		return(0);
 	}
-	else
-	{
-		free(new_str);
-		return(str);
-	}
-	return(new_str);
+	free(new_str);
+	return(str);
 }
 
 void	handle_quotes(char *str)
