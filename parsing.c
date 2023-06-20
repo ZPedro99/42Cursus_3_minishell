@@ -6,142 +6,11 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 10:26:37 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/20 11:06:19 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	print_env(t_minishell *shell)
-{
-	t_list	*temp;
-	char		*complete;
-	char		*name;
-	char		*info;
-	int			i;
-
-	i = 0;
-	while(shell->command_splited[i])
-		i++;
-	if(i >= 2)
-	{
-		printf("Error in env\n");
-		return (127);
-	}
-	temp = shell->env;
-	while (temp)
-	{
-		name = ft_strdup(((t_env *)(temp->content))->name);
-		info = ft_strdup(((t_env *)(temp->content))->info);
-		complete = ft_strjoin(name, info);
-		printf("%s\n", complete);
-		free(complete);
-		free(name);
-		free(info);
-		temp = temp->next;
-	}
-	return (0);
-}
-
-void	print_exp(t_minishell *shell)
-{
-	t_list	*temp;
-	char	**exp_array;
-	//char	*exp_line;
-	int		i;
-	int		size;
-
-	i = 0;
-	size = 0;
-	temp = shell->exp;
-	exp_array = sort_exp(temp, shell->exp);
-	while (exp_array[size])
-		size++;
-	while (size != i)
-	{
-		while (temp)
-		{
-			if (string_comp(exp_array[i], ((t_env *)(temp->content))->name))
-			{
-				//exp_line = ft_strjoin(exp_array[i], ((t_env *)(temp->content))->info);
-				break ;
-			}
-			temp = temp->next;
-		}
-		printf("%s%s\n", ((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
-		//free(exp_line);
-		temp = shell->exp;
-		i++;
-	}
-	i = 0;
-	while (exp_array[i])
-	{
-		free(exp_array[i]);
-		i++;
-	}
-	free(exp_array);
-}
-
-char	**sort_exp(t_list *lst, t_list *head)
-{
-	int		size;
-	int		size_string;
-	char	**exp_array;
-	int		i;
-	char	*temp1;
-	char	*temp2;
-
-	(void)head;
-	i = 0;
-	size = ft_lstsize(lst);
-	exp_array = (char **)malloc(sizeof(char *) * (size + 1));
-	while (i < size)
-	{
-		exp_array[i] = ft_strdup(((t_env *)(lst->content))->name);
-		i++;
-		lst = lst->next;
-	}
-	exp_array[i] = 0;
-	i = 0;
-	while (i < size - 1)
-	{
-		size_string = len_compare(exp_array[i], exp_array[i + 1]);
-		if (ft_strncmp(exp_array[i], exp_array[i + 1], size_string) > 0)
-		{
-			temp1 = ft_strdup(exp_array[i]);
-			temp2 = ft_strdup(exp_array[i + 1]);
-			free(exp_array[i]);
-			free(exp_array[i + 1]);
-			exp_array[i] = ft_strdup(temp2);
-			exp_array[i + 1] = ft_strdup(temp1);
-			free(temp1);
-			free(temp2);
-			i = 0;
-		}
-		else
-			i++;
-	}
-	return (exp_array);
-}
-
-char	**env_copy(t_list *lst)
-{
-	char	**env_cpy;
-	t_list	*temp;
-	int		i;
-
-	i = 0;
-	temp = lst;
-	env_cpy = (char **)malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
-	while (temp)
-	{
-		env_cpy[i] = ft_strjoin(((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
-		temp = temp->next;
-		i++;
-	}
-	env_cpy[i] = 0;
-	return (env_cpy);
-}
 
 int	parsing(t_minishell *shell)
 {
@@ -202,12 +71,10 @@ int	parsing(t_minishell *shell)
 	{
 		if (ft_exit_status(shell) != 1)
 		{
-			free(command);
 			free_struct(shell);
 			exit(g_exit_status);
 		}
 	}
-	free(command);
 	if(shell->command_splited)
 		free_splited(shell);
 	//get_exit_status(status);
@@ -234,6 +101,7 @@ int	check_args(char **command, t_minishell *shell)
 			if(check_exp_quotes(command[i]) == 0)
 			{
 				printf("Error in export variable, check quotes!\n");//se tiver quotes diferentes
+				return(1);
 			}
 			if(check_exp_quotes(command[i]) == -1)
 			{
@@ -320,73 +188,6 @@ int	check_equal(char *str, int i)
 			return (-1);
 	}
 	return(0);
-}
-
-char *quote_remover_exp(char *str)
-{
-	int	i;
-	char *new;
-	char temp;
-	int j;
-
-	j = 0;
-	i = 0;
-	while(str[i] != '\'' && str[i] != '"' && '\0')
-		i++;
-	if (str[i] == '\0')
-	{
-		new = ft_strdup(str);
-		return (new);
-	}
-	temp = str[i];
-	new = malloc(sizeof(char) * (ft_strlen(str) - counting_quote(str, temp) + 1));
-	i = 0;
-	while(str[i] != '\0')
-	{
-		if (str[i] == temp)
-			i++;
-		else
-		{
-			new[j] = str[i];
-			i++;
-			j++;
-		}
-	}
-	new[j] = '\0';
-	return (new);
-}
-
-int	check_exp_input(char *str)
-{
-	int		i;
-	char	*temp;
-	char	*temp1;
-	temp = get_var_name(str);
-	if (ft_search(temp, '=') == 1)
-	{
-		temp1 = ft_strdup(temp);
-		free(temp);
-		temp = ft_strtrim(temp1, "=");
-		free(temp1);
-	}
-	if ((ft_isalpha(temp[0]) == 0) && temp[0] != '_')
-	{
-		free(temp);
-		return (0);
-	}
-	i = 0;
-	while (temp[i])
-	{
-		if ((ft_isalnum(temp[i]) == 1) || temp[i] == '_' )
-			i++;
-		else
-		{
-			free(temp);
-			return (0);
-		}
-	}
-	free(temp);
-	return (1);
 }
 
 int	other_commands(t_minishell *shell)

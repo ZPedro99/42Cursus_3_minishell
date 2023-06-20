@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 10:57:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/08 17:09:58 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/20 10:59:40 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,3 +90,23 @@ char	*get_var_value(char *env)
 	env_value[j] = '\0';
 	return (env_value);
 }
+
+char	**env_copy(t_list *lst)
+{
+	char	**env_cpy;
+	t_list	*temp;
+	int		i;
+
+	i = 0;
+	temp = lst;
+	env_cpy = (char **)malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
+	while (temp)
+	{
+		env_cpy[i] = ft_strjoin(((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
+		temp = temp->next;
+		i++;
+	}
+	env_cpy[i] = 0;
+	return (env_cpy);
+}
+

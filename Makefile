@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/19 12:45:15 by jomirand         ###   ########.fr        #
+#    Updated: 2023/06/20 11:04:46 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,10 @@ LIBFT = ./libft/libft.a
 
 SRCS = main.c\
 		env.c\
+		env2.c\
 		export.c\
 		export2.c\
+		export3.c\
 		free.c\
 		parsing.c\
 		pwd.c\

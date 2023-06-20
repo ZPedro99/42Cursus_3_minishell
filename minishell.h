@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 09:51:24 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/20 11:05:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,15 @@ char		**save_paths(char *paths);
 int			number_of_paths(char *paths);
 
 //***********env***********//
-t_list	*get_env_vars(char **env);
+t_list		*get_env_vars(char **env);
 t_env		*create_env_node(char *env);
 char		*get_var_name(char *env);
 char		*get_var_value(char *env);
+char		**env_copy(t_list *lst);
+
+//***********env2**********//
+
+int	print_env(t_minishell *shell);
 
 //***********export***********//
 t_list		*get_exp_vars(char **env);
@@ -76,6 +81,14 @@ void		change_value_env(t_minishell *shell, char *str, char *name);
 int			ft_check_dup2(t_minishell *shell, char *str);
 int			ft_check_exp(t_minishell *shell, char *str);
 
+//***********export3***********//
+
+void		print_exp(t_minishell *shell);
+char		**sort_exp(t_list *lst, t_list *head);
+int			check_exp_quotes(char *original);
+int			check_exp_input(char *str);
+char		*quote_remover_exp(char *original);
+
 //***********free***********//
 void		free_env(t_list *lst);
 void		free_export(t_list *lst);
@@ -86,17 +99,10 @@ void		free_copies(char **copy);
 
 //***********parsing***********//
 int			parsing(t_minishell *shell);
-int			print_env(t_minishell *shell);
-char		**env_copy(t_list *lst);
-void		print_exp(t_minishell *shell);
-char		**sort_exp(t_list *lst, t_list *head);
 int			check_args(char **command, t_minishell *shell);
-int			check_exp_input(char *str);
 int			other_commands(t_minishell *shell);
 char		*remove_quotes(char *command);
-int			check_exp_quotes(char *original);
 int			check_equal(char *str, int i);
-char		*quote_remover_exp(char *original);
 int			check_available_paths(t_list *env);
 
 //***********pwd***********//
