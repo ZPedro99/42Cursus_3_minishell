@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 09:49:47 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:38:49 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	g_exit_status;
 
+
+//ola
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
