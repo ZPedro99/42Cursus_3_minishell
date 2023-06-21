@@ -1,93 +1,84 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 16:57:10 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:31:57 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parsing(t_minishell *shell)
+int	execute(t_minishell *shell, char *command, int i)
 {
 	pid_t	pid;
 	int		status;
-	char	*command;
-	int		i;
+	char	**command_args;
 
 	status = 0;
-	i = 0;
-	command = 0;
-	shell->command_splited = ft_split(shell->command, ' ');
-	while(shell->command_splited[i])
+	pid = fork();
+	if(!pid)
 	{
-		command = quote_remover(shell->command_splited[i]);
-		pid = fork();
-		if(!pid)
+		command_args = ft_split(shell->command_splited[i], ' ');
+		if (string_comp(command, "exit"))
+			exit(0);
+		else if (string_comp(command, "pwd"))
 		{
-			if (string_comp(command, "exit"))
-				exit(0);
-			else if (string_comp(command, "pwd"))
-			{
-				print_pwd(shell);
-				exit(0);
-			}
-			else if (string_comp(command, "cd"))
-			{
-				exit(0);
-			}
-			else if (string_comp(command, "unset"))
-				exit(0);
-			else if (string_comp(command, "env"))
-			{
-				g_exit_status = print_env(shell);
-				exit(g_exit_status);
-			}
-			else if (string_comp(command, "echo"))
-			{
-				print_echo(shell);
-				exit(0);
-			}
-			else if (string_comp(command, "export"))
-				exit(0);
-			else
-			{
-				if(other_commands(shell) == 0) //exit status ok
-					exit(0);
-				exit(g_exit_status);
-			}
-			free_splited(shell);
+			print_pwd(shell);
+			exit(0);
 		}
-		wait(&status);
-		get_exit_status(status);
-		 if (string_comp(command, "export"))
-			g_exit_status = check_args(shell->command_splited, shell);
-		else if (string_comp(command, "unset"))
-			do_unset(shell);
 		else if (string_comp(command, "cd"))
 		{
-			g_exit_status = print_cd(shell);
+			exit(0);
 		}
-		else if (string_comp(command, "exit"))
+		else if (string_comp(command, "unset"))
+			exit(0);
+		else if (string_comp(command, "env"))
 		{
-			if (ft_exit_status(shell) != 1)
-			{
-				free_struct(shell);
-				exit(g_exit_status);
-			}
+			g_exit_status = print_env(shell);
+			exit(g_exit_status);
 		}
-		//get_exit_status(status);
-		i++;
+		else if (string_comp(command, "echo"))
+		{
+			print_echo(shell);
+			exit(0);
+		}
+		else if (string_comp(command, "export"))
+			exit(0);
+		else
+		{
+			if(other_commands(shell) == 0) //exit status ok
+				exit(0);
+			exit(g_exit_status);
+		}
+		free_splited(shell);
 	}
+	wait(&status);
+	get_exit_status(status);
+	 if (string_comp(command, "export"))
+		g_exit_status = check_args(shell->command_splited, shell);
+	else if (string_comp(command, "unset"))
+		do_unset(shell);
+	else if (string_comp(command, "cd"))
+	{
+		g_exit_status = print_cd(shell);
+	}
+	else if (string_comp(command, "exit"))
+	{
+		if (ft_exit_status(shell) != 1)
+		{
+			free_struct(shell);
+			exit(g_exit_status);
+		}
+	}
+	//get_exit_status(status);
 	if(shell->command_splited)
 		free_splited(shell);
 	return (0);
 }
-
 int	check_args(char **command, t_minishell *shell)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 15:32:36 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 09:49:47 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	read_command(t_minishell *shell)
 			add_history(shell->command);
 			if(counting_pipes(shell) == 0)
 			{
-				if (parsing(shell))
+				if (single_command(shell))
 					break ;
 			}
 			else

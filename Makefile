@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/06/20 14:37:07 by jomirand         ###   ########.fr        #
+#    Updated: 2023/06/21 10:06:48 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRCS = main.c\
 		export2.c\
 		export3.c\
 		free.c\
-		parsing.c\
+		execute.c\
 		pwd.c\
 		echo.c\
 		echo_utils.c\
@@ -39,6 +39,7 @@ SRCS = main.c\
 		signals.c\
 		exit.c\
 		multi_commands.c\
+		single_command.c\
 
 OBJS = $(SRCS:%.c=%.o)
 

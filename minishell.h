@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 15:56:08 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:32:25 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ void		free_struct(t_minishell *shell);
 void		free_splited(t_minishell *shell);
 void		free_copies(char **copy);
 
-//***********parsing***********//
-int			parsing(t_minishell *shell);
+//***********execute***********//
+int			execute(t_minishell *shell, char *command, int i);
 int			check_args(char **command, t_minishell *shell);
 int			other_commands(t_minishell *shell);
 char		*remove_quotes(char *command);
@@ -185,5 +185,9 @@ char	*ft_ltoa(long long n);
 
 int		multi_commands(t_minishell *shell);
 int		pipe_creation(t_minishell *shell);
+
+//***********single_commands***********//
+
+int	single_command(t_minishell *shell);
 
 #endif
