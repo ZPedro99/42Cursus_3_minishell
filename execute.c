@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 10:31:57 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:35:17 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,19 @@ int	execute(t_minishell *shell, char *command, int i)
 	pid_t	pid;
 	int		status;
 	char	**command_args;
+	int	j;
 
 	status = 0;
+	j = 0;
 	pid = fork();
 	if(!pid)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		command_args = ft_split(shell->command_splited[i], ' ');
 		if (string_comp(command, "exit"))
 			exit(0);
-		else if (string_comp(command, "pwd"))
+		else if (string_comp(command_args[0], "pwd"))
 		{
 			print_pwd(shell);
 			exit(0);
@@ -50,11 +54,11 @@ int	execute(t_minishell *shell, char *command, int i)
 			exit(0);
 		else
 		{
-			if(other_commands(shell) == 0) //exit status ok
+			if(other_commands(shell, command, command_args) == 0) //exit status ok
 				exit(0);
 			exit(g_exit_status);
 		}
-		free_splited(shell);
+		free_splited(command_args);
 	}
 	wait(&status);
 	get_exit_status(status);
@@ -75,8 +79,8 @@ int	execute(t_minishell *shell, char *command, int i)
 		}
 	}
 	//get_exit_status(status);
-	if(shell->command_splited)
-		free_splited(shell);
+	/* if(shell->command_splited)
+		free_splited(shell->command_splited); */
 	return (0);
 }
 int	check_args(char **command, t_minishell *shell)
@@ -167,12 +171,13 @@ int	check_equal(char *str, int i)
 	return(0);
 }
 
-int	other_commands(t_minishell *shell)
+int	other_commands(t_minishell *shell, char *command, char **command_args)
 {
 	int		i;
 	char	*complete_path;
 	char	**temp;
 	pid_t	pid;
+	char	*command_temp;
 	static int		x;
 
 	x = -1;
@@ -183,13 +188,14 @@ int	other_commands(t_minishell *shell)
 		return(x);
 	}
 	temp = env_copy(shell->env);
-	if(execve(shell->command_splited[0], shell->command_splited, temp))
+	command_temp = ft_strtrim(command, " ");
+	if(execve(command, command_args, temp))
 	{
 		free_copies(temp);
 		while (shell->paths[i])
 		{
 			temp = malloc(sizeof(char *) * 2);
-			temp[0] = ft_strjoin("/", shell->command_splited[0]);
+			temp[0] = ft_strjoin("/", command_temp);
 			temp[1] = 0;
 			complete_path = ft_strjoin(shell->paths[i], temp[0]);
 			free_copies(temp);
@@ -199,7 +205,7 @@ int	other_commands(t_minishell *shell)
 				x = 0;
 				pid = fork();
 				if(!pid)
-					execve(complete_path, shell->command_splited, temp);
+					execve(complete_path, command_args, temp);
 				wait(0);
 				free(complete_path);
 				free_copies(temp);
@@ -209,6 +215,7 @@ int	other_commands(t_minishell *shell)
 			free_copies(temp);
 			i++;
 		}
+		free(command_temp);
 	}
 	if(x == -1)
 	{

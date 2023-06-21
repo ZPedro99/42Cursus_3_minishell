@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 11:46:54 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:13:48 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ int	ft_exit_status(t_minishell *shell)
 	{
 		num = ft_atol(shell->command_splited[1]);
 		str = ft_ltoa(num);
-		/* if (ft_strncmp(str, shell->command_splited[1], ft_strlen(str)) != 0)
+		if (ft_strncmp(str, shell->command_splited[1], ft_strlen(str)) != 0)
 		{
 			printf("exit\n");
 			printf("minishell: %s: numeric argument required\n", shell->command_splited[1]);
 			g_exit_status = 2;
 			free(str);
 			return (g_exit_status);
-		} */
+		}
 		free(str);
 		printf("exit\n");
 		num = ft_atol(shell->command_splited[1]);

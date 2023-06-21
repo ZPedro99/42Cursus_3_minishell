@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 10:32:25 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:08:53 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,13 @@ void		free_env(t_list *lst);
 void		free_export(t_list *lst);
 void		free_export1(t_list *lst);
 void		free_struct(t_minishell *shell);
-void		free_splited(t_minishell *shell);
+void		free_splited(char **array);
 void		free_copies(char **copy);
 
 //***********execute***********//
 int			execute(t_minishell *shell, char *command, int i);
 int			check_args(char **command, t_minishell *shell);
-int			other_commands(t_minishell *shell);
+int			other_commands(t_minishell *shell, char *command, char **command_args);
 char		*remove_quotes(char *command);
 int			check_equal(char *str, int i);
 int			check_available_paths(t_list *env);
@@ -185,6 +185,7 @@ char	*ft_ltoa(long long n);
 
 int		multi_commands(t_minishell *shell);
 int		pipe_creation(t_minishell *shell);
+void	through_pipes(t_minishell *shell, int i);
 
 //***********single_commands***********//
 

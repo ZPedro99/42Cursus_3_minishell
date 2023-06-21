@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:36:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 10:30:50 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:49:09 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	multi_commands(t_minishell *shell)
 	i = 0;
 	while(shell->command_splited[i])
 	{
+		through_pipes(shell, i);
 		execute(shell, shell->command_splited[i], i);
 		i++;
 	}
@@ -41,4 +42,18 @@ int	pipe_creation(t_minishell *shell)
 		return (1);
 	}
 	return (0);
+}
+
+void	through_pipes(t_minishell *shell, int i)
+{
+	if(i == 0)
+	{
+		dup2(shell->stdin_fd, STDIN_FILENO);
+		dup2(shell->pipes_fd[1], STDOUT_FILENO);
+	}
+	if(i == 1)
+	{
+		dup2(shell->pipes_fd[0], STDIN_FILENO);
+		dup2(shell->stdout_fd, STDOUT_FILENO);
+	}
 }

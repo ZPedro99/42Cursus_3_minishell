@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/14 14:05:41 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:50:07 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	free_struct(t_minishell *shell)
 		i++;
 	}
 	free(shell->paths);
-	free_splited(shell);
+	free_splited(shell->command_splited);
 	free(shell->command);
 	free(shell->prompt);
 	free(shell->pwd);
@@ -83,18 +83,18 @@ void	free_struct(t_minishell *shell)
 	free_env(shell->env);
 }
 
-void	free_splited(t_minishell *shell)
+void	free_splited(char **array)
 {
 	int	i;
 
 	i = 0;
-	while (shell->command_splited[i])
+	while (array[i])
 	{
-		free(shell->command_splited[i]);
+		free(array[i]);
 		i++;
 	}
-	free(shell->command_splited[i]);
-	free(shell->command_splited);
+	free(array[i]);
+	free(array);
 }
 
 void	free_copies(char **copy)
