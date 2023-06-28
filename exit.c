@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 11:13:48 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/28 09:49:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,27 @@ void	get_exit_status(int status)
 		g_exit_status = WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
 		g_exit_status = 128 + WEXITSTATUS(status);
+	//printf("status is: %d\n", g_exit_status);
+	//exit(g_exit_status);
+}
+
+void	get_exit_status_multi(t_minishell *shell)
+{
+	int		i;
+	pid_t	j;
+	int		status;
+
+	i = 0;
+	status = 0;
+	while(i < shell->pipes + 1)
+	{
+		j = waitpid(shell->pid[i], &status, 0);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+			g_exit_status = 128 + WEXITSTATUS(status);
+		i++;
+	}
 	//printf("status is: %d\n", g_exit_status);
 	//exit(g_exit_status);
 }

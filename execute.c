@@ -6,30 +6,35 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 12:35:17 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/28 10:34:07 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute(t_minishell *shell, char *command, int i)
+int	execute_single_cmd(t_minishell *shell, char *command)
 {
 	pid_t	pid;
 	int		status;
-	char	**command_args;
 	int	j;
 
 	status = 0;
 	j = 0;
+	//shell->command_args = ft_split(shell->command_splited[i], ' ');
 	pid = fork();
 	if(!pid)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		command_args = ft_split(shell->command_splited[i], ' ');
+		//through_pipes(shell, i);
+		/* if(1 > 0)
+		{
+			dup2(shell->stdin_fd, STDIN_FILENO);
+			dup2(shell->stdout_fd, STDOUT_FILENO);
+		} */
 		if (string_comp(command, "exit"))
 			exit(0);
-		else if (string_comp(command_args[0], "pwd"))
+		else if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
 			exit(0);
@@ -54,13 +59,15 @@ int	execute(t_minishell *shell, char *command, int i)
 			exit(0);
 		else
 		{
-			if(other_commands(shell, command, command_args) == 0) //exit status ok
+			if(other_commands(shell, command, shell->command_splited) == 0) //exit status ok
 				exit(0);
 			exit(g_exit_status);
 		}
-		free_splited(command_args);
+		free_splited(shell->command_args);
 	}
 	wait(&status);
+	/* close(shell->pipes_fd[0]);
+	close(shell->pipes_fd[1]); */
 	get_exit_status(status);
 	 if (string_comp(command, "export"))
 		g_exit_status = check_args(shell->command_splited, shell);
@@ -83,100 +90,88 @@ int	execute(t_minishell *shell, char *command, int i)
 		free_splited(shell->command_splited); */
 	return (0);
 }
-int	check_args(char **command, t_minishell *shell)
+
+int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 {
-	int	i;
-	int	x;
-	char	*str;
+	int		status;
 
-	i = 1;
-	x = 0;
-	while (command[i] != NULL)
-		i++;
-	if(i == 1)
-		print_exp(shell);
-	if(i >= 2)
+	status = 0;
+	//shell->command_args = ft_split(shell->command_splited[i], ' ');
+	shell->pid[i] = fork();
+	if(!shell->pid[i])
 	{
-		i = 1;
-		while(command[i])
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		through_pipes(shell, i);
+		if(1 > 0)
 		{
-			if(check_exp_quotes(command[i]) == 0)
-			{
-				printf("Error in export variable, check quotes!\n");//se tiver quotes diferentes
-				return(1);
-			}
-			if(check_exp_quotes(command[i]) == -1)
-			{
-				printf("Error in export variable, quote must have their pair!\n");
-				return (1);
-			}
-			if(check_exp_quotes(command[i]) == 1)
-			{
-				str = quote_remover_exp(command[i]);
-				if(check_exp_input(str) == 0)
-				{
-					x = 1;
-					free(str);
-					printf("minishell: export: `%s': not a valid identifier\n", str);
-				}
-				else
-					place_exp_var(shell, str);
-				free(str);
-			}
-			i++;
+			dup2(shell->stdin_fd, STDIN_FILENO);
+			dup2(shell->stdout_fd, STDOUT_FILENO);
 		}
-	}
-	if (x == 0)
-		return (0);
-	return (1);
-}
-
-int	check_equal(char *str, int i)
-{
-	char temp;
-	int count;
-
-	count = 0;
-	temp = str[i];
-	if(temp == '\'')
-	{
-			while(str[i])
-			{
-				if (str[i] == '"')
-					return(0);
-				if (str[i] == '\'')
-					count++;
-				i++;
-			}
-			if(count % 2 == 0)
-				return (1);
-			else
-				return (-1);
-	}
-	else if(temp == '"')
-	{
-		while(str[i])
+		if (string_comp(command, "exit"))
+			exit(0);
+		else if (string_comp(command, "pwd"))
 		{
-			if (str[i] == '\'')
-				return(0);
-			if (str[i] == '"')
-				count++;
-			i++;
+			print_pwd(shell);
+			exit(0);
 		}
-		if(count % 2 == 0)
-			return (1);
+		else if (string_comp(command, "cd"))
+		{
+			exit(0);
+		}
+		else if (string_comp(command, "unset"))
+			exit(0);
+		else if (string_comp(command, "env"))
+		{
+			g_exit_status = print_env(shell);
+			exit(g_exit_status);
+		}
+		else if (string_comp(command, "echo"))
+		{
+			print_echo(shell);
+			exit(0);
+		}
+		else if (string_comp(command, "export"))
+			exit(0);
 		else
-			return (-1);
+		{
+			if(other_commands(shell, command, shell->command_splited) == 0) //exit status ok
+				exit(0);
+			exit(g_exit_status);
+		}
+		free_splited(shell->command_args);
 	}
-	return(0);
+	//wait(&status);
+	//close(shell->pipes_fd[0]);
+	close(shell->pipes_fd[1]);
+	get_exit_status(status);
+	 if (string_comp(command, "export"))
+		g_exit_status = check_args(shell->command_splited, shell);
+	else if (string_comp(command, "unset"))
+		do_unset(shell);
+	else if (string_comp(command, "cd"))
+	{
+		g_exit_status = print_cd(shell);
+	}
+	else if (string_comp(command, "exit"))
+	{
+		if (ft_exit_status(shell) != 1)
+		{
+			free_struct(shell);
+			exit(g_exit_status);
+		}
+	}
+	//get_exit_status(status);
+	/* if(shell->command_splited)
+		free_splited(shell->command_splited); */
+	return (0);
 }
 
 int	other_commands(t_minishell *shell, char *command, char **command_args)
 {
 	int		i;
 	char	*complete_path;
-	char	**temp;
-	pid_t	pid;
+	char	*temp;
 	char	*command_temp;
 	static int		x;
 
@@ -187,32 +182,31 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 		printf("Error! PATH unavailable!\n");
 		return(x);
 	}
-	temp = env_copy(shell->env);
+	//temp = env_copy(shell->env);
 	command_temp = ft_strtrim(command, " ");
-	if(execve(command, command_args, temp))
+	if(execve(command, command_args, env_copy(shell->env)))
 	{
-		free_copies(temp);
+		//free_copies(temp);
 		while (shell->paths[i])
 		{
-			temp = malloc(sizeof(char *) * 2);
-			temp[0] = ft_strjoin("/", command_temp);
-			temp[1] = 0;
-			complete_path = ft_strjoin(shell->paths[i], temp[0]);
-			free_copies(temp);
-			temp = env_copy(shell->env);
+			//temp = malloc(sizeof(char *) * 2);
+			temp= ft_strjoin("/", command_temp);
+			//temp[1] = 0;
+			complete_path = ft_strjoin(shell->paths[i], temp);
+			free(temp);
+			//temp = env_copy(shell->env);
 			if (!access(complete_path, X_OK))
 			{
 				x = 0;
-				pid = fork();
-				if(!pid)
-					execve(complete_path, command_args, temp);
-				wait(0);
+				execve(complete_path, command_args, env_copy(shell->env));
+				dup2(shell->stdin_fd, STDIN_FILENO);
+				dup2(shell->stdout_fd, STDOUT_FILENO);
 				free(complete_path);
-				free_copies(temp);
+				//free_copies(temp);
 				break ;
 			}
 			free(complete_path);
-			free_copies(temp);
+			//free(temp);
 			i++;
 		}
 		free(command_temp);
@@ -225,21 +219,7 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	return (x);
 }
 
-int	check_available_paths(t_list *env)
-{
-	t_list	*temp;
-
-	temp = env;
-	while(temp)
-	{
-		if(string_comp(((t_env *)(temp->content))->name, "PATH="))
-			return (0);
-		temp = temp->next;
-	}
-	return (1);
-}
-
-char	*remove_quotes(char *command)
+/* char	*remove_quotes(char *command)
 {
 	char *str;
 	int i;
@@ -263,4 +243,4 @@ char	*remove_quotes(char *command)
 	}
 	str = ft_strdup(command);
 	return (str);
-}
+} */

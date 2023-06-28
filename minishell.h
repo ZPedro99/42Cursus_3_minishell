@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 12:08:53 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/28 10:34:56 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <limits.h>
-#	include <stdarg.h>
+# include <stdarg.h>
 
 extern int	g_exit_status;
 
@@ -44,6 +44,8 @@ typedef struct s_minishell
 	int		*pipes_fd;
 	int		stdin_fd;
 	int		stdout_fd;
+	char	**command_args;
+	pid_t	*pid;
 }				t_minishell;
 
 typedef struct s_env
@@ -102,12 +104,10 @@ void		free_splited(char **array);
 void		free_copies(char **copy);
 
 //***********execute***********//
-int			execute(t_minishell *shell, char *command, int i);
-int			check_args(char **command, t_minishell *shell);
+int			execute_single_cmd(t_minishell *shell, char *command);
+int			execute_multi_cmd(t_minishell *shell, char *command, int i);
 int			other_commands(t_minishell *shell, char *command, char **command_args);
 char		*remove_quotes(char *command);
-int			check_equal(char *str, int i);
-int			check_available_paths(t_list *env);
 
 //***********pwd***********//
 void		print_pwd(t_minishell *shell);
@@ -153,6 +153,9 @@ char		*get_prompt2(int i, int j, char *temp);
 //***********utils2***********//
 int			ft_search(char *str, char c);
 int			counting_pipes(t_minishell *shell);
+int			check_available_paths(t_list *env);
+int			check_equal(char *str, int i);
+int			check_args(char **command, t_minishell *shell);
 
 //***********unset***********//
 
@@ -180,12 +183,14 @@ long long		ft_atol(const char *str);
 static char	*negnum(char *str, long long n, int len);
 static int	int_len(long long n) */;
 char	*ft_ltoa(long long n);
+void	get_exit_status_multi(t_minishell *shell);
 
 //***********multi_commands***********//
 
 int		multi_commands(t_minishell *shell);
 int		pipe_creation(t_minishell *shell);
 void	through_pipes(t_minishell *shell, int i);
+void	pipe_closing(t_minishell *shell);
 
 //***********single_commands***********//
 
