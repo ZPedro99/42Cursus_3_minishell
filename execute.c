@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/03 09:38:21 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 12:49:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
+		handle_redirects(shell);
 		through_pipes(shell, i);
 		/* if(i > 0)
 		{
@@ -132,7 +133,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 			exit(0);
 		else
 		{
-			if(other_commands(shell, command, shell->command_splitted) == 0) //exit status ok
+			if(other_commands(shell, command, shell->command_args) == 0) //exit status ok
 				exit(0);
 			exit(g_exit_status);
 		}
