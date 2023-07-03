@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/03 09:55:40 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 12:18:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_minishell
 	char	*prompt;
 	char	*command;
 	char	**command_splitted;
+	char	**command_splitted_pipe;
 	char	*home;
 	char	**paths;
 	int		pipes;
@@ -194,6 +195,7 @@ int		multi_commands(t_minishell *shell);
 int		pipe_creation(t_minishell *shell);
 void	through_pipes(t_minishell *shell, int i);
 void	pipe_closing(t_minishell *shell);
+char	*remove_last_space(char *str);
 
 //***********single_commands***********//
 

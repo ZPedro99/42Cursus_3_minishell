@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:36:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/03 09:40:17 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 12:19:12 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,22 @@
 int	multi_commands(t_minishell *shell)
 {
 	int	i;
+	char	*str_nospace;
 
 	shell->stdin_fd = STDIN_FILENO;
 	shell->stdout_fd = STDOUT_FILENO;
-	shell->command_args = ft_split(shell->command, '|');
+	shell->command_splitted_pipe = ft_split(shell->command, '|');
 	i = 0;
 	pipe_creation(shell);
-	while(shell->command_args[i])
+	while(shell->command_splitted_pipe[i])
 	{
-		shell->command_splitted = ft_split(shell->command_args[i], ' ');
+		shell->command_splitted = ft_split(shell->command_splitted_pipe[i], ' ');
+		str_nospace = remove_last_space(shell->command_splitted_pipe[i]);
+		shell->command_args = remove_redirs(str_nospace);
 		execute_multi_cmd(shell, shell->command_splitted[0], i);
 		free_splited(shell->command_splitted);
+		free(str_nospace);
+		//free_splited(shell->command_splitted_pipe);
 		i++;
 	}
 	pipe_closing(shell);
@@ -85,4 +90,24 @@ void	pipe_closing(t_minishell *shell)
 		close(shell->pipes_fd[i]);
 		i++;
 	}
+}
+
+char	*remove_last_space(char *str)
+{
+	char	*new_str;
+	int		i;
+
+	new_str = malloc(sizeof(char) * ft_strlen(str));
+	i = 0;
+	while(str[i])
+	{
+		if(str[i] == ' ' && str[i + 1] == '\0')
+		{
+			new_str[i] = '\0';
+			break ;
+		}
+		new_str[i] = str[i];
+		i++;
+	}
+	return (new_str);
 }
