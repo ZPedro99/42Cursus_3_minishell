@@ -16,8 +16,8 @@ int	ft_echo_es(t_minishell *shell, int i)
 {
 	char	*str;
 
-	str = ft_strtrim(shell->command_splited[i], "$?");
-	if (shell->command_splited[i][1] == '?')
+	str = ft_strtrim(shell->command_splitted[i], "$?");
+	if (shell->command_splitted[i][1] == '?')
 	{
 		printf("%d%s", g_exit_status, str);
 		free(str);

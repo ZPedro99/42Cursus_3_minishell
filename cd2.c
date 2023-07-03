@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 15:00:18 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/19 16:25:58 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 09:37:54 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	change_dir_rest(t_minishell *shell)
 	shell->pwd = getcwd(0, 0);
 	shell->old_pwd = ft_strdup(shell->pwd);
 	free(shell->pwd);
-	if (chdir(shell->command_splited[1]) == -1)
+	if (chdir(shell->command_splitted[1]) == -1)
 	{
-		printf("%s: No such file or directory\n", shell->command_splited[1]);
+		printf("%s: No such file or directory\n", shell->command_splitted[1]);
 		return (1);
 	}
 	shell->pwd = getcwd(0, 0);

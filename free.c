@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/21 11:50:07 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/29 12:46:24 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	free_struct(t_minishell *shell)
 		i++;
 	}
 	free(shell->paths);
-	free_splited(shell->command_splited);
+	free_splited(shell->command_args);
 	free(shell->command);
 	free(shell->prompt);
 	free(shell->pwd);

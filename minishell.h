@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/28 10:34:56 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 09:55:40 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <signal.h>
 # include <limits.h>
 # include <stdarg.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 extern int	g_exit_status;
 
@@ -37,7 +39,7 @@ typedef struct s_minishell
 	char	*old_pwd;
 	char	*prompt;
 	char	*command;
-	char	**command_splited;
+	char	**command_splitted;
 	char	*home;
 	char	**paths;
 	int		pipes;
@@ -121,6 +123,7 @@ int			print_trimmed_string(char *str, int quote_count, char quote_type, int flag
 char		*quote_remover(char *str);
 void		handle_quotes(char *str);
 int			check_closed_quotes(char *str);
+int			check_redirect(char *str);
 
 //***********echo_utils***********//
 int			wordcount(char *s, char c);
@@ -174,7 +177,7 @@ void		handle_signals(void);
 void		sighand(int signal);
 
 //***********exit***********//
-void	get_exit_status(int status);
+//void	get_exit_status(int status);
 int		ft_exit_status(t_minishell *shell);
 int		ft_word_count(char **str);
 int		check_arg(char *str);
@@ -183,7 +186,7 @@ long long		ft_atol(const char *str);
 static char	*negnum(char *str, long long n, int len);
 static int	int_len(long long n) */;
 char	*ft_ltoa(long long n);
-void	get_exit_status_multi(t_minishell *shell);
+void	get_exit_status(t_minishell *shell);
 
 //***********multi_commands***********//
 
@@ -194,6 +197,16 @@ void	pipe_closing(t_minishell *shell);
 
 //***********single_commands***********//
 
-int	single_command(t_minishell *shell);
+int		single_command(t_minishell *shell);
+char	**ft_splitting(char *command, char delimiter);
+int		countwords(char *str);
+char	**remove_redirs(char *command);
+
+//***********redirects***********//
+
+void		handle_redirects(t_minishell *shell);
+void		redirect_output(t_minishell *shell, int i);
+void		redirect_input(t_minishell *shell, int i);
+void		redirect_append(t_minishell *shell, int i);
 
 #endif

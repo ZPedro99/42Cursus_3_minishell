@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/28 10:34:07 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 09:38:21 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,93 @@
 
 int	execute_single_cmd(t_minishell *shell, char *command)
 {
-	pid_t	pid;
 	int		status;
 	int	j;
 
 	status = 0;
 	j = 0;
-	//shell->command_args = ft_split(shell->command_splited[i], ' ');
-	pid = fork();
-	if(!pid)
+	//shell->command_args = ft_split(shell->command_splitted[i], ' ');
+	shell->pid[0] = fork();
+	if(!shell->pid[0])
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
+		handle_redirects(shell);
 		//through_pipes(shell, i);
-		/* if(1 > 0)
+		dup2(shell->stdin_fd, STDIN_FILENO);
+		dup2(shell->stdout_fd, STDOUT_FILENO);
+		if (string_comp(command, "exit"))
+			exit(0);
+		else if (string_comp(command, "pwd"))
+		{
+			print_pwd(shell);
+			exit(0);
+		}
+		else if (string_comp(command, "cd"))
+		{
+			exit(0);
+		}
+		else if (string_comp(command, "unset"))
+			exit(0);
+		else if (string_comp(command, "env"))
+		{
+			g_exit_status = print_env(shell);
+			exit(g_exit_status);
+		}
+		else if (string_comp(command, "echo"))
+		{
+			print_echo(shell);
+			exit(0);
+		}
+		else if (string_comp(command, "export"))
+			exit(0);
+		else
+		{
+			if(other_commands(shell, command, shell->command_args) == 0) //exit status ok
+				exit(0);
+			exit(g_exit_status);
+		}
+		free_splited(shell->command_args);
+	}
+	//wait(&status);
+	/* close(shell->pipes_fd[0]);
+	close(shell->pipes_fd[1]); */
+	//get_exit_status(status);
+	 if (string_comp(command, "export"))
+		g_exit_status = check_args(shell->command_args, shell);
+	else if (string_comp(command, "unset"))
+		do_unset(shell);
+	else if (string_comp(command, "cd"))
+	{
+		g_exit_status = print_cd(shell);
+	}
+	else if (string_comp(command, "exit"))
+	{
+		if (ft_exit_status(shell) != 1)
+		{
+			free_struct(shell);
+			exit(g_exit_status);
+		}
+	}
+	//get_exit_status(status);
+	/* if(shell->command_splitted)
+		free_splited(shell->command_splitted); */
+	return (0);
+}
+
+int	execute_multi_cmd(t_minishell *shell, char *command, int i)
+{
+	int		status;
+
+	status = 0;
+	//shell->command_args = ft_split(shell->command_splitted[i], ' ');
+	shell->pid[i] = fork();
+	if(!shell->pid[i])
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		through_pipes(shell, i);
+		/* if(i > 0)
 		{
 			dup2(shell->stdin_fd, STDIN_FILENO);
 			dup2(shell->stdout_fd, STDOUT_FILENO);
@@ -59,94 +132,16 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 			exit(0);
 		else
 		{
-			if(other_commands(shell, command, shell->command_splited) == 0) //exit status ok
-				exit(0);
-			exit(g_exit_status);
-		}
-		free_splited(shell->command_args);
-	}
-	wait(&status);
-	/* close(shell->pipes_fd[0]);
-	close(shell->pipes_fd[1]); */
-	get_exit_status(status);
-	 if (string_comp(command, "export"))
-		g_exit_status = check_args(shell->command_splited, shell);
-	else if (string_comp(command, "unset"))
-		do_unset(shell);
-	else if (string_comp(command, "cd"))
-	{
-		g_exit_status = print_cd(shell);
-	}
-	else if (string_comp(command, "exit"))
-	{
-		if (ft_exit_status(shell) != 1)
-		{
-			free_struct(shell);
-			exit(g_exit_status);
-		}
-	}
-	//get_exit_status(status);
-	/* if(shell->command_splited)
-		free_splited(shell->command_splited); */
-	return (0);
-}
-
-int	execute_multi_cmd(t_minishell *shell, char *command, int i)
-{
-	int		status;
-
-	status = 0;
-	//shell->command_args = ft_split(shell->command_splited[i], ' ');
-	shell->pid[i] = fork();
-	if(!shell->pid[i])
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		through_pipes(shell, i);
-		if(1 > 0)
-		{
-			dup2(shell->stdin_fd, STDIN_FILENO);
-			dup2(shell->stdout_fd, STDOUT_FILENO);
-		}
-		if (string_comp(command, "exit"))
-			exit(0);
-		else if (string_comp(command, "pwd"))
-		{
-			print_pwd(shell);
-			exit(0);
-		}
-		else if (string_comp(command, "cd"))
-		{
-			exit(0);
-		}
-		else if (string_comp(command, "unset"))
-			exit(0);
-		else if (string_comp(command, "env"))
-		{
-			g_exit_status = print_env(shell);
-			exit(g_exit_status);
-		}
-		else if (string_comp(command, "echo"))
-		{
-			print_echo(shell);
-			exit(0);
-		}
-		else if (string_comp(command, "export"))
-			exit(0);
-		else
-		{
-			if(other_commands(shell, command, shell->command_splited) == 0) //exit status ok
+			if(other_commands(shell, command, shell->command_splitted) == 0) //exit status ok
 				exit(0);
 			exit(g_exit_status);
 		}
 		free_splited(shell->command_args);
 	}
 	//wait(&status);
-	//close(shell->pipes_fd[0]);
-	close(shell->pipes_fd[1]);
-	get_exit_status(status);
+	//get_exit_status(status);
 	 if (string_comp(command, "export"))
-		g_exit_status = check_args(shell->command_splited, shell);
+		g_exit_status = check_args(shell->command_splitted, shell);
 	else if (string_comp(command, "unset"))
 		do_unset(shell);
 	else if (string_comp(command, "cd"))
@@ -162,8 +157,8 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 		}
 	}
 	//get_exit_status(status);
-	/* if(shell->command_splited)
-		free_splited(shell->command_splited); */
+	/* if(shell->command_splitted)
+		free_splited(shell->command_splitted); */
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 11:00:24 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 11:00:43 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/29 12:49:42 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	print_env(t_minishell *shell)
 	int			i;
 
 	i = 0;
-	while(shell->command_splited[i])
+	while(shell->command_args[i])
 		i++;
 	if(i >= 2)
 	{

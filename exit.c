@@ -6,13 +6,13 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/28 09:49:32 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/29 12:45:13 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_exit_status(int status)
+/* void	get_exit_status(int status)
 {
 	if (WIFEXITED(status))
 		g_exit_status = WEXITSTATUS(status);
@@ -20,9 +20,9 @@ void	get_exit_status(int status)
 		g_exit_status = 128 + WEXITSTATUS(status);
 	//printf("status is: %d\n", g_exit_status);
 	//exit(g_exit_status);
-}
+} */
 
-void	get_exit_status_multi(t_minishell *shell)
+void	get_exit_status(t_minishell *shell)
 {
 	int		i;
 	pid_t	j;
@@ -51,7 +51,7 @@ int	ft_exit_status(t_minishell *shell)
 
 	str = 0;
 	num = 0;
-	count = ft_word_count(shell->command_splited);
+	count = ft_word_count(shell->command_args);
 	if (count == 1)
 	{
 		printf("exit\n");
@@ -65,28 +65,28 @@ int	ft_exit_status(t_minishell *shell)
 		g_exit_status = 1;
 		return (g_exit_status);
 	}
-	if (check_arg(shell->command_splited[1]) == 0)//se tiver letras
+	if (check_arg(shell->command_args[1]) == 0)//se tiver letras
 	{
 		printf("exit\n");
-		printf("minishell: %s: numeric argument required\n", shell->command_splited[1]);
+		printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
 		g_exit_status = 2;
 		return (g_exit_status);
 	}
 	else
 	{
-		num = ft_atol(shell->command_splited[1]);
+		num = ft_atol(shell->command_args[1]);
 		str = ft_ltoa(num);
-		if (ft_strncmp(str, shell->command_splited[1], ft_strlen(str)) != 0)
+		if (ft_strncmp(str, shell->command_args[1], ft_strlen(str)) != 0)
 		{
 			printf("exit\n");
-			printf("minishell: %s: numeric argument required\n", shell->command_splited[1]);
+			printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
 			g_exit_status = 2;
 			free(str);
 			return (g_exit_status);
 		}
 		free(str);
 		printf("exit\n");
-		num = ft_atol(shell->command_splited[1]);
+		num = ft_atol(shell->command_args[1]);
 		g_exit_status = (num % 256);
 		return (g_exit_status);
 	}

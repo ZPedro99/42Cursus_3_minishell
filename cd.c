@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:08:13 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/15 16:52:07 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/06/29 12:48:41 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 int	print_cd(t_minishell *shell)
 {
-	if ((shell->command_splited[1] == 0)
-		|| (string_comp(shell->command_splited[1], "~")))
+	if ((shell->command_args[1] == 0)
+		|| (string_comp(shell->command_args[1], "~")))
 	{
 		change_dir_home(shell);
 		return (0) ;
 	}
-	if (string_comp(shell->command_splited[1], "-"))
+	if (string_comp(shell->command_args[1], "-"))
 	{
 		change_dir_minus(shell);
 		return (0);
 	}
-	else if (string_comp(shell->command_splited[1], ".."))
+	else if (string_comp(shell->command_args[1], ".."))
 	{
 		change_dir_dotdot(shell);
 		return (0);

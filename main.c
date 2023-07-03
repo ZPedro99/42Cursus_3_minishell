@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/28 10:38:25 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:27:02 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.pipes = 0;
 	shell.env = get_env_vars(envp);
 	shell.exp = get_exp_vars(envp);
+	//counting_pipes(shell)
 	shell.pid = malloc(sizeof(int) * (shell.pipes + 1));
 	obtain_vars(&shell);
 	get_prompt(&shell);

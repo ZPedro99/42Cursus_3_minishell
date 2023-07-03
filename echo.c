@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 10:00:57 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/03 09:55:58 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,29 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 
 	i = 1;
 	flag = 0;
-	while (shell->command_splited[i])
+	while (shell->command_args[i])
 	{
 		j = i;
-		if (shell->command_splited[i][0] == '$')
+		if(check_redirect(shell->command_args[i]))
+			break ;
+		if (shell->command_args[i][0] == '$') //$'PATH' tem que funcionar de acordo com o bash e nao esta
 		{
 			ft_echo_es(shell, i);
-			ret = check_dollar_sign(shell->command_splited[i], shell);
+			ret = check_dollar_sign(shell->command_args[i], shell);
 			if (ret == 1 || !ret)
 				i++;
 		}
 		else
 		{
-			if(i == 1 && string_comp(shell->command_splited[i], "-n"))
+			if(i == 1 && string_comp(shell->command_args[i], "-n"))
 			{
 				flag = 1;
 				i++;
 				j++;
 			}
-			while(shell->command_splited[i])
+			while(shell->command_args[i])
 			{
-				if(check_closed_quotes(shell->command_splited[i]))
+				if(check_closed_quotes(shell->command_args[i]))
 				{
 					write(1, "Error", 5);
 					return (0);
@@ -65,7 +67,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 				i++;
 			}
 			i = j;
-			new_str = quote_remover(shell->command_splited[i]);
+			new_str = quote_remover(shell->command_args[i]);
 			if(!new_str)
 				return (0);
 			handle_quotes(new_str);
@@ -230,4 +232,17 @@ int	check_closed_quotes(char *str)
 			i++;
 	}
 	return(flag);
+}
+
+int	check_redirect(char *str)
+{
+	if(string_comp(str, ">"))
+		return (1);
+	if(string_comp(str, "<"))
+		return (1);
+	if(string_comp(str, ">>"))
+		return (1);
+	if(string_comp(str, "<<"))
+		return (1);
+	return (0);
 }
