@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/03 09:55:58 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 09:56:47 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 		j = i;
 		if(check_redirect(shell->command_args[i]))
 			break ;
-		if (shell->command_args[i][0] == '$') //$'PATH' tem que funcionar de acordo com o bash e nao esta
+		if (shell->command_args[i][0] == '$')
 		{
 			ft_echo_es(shell, i);
 			ret = check_dollar_sign(shell->command_args[i], shell);
@@ -61,7 +61,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 			{
 				if(check_closed_quotes(shell->command_args[i]))
 				{
-					write(1, "Error", 5);
+					write(2, "Error", 5);
 					return (0);
 				}
 				i++;
@@ -131,11 +131,13 @@ char	*quote_remover(char *str)
 	if(quote_counter == 2 && str[i] == '"' && str[len - 1] == '\'')
 	{
 		printf("error on quotes");
+		free(new_str);
 		return(0);
 	}
 	if(quote_counter == 2 && str[i] == '\'' && str[len - 1] == '"')
 	{
 		printf("error on quotes");
+		free(new_str);
 		return(0);
 	}
 	free(new_str);
@@ -216,7 +218,7 @@ int	check_closed_quotes(char *str)
 		{
 			if(flag && str[i] == ignore)
 			{
-				flag = 0;
+				flag = 2;
 				ignore = 0;
 				i++;
 			}
