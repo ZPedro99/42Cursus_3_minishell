@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/03 12:49:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:02:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		dup2(shell->stdin_fd, STDIN_FILENO);
 		dup2(shell->stdout_fd, STDOUT_FILENO);
 		if (string_comp(command, "exit"))
+		{
+			free_struct(shell);
+			//free_splited(shell->command_args);
 			exit(0);
-		else if (string_comp(command, "pwd"))
+		}
+		if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
 			exit(0);
@@ -60,9 +64,10 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 				exit(0);
 			exit(g_exit_status);
 		}
+		free_struct(shell);
 		free_splited(shell->command_args);
 	}
-	//wait(&status);
+	wait(&status);
 	/* close(shell->pipes_fd[0]);
 	close(shell->pipes_fd[1]); */
 	//get_exit_status(status);
@@ -107,10 +112,14 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 			dup2(shell->stdout_fd, STDOUT_FILENO);
 		} */
 		if (string_comp(command, "exit"))
+		{
+			free_struct(shell);
 			exit(0);
+		}
 		else if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
+			//free_splited(shell->command_args);
 			exit(0);
 		}
 		else if (string_comp(command, "cd"))
@@ -137,7 +146,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 				exit(0);
 			exit(g_exit_status);
 		}
-		free_splited(shell->command_args);
+		//free_splited(shell->command_args);
 	}
 	//wait(&status);
 	//get_exit_status(status);

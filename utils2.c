@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/23 09:51:16 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/04 11:10:51 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,28 @@ int	ft_search(char *str, char c)
 
 int	counting_pipes(t_minishell *shell)
 {
-	int	i;
+	int		i;
+	char	ignore;
+	int		flag;
 
 	i = 0;
+	ignore = 0;
+	flag = 0;
 	while(shell->command[i])
 	{
-		if(shell->command[i] == '|')
+		if((shell->command[i] == '"' || shell->command[i] == '\'') && !flag)
+		{
+			ignore = '"';
+			flag = 1;
+			i++;
+		}
+		if((shell->command[i] == '"' || shell->command[i] == '\'') && flag)
+		{
+			ignore = 0;
+			flag = 0;
+			i++;
+		}
+		if(shell->command[i] == '|' && !ignore)
 			shell->pipes++;
 		i++;
 	}

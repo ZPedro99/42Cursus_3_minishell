@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/03 12:18:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/04 10:13:25 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,5 +210,6 @@ void		handle_redirects(t_minishell *shell);
 void		redirect_output(t_minishell *shell, int i);
 void		redirect_input(t_minishell *shell, int i);
 void		redirect_append(t_minishell *shell, int i);
+void		here_doc(char *delimiter);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/29 12:46:24 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:02:28 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	free_splited(char **array)
 		free(array[i]);
 		i++;
 	}
-	free(array[i]);
 	free(array);
 }
 
@@ -107,6 +106,5 @@ void	free_copies(char **copy)
 		free(copy[i]);
 		i++;
 	}
-	free(copy[i]);
 	free(copy);
 }
