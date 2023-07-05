@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 14:34:57 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 16:02:04 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*quote_remover(char *str)
 	j = 0;
 	quote_counter = 0;
 	len = ft_strlen(str);
-	new_str = malloc(sizeof(char) * (len - 2 + 1));
+	new_str = ft_calloc(len - 2 + 1, sizeof(char));
 	while(str[i])
 	{
 		if(str[i] == '"' || str[i] == '\'')

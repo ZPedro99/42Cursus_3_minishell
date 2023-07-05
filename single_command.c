@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 11:08:10 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 15:54:16 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,19 @@ int	single_command(t_minishell *shell)
 	char	*cmd_no_quotes;
 
 	shell->command_args = remove_redirs(shell->command);
+	if(!shell->command_args)
+	{
+		ft_putstr_fd("Error: unclosed quotes\n", 2);
+		//free_splited(shell->command_args);
+		return(0);
+	}
 	i = 0;
 	//cmd_no_quotes = 0;
 	while(shell->command_args[i])
 	{
 		if(check_closed_quotes(shell->command_args[i]) == 1)
 		{
-			write(2, "Error", 5);
+			ft_putstr_fd("Error: unclosed quotes\n", 2);
 			free_splited(shell->command_args);
 			return(0);
 		}
@@ -37,6 +43,7 @@ int	single_command(t_minishell *shell)
 		}
 		i++;
 	}
+	ft_expander(shell);
 	//shell->command_args = ft_splitting(shell->command, ' ');
 	//command = quote_remover(shell->command_args[0]);
 	//free(shell->command_splitted[0]);
@@ -58,10 +65,15 @@ char	**remove_redirs(char *command)
 	int		i;
 	char	**command_args;
 
-	i = 0;
 	command_args = ft_splitting(command, ' ');
+	i = 0;
 	while(command_args[i])
 	{
+		if(check_closed_quotes(command_args[i]) == 1)
+		{
+			free_splited(command_args);
+			return (0);
+		}
 		if(string_comp(command_args[i], ">"))
 		{
 			command_args[i] = 0;
@@ -120,14 +132,17 @@ char	**ft_splitting(char *command, char delimiter)
 					ignore = '\'';
 				k = i;
 				k++;
-				while(command[k] != ignore)
+				while(command[k] != ignore && command[k])
 					k++;
 				if(command[k] == ignore && flag == 0)
 					k++;
 				command_args[j] = ft_substr(command, i, k - i);
 				i = k;
-				if(command[k + 1] == '\0')
+				/* if(command[k + 1] == '\0')
+				{
+					command_args[j + 1] = 0;
 					return (command_args);
+				} */
 			}
 			else
 			{

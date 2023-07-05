@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/04 10:13:25 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 15:06:36 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void		free_export1(t_list *lst);
 void		free_struct(t_minishell *shell);
 void		free_splited(char **array);
 void		free_copies(char **copy);
+void		free_eof(t_minishell *shell);
 
 //***********execute***********//
 int			execute_single_cmd(t_minishell *shell, char *command);
@@ -211,5 +212,16 @@ void		redirect_output(t_minishell *shell, int i);
 void		redirect_input(t_minishell *shell, int i);
 void		redirect_append(t_minishell *shell, int i);
 void		here_doc(char *delimiter);
+
+//***********expander***********//
+void		ft_expander(t_minishell *shell);
+int			expand_variable(t_minishell *shell, int i);
+void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
+
+//***********expander2***********//
+char		*get_after_dollar(char *str);
+char		*get_before_dollar(char *str);
+int			check_var_true(char *str, t_minishell *shell);
+char		*var_value(char *str, t_minishell *shell);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 14:33:56 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 15:20:35 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		free_struct(shell);
 		free_splited(shell->command_args);
 	}
-	wait(&status);
+	//wait(&status);
 	/* close(shell->pipes_fd[0]);
 	close(shell->pipes_fd[1]); */
 	//get_exit_status(status);
@@ -194,7 +194,7 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	i = 0;
 	if(check_available_paths(shell->env))
 	{
-		printf("Error! PATH unavailable!\n");
+		ft_putstr_fd("Minishell: variable PATH unavailable.\n", 2);
 		return(x);
 	}
 	//temp = env_copy(shell->env);
@@ -214,9 +214,9 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 			{
 				x = 0;
 				execve(complete_path, command_args, env_copy(shell->env));
-				dup2(shell->stdin_fd, STDIN_FILENO);
+				/* dup2(shell->stdin_fd, STDIN_FILENO);
 				dup2(shell->stdout_fd, STDOUT_FILENO);
-				free(complete_path);
+				free(complete_path); */
 				//free_copies(temp);
 				break ;
 			}
@@ -228,7 +228,7 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	}
 	if(x == -1)
 	{
-		perror("other commands");
+		ft_putstr_fd("Minishell: command does not exist.\n", 2);
 		g_exit_status = 127; //nao esta a assumir !!!!
 	}
 	return (x);

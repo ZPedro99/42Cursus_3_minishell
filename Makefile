@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/07/05 10:52:14 by jomirand         ###   ########.fr        #
+#    Updated: 2023/07/05 15:07:32 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,8 @@ SRCS = main.c\
 		multi_commands.c\
 		single_command.c\
 		redirects.c\
+		expander.c\
+		expander2.c\
 
 OBJS = $(SRCS:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 14:41:35 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 15:03:42 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,25 @@ void	free_copies(char **copy)
 		i++;
 	}
 	free(copy);
+}
+
+void	free_eof(t_minishell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->paths[i])
+	{
+		free(shell->paths[i]);
+		i++;
+	}
+	free(shell->paths);
+	free(shell->pid);
+	free(shell->command);
+	free(shell->prompt);
+	free(shell->pwd);
+	free(shell->old_pwd);
+	free(shell->home);
+	free_export(shell->exp); //por obra do espirito santo nao e preciso este free, cada vez percebo menos
+	free_env(shell->env);
 }

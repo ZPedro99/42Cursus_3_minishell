@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 14:32:18 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 15:53:49 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	g_exit_status;
 
-
-//ola
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
@@ -70,7 +68,8 @@ void	read_command(t_minishell *shell)
 		if (!shell->command)
 		{
 			printf("exit\n");
-			free_struct(shell);
+			free_eof(shell);
+			//free_struct(shell);
 			exit (0);
 		}
 		if (!*shell->command)
