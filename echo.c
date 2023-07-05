@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 09:56:47 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:34:57 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 			if(!new_str)
 				return (0);
 			handle_quotes(new_str);
-			free(new_str);
+			//free(new_str);
 			i++;
 		}
 		if (i < word_num)

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/04 10:15:49 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:52:41 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@ void	handle_redirects(t_minishell *shell)
 			shell->stdin_fd = open(".heredoc", O_RDONLY);
 			//if(shell->stdin_fd < 0)
 				//handle_error
+			unlink(".heredoc");
 		}
 		i++;
 	}
+	free_splited(command_args);
 }
 
 void	redirect_output(t_minishell *shell, int i)

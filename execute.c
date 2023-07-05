@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 12:02:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:33:56 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,36 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "cd"))
 		{
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "unset"))
+		{
+			free_struct(shell);
 			exit(0);
+		}
 		else if (string_comp(command, "env"))
 		{
 			g_exit_status = print_env(shell);
+			free_struct(shell);
 			exit(g_exit_status);
 		}
 		else if (string_comp(command, "echo"))
 		{
 			print_echo(shell);
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "export"))
+		{
+			free_struct(shell);
 			exit(0);
+		}
 		else
 		{
 			if(other_commands(shell, command, shell->command_args) == 0) //exit status ok
