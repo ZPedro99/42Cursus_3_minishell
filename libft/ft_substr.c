@@ -12,59 +12,31 @@
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *str, unsigned int start, size_t len)
+
 {
-	char	*str;
-	size_t	a;
+	unsigned int	i;
+	char			*memall;
 
-	a = 0;
-	if (!s)
-		return (NULL);
-	if (start >= ft_strlen(s))
+	i = 0;
+	if (!str || !len || start >= ft_strlen((char *)str))
 	{
-		str = (char *)malloc(sizeof(char) * 1);
-		if (!str)
-			return (NULL);
-		str[a] = 0;
-		return (str);
+		memall = malloc(1 * sizeof(char));
+		memall[0] = '\0';
+		return (memall);
 	}
-	str = (char *)malloc(sizeof(char) * len + 1);
-	if (!str)
+	memall = malloc((len + 1) * sizeof(char));
+	if (memall == NULL)
 		return (NULL);
-	while (a < len)
+	while (i < len)
 	{
-		str[a] = s[start + a];
-		a++;
+		memall[i] = str[start];
+		start++;
+		i++;
 	}
-		str[a] = '\0';
-	return (str);
+	memall[i] = '\0';
+	return (memall);
 }
-
-//char	*ft_substr(char const *str, unsigned int start, size_t len)
-//
-//{
-//	unsigned int	i;
-//	char			*memall;
-//
-//	i = 0;
-//	if (!str || !len || start >= ft_strlen((char *)str))
-//	{
-//		memall = malloc(1 * sizeof(char));
-//		memall[0] = '\0';
-//		return (memall);
-//	}
-//	memall = malloc((len + 1) * sizeof(char));
-//	if (memall == NULL)
-//		return (NULL);
-//	while (i < len)
-//	{
-//		memall[i] = str[start];
-//		start++;
-//		i++;
-//	}
-//	memall[i] = '\0';
-//	return (memall);
-//}
 
 /* #include <stdio.h>
 

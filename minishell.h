@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/04 10:13:25 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 12:49:05 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void		free_export1(t_list *lst);
 void		free_struct(t_minishell *shell);
 void		free_splited(char **array);
 void		free_copies(char **copy);
+void		free_eof(t_minishell *shell);
 
 //***********execute***********//
 int			execute_single_cmd(t_minishell *shell, char *command);
@@ -125,6 +126,7 @@ char		*quote_remover(char *str);
 void		handle_quotes(char *str);
 int			check_closed_quotes(char *str);
 int			check_redirect(char *str);
+char		*quotes_middle(char *str, int num_quotes);
 
 //***********echo_utils***********//
 int			wordcount(char *s, char c);
@@ -137,7 +139,7 @@ char		*get_dup_str(char *str);
 int			ft_echo_es(t_minishell *shell, int i);
 
 //***********cd***********//
-int			print_cd(t_minishell *shell);
+int			do_cd(t_minishell *shell);
 void		change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
 void		change_exp(t_list *exp, char *old_pwd, char *new_pwd);
 char		*change_dir(t_list *env, char *str);
@@ -160,6 +162,7 @@ int			counting_pipes(t_minishell *shell);
 int			check_available_paths(t_list *env);
 int			check_equal(char *str, int i);
 int			check_args(char **command, t_minishell *shell);
+void		check_export_args(t_minishell *shell);
 
 //***********unset***********//
 
@@ -176,6 +179,7 @@ void		unset_only_exp(t_minishell *shell, t_list *temp, int i);
 
 void		handle_signals(void);
 void		sighand(int signal);
+void		sigint_on_child(int signal);
 
 //***********exit***********//
 //void	get_exit_status(int status);
@@ -211,5 +215,16 @@ void		redirect_output(t_minishell *shell, int i);
 void		redirect_input(t_minishell *shell, int i);
 void		redirect_append(t_minishell *shell, int i);
 void		here_doc(char *delimiter);
+
+//***********expander***********//
+void		ft_expander(t_minishell *shell);
+int			expand_variable(t_minishell *shell, int i);
+void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
+
+//***********expander2***********//
+char		*get_after_dollar(char *str);
+char		*get_before_dollar(char *str);
+int			check_var_true(char *str, t_minishell *shell);
+char		*var_value(char *str, t_minishell *shell);
 
 #endif

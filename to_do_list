@@ -1,0 +1,20 @@
+corrigir "echo "   -------CHECK
+corrigir cd com argumentos invalidos (espaco e av) (cd . mantem no diretorio atual) -------CHECK
+colocar wait no exit -------CHECK
+ctrl + c com algo escrito nao pode aparecer nada no novo prompt -------CHECK
+cat e grep + ctrl c buga o prompt -------CHECK
+cat e grep + ctrl \ prompt tem que ir para newline -------CHECK
+printar o path com cd - -------CHECK
+tratar de "cd -" (leaks e erros) -------CHECK
+echo '' -> leaks e printar newline
+pwd '' -> erros e leaks
+echo $env_vars -> leaks e erros
+echo '$PATH' -> tem que printar $PATH (leaks)
+corrigir cd ../.. (varios '..')
+corrigir cd com caminho relativo
+unset $PATH -> leaks (argumentos inexistentes) (com $ erros de expander)
+quando o PATH e alterado, atualizar os paths da estrutura
+erros no append
+cat file | grep something | more > nao funciona
+ls cona.c | grep if -> erro
+ls | cat > a

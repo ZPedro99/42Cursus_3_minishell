@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 12:02:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:38:51 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,36 +38,50 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "cd"))
 		{
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "unset"))
+		{
+			free_struct(shell);
 			exit(0);
+		}
 		else if (string_comp(command, "env"))
 		{
 			g_exit_status = print_env(shell);
+			free_struct(shell);
 			exit(g_exit_status);
 		}
 		else if (string_comp(command, "echo"))
 		{
 			print_echo(shell);
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "export"))
+		{
+			check_export_args(shell);
+			free_struct(shell);
 			exit(0);
+		}
 		else
 		{
-			if(other_commands(shell, command, shell->command_args) == 0) //exit status ok
+			if(other_commands(shell, command, shell->command_args) == 0)
+			{
+				free_struct(shell);
 				exit(0);
+			}
+			free_struct(shell);
 			exit(g_exit_status);
 		}
-		free_struct(shell);
-		free_splited(shell->command_args);
+		//free_struct(shell);
+		//free_splited(shell->command_args);
 	}
-	wait(&status);
 	/* close(shell->pipes_fd[0]);
 	close(shell->pipes_fd[1]); */
 	//get_exit_status(status);
@@ -77,7 +91,7 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		do_unset(shell);
 	else if (string_comp(command, "cd"))
 	{
-		g_exit_status = print_cd(shell);
+		g_exit_status = do_cd(shell);
 	}
 	else if (string_comp(command, "exit"))
 	{
@@ -119,31 +133,45 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 		else if (string_comp(command, "pwd"))
 		{
 			print_pwd(shell);
-			//free_splited(shell->command_args);
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "cd"))
 		{
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "unset"))
+		{
+			free_struct(shell);
 			exit(0);
+		}
 		else if (string_comp(command, "env"))
 		{
 			g_exit_status = print_env(shell);
+			free_struct(shell);
 			exit(g_exit_status);
 		}
 		else if (string_comp(command, "echo"))
 		{
 			print_echo(shell);
+			free_struct(shell);
 			exit(0);
 		}
 		else if (string_comp(command, "export"))
+		{
+			if(!shell->command_args[1])
+				print_exp(shell);
+			free_struct(shell);
 			exit(0);
+		}
 		else
 		{
-			if(other_commands(shell, command, shell->command_args) == 0) //exit status ok
+			if(other_commands(shell, command, shell->command_args) == 0)
+			{
+				free_struct(shell);
 				exit(0);
+			}
 			exit(g_exit_status);
 		}
 		//free_splited(shell->command_args);
@@ -156,7 +184,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 		do_unset(shell);
 	else if (string_comp(command, "cd"))
 	{
-		g_exit_status = print_cd(shell);
+		g_exit_status = do_cd(shell);
 	}
 	else if (string_comp(command, "exit"))
 	{
@@ -177,6 +205,7 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	int		i;
 	char	*complete_path;
 	char	*temp;
+	char	**temp_env;
 	char	*command_temp;
 	static int		x;
 
@@ -184,12 +213,12 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	i = 0;
 	if(check_available_paths(shell->env))
 	{
-		printf("Error! PATH unavailable!\n");
+		ft_putstr_fd("Minishell: variable PATH unavailable.\n", 2);
 		return(x);
 	}
-	//temp = env_copy(shell->env);
+	temp_env = env_copy(shell->env);
 	command_temp = ft_strtrim(command, " ");
-	if(execve(command, command_args, env_copy(shell->env)))
+	if(execve(command, command_args, temp_env))
 	{
 		//free_copies(temp);
 		while (shell->paths[i])
@@ -203,10 +232,10 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 			if (!access(complete_path, X_OK))
 			{
 				x = 0;
-				execve(complete_path, command_args, env_copy(shell->env));
-				dup2(shell->stdin_fd, STDIN_FILENO);
+				execve(complete_path, command_args, temp_env);
+				/* dup2(shell->stdin_fd, STDIN_FILENO);
 				dup2(shell->stdout_fd, STDOUT_FILENO);
-				free(complete_path);
+				free(complete_path); */
 				//free_copies(temp);
 				break ;
 			}
@@ -218,9 +247,11 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	}
 	if(x == -1)
 	{
-		perror("other commands");
+		ft_putstr_fd("Minishell: command does not exist.\n", 2);
+		free_splited(temp_env);
 		g_exit_status = 127; //nao esta a assumir !!!!
 	}
+	//free_splited(temp_env);
 	return (x);
 }
 
