@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:05:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/23 10:06:53 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 12:48:27 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,17 @@ void	sighand(int signal)
 	{
 		printf("\n");
 		rl_on_new_line();
+		rl_replace_line("", 0);
 		rl_redisplay();
 		g_exit_status = 130;
+	}
+}
+void	sigint_on_child(int signal)
+{
+	if (signal == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
 	}
 }

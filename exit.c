@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/29 12:45:13 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 12:48:43 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	get_exit_status(t_minishell *shell)
 	status = 0;
 	while(i < shell->pipes + 1)
 	{
+		signal(SIGINT, &sigint_on_child);
 		j = waitpid(shell->pid[i], &status, 0);
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
@@ -48,47 +49,52 @@ int	ft_exit_status(t_minishell *shell)
 	int count;
 	long long	num;
 	char	*str;
+	int		status;
 
 	str = 0;
 	num = 0;
 	count = ft_word_count(shell->command_args);
-	if (count == 1)
+	wait(&status);
+	if(WIFEXITED(status))
 	{
-		printf("exit\n");
-		g_exit_status = 0;
-		return (g_exit_status);
-	}
-	if (count > 2)
-	{
-		printf("exit\n");
-		printf("minishell: exit: too many arguments\n");
-		g_exit_status = 1;
-		return (g_exit_status);
-	}
-	if (check_arg(shell->command_args[1]) == 0)//se tiver letras
-	{
-		printf("exit\n");
-		printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
-		g_exit_status = 2;
-		return (g_exit_status);
-	}
-	else
-	{
-		num = ft_atol(shell->command_args[1]);
-		str = ft_ltoa(num);
-		if (ft_strncmp(str, shell->command_args[1], ft_strlen(str)) != 0)
+		if (count == 1)
+		{
+			printf("exit\n");
+			g_exit_status = 0;
+			return (g_exit_status);
+		}
+		if (count > 2)
+		{
+			printf("exit\n");
+			printf("minishell: exit: too many arguments\n");
+			g_exit_status = 1;
+			return (g_exit_status);
+		}
+		if (check_arg(shell->command_args[1]) == 0)//se tiver letras
 		{
 			printf("exit\n");
 			printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
 			g_exit_status = 2;
-			free(str);
 			return (g_exit_status);
 		}
-		free(str);
-		printf("exit\n");
-		num = ft_atol(shell->command_args[1]);
-		g_exit_status = (num % 256);
-		return (g_exit_status);
+		else
+		{
+			num = ft_atol(shell->command_args[1]);
+			str = ft_ltoa(num);
+			if (ft_strncmp(str, shell->command_args[1], ft_strlen(str)) != 0)
+			{
+				printf("exit\n");
+				printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
+				g_exit_status = 2;
+				free(str);
+				return (g_exit_status);
+			}
+			free(str);
+			printf("exit\n");
+			num = ft_atol(shell->command_args[1]);
+			g_exit_status = (num % 256);
+			return (g_exit_status);
+		}
 	}
 	return (0);
 }

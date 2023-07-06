@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 15:53:49 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 12:52:13 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ void	read_command(t_minishell *shell)
 			exit (0);
 		}
 		if (!*shell->command)
+		{
 			free(shell->command);
+		}
 		else
 		{
 			add_history(shell->command);

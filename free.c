@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 15:03:42 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:35:41 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	free_struct(t_minishell *shell)
 		free_splited(shell->command_args);
 	else
 		free(shell->command_args);
-	free(shell->command);
+	if(shell->command)
+		free(shell->command);
 	free(shell->prompt);
 	free(shell->pwd);
 	free(shell->old_pwd);

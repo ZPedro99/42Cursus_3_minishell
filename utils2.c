@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/05 15:48:44 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/06 10:59:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,46 +116,68 @@ int	check_args(char **command, t_minishell *shell)
 {
 	int	i;
 	int	x;
+	int	status;
 	char	*str;
 
 	i = 1;
 	x = 0;
+	wait(&status);
+
 	while (command[i] != NULL)
 		i++;
-	if(i == 1)
-		print_exp(shell);
-	if(i >= 2)
+	if (WIFEXITED(status))
+		g_exit_status = WEXITSTATUS(status);
+	if(g_exit_status != 2)
 	{
-		i = 1;
-		while(command[i])
+		if(i >= 2)
 		{
-			if(check_exp_quotes(command[i]) == 0)
+			i = 1;
+			while(command[i])
 			{
-				printf("Error in export variable, check quotes!\n");//se tiver quotes diferentes
-				return(1);
-			}
-			if(check_exp_quotes(command[i]) == -1)
-			{
-				printf("Error in export variable, quote must have their pair!\n");
-				return (1);
-			}
-			if(check_exp_quotes(command[i]) == 1)
-			{
-				str = quote_remover_exp(command[i]);
-				if(check_exp_input(str) == 0)
+				if(check_exp_quotes(command[i]) == 0)
 				{
-					x = 1;
-					free(str);
-					printf("minishell: export: `%s': not a valid identifier\n", str);
+					printf("Error in export variable, check quotes!\n");//se tiver quotes diferentes
+					return(1);
 				}
-				else
-					place_exp_var(shell, str);
-				free(str);
+				if(check_exp_quotes(command[i]) == -1)
+				{
+					printf("Error in export variable, quote must have their pair!\n");
+					return (1);
+				}
+				if(check_exp_quotes(command[i]) == 1)
+				{
+					str = quote_remover_exp(command[i]);
+					if(check_exp_input(str) == 0)
+					{
+						x = 1;
+						//free(str);
+						printf("minishell: export: `%s': not a valid identifier\n", str);
+					}
+					else
+						place_exp_var(shell, str);
+					free(str);
+				}
+				i++;
 			}
-			i++;
 		}
 	}
 	if (x == 0)
 		return (0);
 	return (1);
+}
+
+void	check_export_args(t_minishell *shell)
+{
+	int	i;
+
+	i = 0;
+	while(shell->command_args[i])
+		i++;
+	if(i == 1)
+		print_exp(shell);
+	else if(i > 1)
+	{
+		//error handling
+		return ;
+	}
 }
