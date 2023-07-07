@@ -6,14 +6,14 @@ cat e grep + ctrl c buga o prompt -------CHECK
 cat e grep + ctrl \ prompt tem que ir para newline -------CHECK
 printar o path com cd - -------CHECK
 tratar de "cd -" (leaks e erros) -------CHECK
-echo '' -> leaks e printar newline
-pwd '' -> erros e leaks
-echo $env_vars -> leaks e erros
+echo '' -> leaks e printar newline -------CHECK
+pwd '' -> erros e leaks -------CHECK
+echo $env_vars -> leaks e erros -------CHECK
 echo '$PATH' -> tem que printar $PATH (leaks)
-corrigir cd ../.. (varios '..')
-corrigir cd com caminho relativo
-unset $PATH -> leaks (argumentos inexistentes) (com $ erros de expander)
-quando o PATH e alterado, atualizar os paths da estrutura
+corrigir cd ../.. (varios '..') -------CHECK
+corrigir cd com caminho relativo -------CHECK
+unset $PATH -> leaks (argumentos inexistentes) (com $ erros de expander) -------CHECK //FALTA MENSAGEM DE ERRO NO unset $PATH
+quando o PATH e alterado, atualizar os paths da estrutura -------CHECK FALTA PRINTAR MENSAGEM ERRO E LEAKS
 erros no append
 cat file | grep something | more > nao funciona
 ls cona.c | grep if -> erro

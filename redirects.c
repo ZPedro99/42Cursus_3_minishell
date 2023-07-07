@@ -6,19 +6,21 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 12:52:41 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 12:26:45 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_redirects(t_minishell *shell)
+char	**handle_redirects(t_minishell *shell, char *command)
 {
 	int	i;
+	int	num_words;
 	char	**command_args;
 
 	i = 0;
-	command_args = ft_splitting(shell->command, ' ');
+	num_words = countwords(command);
+	command_args = ft_splitting(command, ' ');
 	while(command_args[i])
 	{
 		if(string_comp(command_args[i], ">"))
@@ -26,7 +28,16 @@ void	handle_redirects(t_minishell *shell)
 		if(string_comp(command_args[i], "<"))
 			redirect_input(shell, i);
 		if(string_comp(command_args[i], ">>"))
+		{
 			redirect_append(shell, i);
+			if(i == 1)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				command_args[i] = 0;
+				return(command_args);
+			}
+		}
 		if(string_comp(command_args[i], "<<"))
 		{
 			here_doc(command_args[i + 1]);
@@ -37,7 +48,8 @@ void	handle_redirects(t_minishell *shell)
 		}
 		i++;
 	}
-	free_splited(command_args);
+	//free_splited(command_args);
+	return(command_args);
 }
 
 void	redirect_output(t_minishell *shell, int i)

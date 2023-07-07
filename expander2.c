@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:17:01 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/04 17:21:13 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/07 12:16:05 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_before_dollar(char *str)
 	i = 0;
 	while (str[i] != '$')
 		i++;
-	trimmed = malloc(sizeof(char) * (i));
+	trimmed = malloc(sizeof(char) * (i + 1));
 	i = 0;
 	while (str[i] != '$')
 	{
@@ -69,6 +69,7 @@ int	check_var_true(char *str, t_minishell *shell)
 		}
 		head = head->next;
 	}
+	free(temp);
 	return (0);
 }
 

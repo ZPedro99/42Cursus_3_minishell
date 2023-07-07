@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/06 14:48:13 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 12:34:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,67 +15,26 @@
 int	single_command(t_minishell *shell)
 {
 	int		i;
-	char	*cmd_no_quotes;
-	char	*arg_no_quotes;
+	char	*command;
 
-	i = 0;
-	if(check_closed_quotes(shell->command))
-	{
-		cmd_no_quotes = quote_remover(shell->command);//criar outra quote remover para o comando geral(ideia: split pelo espaco e remover a cada arg)
-		free(shell->command);
-		shell->command = ft_strdup(cmd_no_quotes);
-		free(cmd_no_quotes);
-	}
-	if(shell->command[0] == ' ')
-	{
-		while(shell->command[i] == ' ' && shell->command[i])
-		{
-			if(shell->command[i] != ' ' && shell->command[i] != '\0')
-				break ;
-			i++;
-			if(shell->command[i] == '\0')
-				return (0);
-		}
-	}
-	shell->command_args = remove_redirs(shell->command);
-	//free(cmd_no_quotes);
+	command = whitespaces(shell->command);
+	shell->command_args = remove_redirs(command);
 	if(!shell->command_args)
 	{
-		ft_putstr_fd("Error: unclosed quotes\n", 2);
-		//free_splited(shell->command_args);
+		ft_putstr_fd("Minishell: invalid command.\n", 2);
+		free(command);
 		return(0);
 	}
-	i = 0;
-	//cmd_no_quotes = 0;
-	while(shell->command_args[i])
-	{
-		if(check_closed_quotes(shell->command_args[i]) == 1)
-		{
-			ft_putstr_fd("Error: unclosed quotes\n", 2);
-			free_splited(shell->command_args);
-			return(0);
-		}
-		if(check_closed_quotes(shell->command_args[i]) == 2)
-		{
-			arg_no_quotes = quote_remover(shell->command_args[i]);
-			free(shell->command_args[i]);
-			shell->command_args[i] = ft_strdup(arg_no_quotes);
-			free(arg_no_quotes);
-		}
-		i++;
-	}
 	ft_expander(shell);
-	//shell->command_args = ft_splitting(shell->command, ' ');
-	//command = quote_remover(shell->command_args[0]);
-	//free(shell->command_splitted[0]);
-	//shell->command_args[0] = ft_strdup(command);
-	//free(command);
-	//handle_redirects(shell);
-	if(execute_single_cmd(shell, shell->command_args[0]))
+	i = 0;
+	if(check_quotes_on_args(shell->command_args))
+		return (0);
+	if(execute_single_cmd(shell, command))
 	{
 		free_splited(shell->command_args);
 		return (1);
 	}
+	free(command);
 	get_exit_status(shell);
 	free_splited(shell->command_args);
 	return (0);
@@ -84,8 +43,10 @@ int	single_command(t_minishell *shell)
 char	**remove_redirs(char *command)
 {
 	int		i;
+	int		num_words;
 	char	**command_args;
 
+	num_words = countwords(command);
 	command_args = ft_splitting(command, ' ');
 	i = 0;
 	while(command_args[i])
@@ -102,8 +63,14 @@ char	**remove_redirs(char *command)
 		}
 		if(string_comp(command_args[i], ">>"))
 		{
-			command_args[i] = 0;
-			break ;
+			if(i == 1)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				command_args[i] = 0;
+				return(command_args);
+			}
+			//break ;
 		}
 		if(string_comp(command_args[i], "<"))
 		{
@@ -218,4 +185,94 @@ int	countwords(char *str)
 			i++;
 	}
 	return (count);
+}
+
+char	*whitespaces(char *str)
+{
+	char	*new_str;
+	char	quote;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	quote = 0;
+	new_str = (char *)malloc(sizeof(char) * (strlength(str) + 1));
+	while(str[i])
+	{
+		if((str[i] == '\'' || str[i] == '"') && !quote)
+			quote = str[i];
+		else if((str[i] == '\'' || str[i] == '"') && quote == str[i])
+			quote = 0;
+		if(!quote && (str[i] == '>' || str[i] == '<'))
+		{
+			new_str[j] = ' ';
+			j++;
+			new_str[j] = str[i];
+			j++;
+			i++;
+			if(str[i] == str[i - 1])
+			{
+				new_str[j] = str[i];
+				j++;
+				i++;
+			}
+			new_str[j] = str[i];
+			j++;
+			i++;
+		}
+		new_str[j] = str[i];
+		j++;
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
+
+int		strlength(char *str)
+{
+	int	len;
+	int	i;
+
+	i = 0;
+	len = 0;
+	if(!str)
+		return(0);
+	while(str[i])
+	{
+		if(str[i] == '<' || str[i] == '>')
+		{
+			len += 3;
+			i++;
+			//continue ;
+		}
+		len++;
+		i++;
+	}
+	return(len);
+}
+
+int	check_quotes_on_args(char **args)
+{
+	int		i;
+	char	*unquoted_cmd;
+
+	i = 0;
+	while(args[i])
+	{
+		if(check_closed_quotes(args[i]) == 1)
+		{
+			ft_putstr_fd("Minishell: unclosed quotes.\n", 2);
+			return (1);
+		}
+		if(check_closed_quotes(args[i]) == 2)
+		{
+			unquoted_cmd = quote_remover(args[i]);
+			free(args[i]);
+			args[i] = ft_strdup(unquoted_cmd);
+			free(unquoted_cmd);
+		}
+		i++;
+	}
+	return(0);
 }

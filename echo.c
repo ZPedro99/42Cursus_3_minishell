@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/06 14:30:12 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 12:38:09 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,80 +76,74 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 			i++;
 		}
 		if (i < word_num)
-			write(1, " ", 1);
+			printf(" ");
 	}
 	return (flag);
 }
 
-char	*quote_remover(char *str)
+static int	length_no_quotes(char *str)
 {
 	int		i;
-	int		j;
 	int		len;
-	int		quote_counter;
+	char	quote;
+
+	i = 0;
+	len = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if ((str[i] == '"' || str[i] == '\'') && !quote)
+		{
+			quote = str[i];
+			len--;
+		}
+		else if ((str[i] == '"' || str[i] == '\'') && quote == str[i])
+		{
+			len--;
+			quote = 0;
+		}
+		len++;
+		i++;
+	}
+	return (len);
+}
+
+char	quote_checker(char *str, int i, char quote)
+{
+	if (ft_strrchr("\"\'", str[i]) && !quote)
+		quote = str[i];
+	else if (ft_strrchr("\"\'", str[i]) && quote == str[i])
+		quote = 0;
+	return(quote);
+}
+
+char	*quote_remover(char *str)
+{
 	char	*new_str;
+	char	quote;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
-	quote_counter = 0;
-	len = ft_strlen(str);
-	//new_str = ft_calloc(len - 2 + 1, sizeof(char));
-	while(str[i])
+	quote = 0;
+	if (length_no_quotes(str) <= 0)
+		return (ft_strdup(""));
+	new_str = (char *)malloc(sizeof(char) * (length_no_quotes(str) + 1));
+	while (str[i])
 	{
-		if(str[i] == '"' || str[i] == '\'')
-			quote_counter++;
+		quote = quote_checker(str, i, quote);
+		if (i > (int)ft_strlen(str) - 1)
+			break ;
+		if ((quote && quote != str[i]) || (!quote && !ft_strchr("\"\'", str[i])))
+		{
+			new_str[j] = str[i];
+			j++;
+		}
 		i++;
 	}
-	i = 0;
-	if(quote_counter % 2 == 0 && str[i] == '"' && str[len - 1] == '"')
-	{
-		new_str = ft_calloc(len - 2 + 1, sizeof(char));
-		while(str[i])
-		{
-			if(i == 0 || i == len - 1)
-				i++;
-			if(i == len)
-				break;
-			new_str[j] = str[i];
-			i++;
-			j++;
-		}
-		return(new_str);
-	}
-	if(quote_counter == 2 && str[i] == '\'' && str[len - 1] == '\'')
-	{
-		new_str = ft_calloc(len - 2 + 1, sizeof(char));
-		while(str[i])
-		{
-			if(i == 0 || i == len - 1)
-				i++;
-			if(i == len)
-				break;
-			new_str[j] = str[i];
-			i++;
-			j++;
-		}
-		return(new_str);
-	}
-	if(quote_counter == 2 && str[i] == '"' && str[len - 1] == '\'')
-	{
-		printf("error on quotes");
-		//free(new_str);
-		return(0);
-	}
-	if(quote_counter == 2 && str[i] == '\'' && str[len - 1] == '"')
-	{
-		printf("error on quotes");
-		//free(new_str);
-		return(0);
-	}
-	if(quote_counter == 2)
-	{
-		new_str = quotes_middle(str, quote_counter);
-		return (new_str);
-	}
-	//free(new_str);
-	return(str);
+	new_str[j] = '\0';
+	return (new_str);
 }
 
 void	handle_quotes(char *str)

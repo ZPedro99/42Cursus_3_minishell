@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 10:10:24 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/04 17:21:04 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/07 12:13:51 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	perform_variable_expansion(t_minishell *shell, int i, char *after_ds)
 	temp = ft_strdup(after_ds);
 	free(after_ds);
 	after_ds = var_value(temp, shell);
+	free(temp);
 	before_ds = get_before_dollar(shell->command_args[i]);
 	free(shell->command_args[i]);
 	shell->command_args[i] = ft_strjoin(before_ds, after_ds);

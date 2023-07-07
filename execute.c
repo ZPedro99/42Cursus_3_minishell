@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/06 14:38:51 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 12:32:15 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,69 +14,88 @@
 
 int	execute_single_cmd(t_minishell *shell, char *command)
 {
-	int		status;
-	int	j;
+	//int		status;
+	//int	j;
+	char	**cmd_args;
 
-	status = 0;
-	j = 0;
+	//status = 0;
+	//j = 0;
 	//shell->command_args = ft_split(shell->command_splitted[i], ' ');
 	shell->pid[0] = fork();
 	if(!shell->pid[0])
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		handle_redirects(shell);
+		cmd_args = handle_redirects(shell, command);
 		//through_pipes(shell, i);
 		dup2(shell->stdin_fd, STDIN_FILENO);
 		dup2(shell->stdout_fd, STDOUT_FILENO);
-		if (string_comp(command, "exit"))
+		if (string_comp(shell->command_args[0], "exit"))
 		{
 			free_struct(shell);
+			free(command);
+			free(cmd_args);
 			//free_splited(shell->command_args);
 			exit(0);
 		}
-		if (string_comp(command, "pwd"))
+		if (string_comp(shell->command_args[0], "pwd"))
 		{
 			print_pwd(shell);
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(0);
 		}
-		else if (string_comp(command, "cd"))
+		else if (string_comp(shell->command_args[0], "cd"))
 		{
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(0);
 		}
-		else if (string_comp(command, "unset"))
+		else if (string_comp(shell->command_args[0], "unset"))
 		{
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(0);
 		}
-		else if (string_comp(command, "env"))
+		else if (string_comp(shell->command_args[0], "env"))
 		{
 			g_exit_status = print_env(shell);
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(g_exit_status);
 		}
-		else if (string_comp(command, "echo"))
+		else if (string_comp(shell->command_args[0], "echo"))
 		{
 			print_echo(shell);
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(0);
 		}
-		else if (string_comp(command, "export"))
+		else if (string_comp(shell->command_args[0], "export"))
 		{
 			check_export_args(shell);
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(0);
 		}
 		else
 		{
-			if(other_commands(shell, command, shell->command_args) == 0)
+			if(other_commands(shell, shell->command_args[0], cmd_args) == 0)
 			{
 				free_struct(shell);
+				free(command);
+				free_splited(cmd_args);
 				exit(0);
 			}
 			free_struct(shell);
+			free(command);
+			free_splited(cmd_args);
 			exit(g_exit_status);
 		}
 		//free_struct(shell);
@@ -85,15 +104,15 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 	/* close(shell->pipes_fd[0]);
 	close(shell->pipes_fd[1]); */
 	//get_exit_status(status);
-	 if (string_comp(command, "export"))
+	 if (string_comp(shell->command_args[0], "export"))
 		g_exit_status = check_args(shell->command_args, shell);
-	else if (string_comp(command, "unset"))
+	else if (string_comp(shell->command_args[0], "unset"))
 		do_unset(shell);
-	else if (string_comp(command, "cd"))
+	else if (string_comp(shell->command_args[0], "cd"))
 	{
 		g_exit_status = do_cd(shell);
 	}
-	else if (string_comp(command, "exit"))
+	else if (string_comp(shell->command_args[0], "exit"))
 	{
 		if (ft_exit_status(shell) != 1)
 		{
@@ -110,6 +129,7 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 {
 	int		status;
+	char	**cmd_args;
 
 	status = 0;
 	//shell->command_args = ft_split(shell->command_splitted[i], ' ');
@@ -118,7 +138,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		handle_redirects(shell);
+		cmd_args = handle_redirects(shell, command);
 		through_pipes(shell, i);
 		/* if(i > 0)
 		{
