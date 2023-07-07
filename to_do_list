@@ -9,12 +9,12 @@ tratar de "cd -" (leaks e erros) -------CHECK
 echo '' -> leaks e printar newline -------CHECK
 pwd '' -> erros e leaks -------CHECK
 echo $env_vars -> leaks e erros -------CHECK
-echo '$PATH' -> tem que printar $PATH (leaks)
+echo '$PATH' -> tem que printar $PATH (leaks) -------CHECK
 corrigir cd ../.. (varios '..') -------CHECK
 corrigir cd com caminho relativo -------CHECK
-unset $PATH -> leaks (argumentos inexistentes) (com $ erros de expander) -------CHECK //FALTA MENSAGEM DE ERRO NO unset $PATH
+unset $PATH -> leaks (argumentos inexistentes) (com $ erros de expander) -------CHECK
 quando o PATH e alterado, atualizar os paths da estrutura -------CHECK FALTA PRINTAR MENSAGEM ERRO E LEAKS
-erros no append
+erros no append -------CHECK
 cat file | grep something | more > nao funciona
 ls cona.c | grep if -> erro
 ls | cat > a

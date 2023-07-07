@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/06 10:59:32 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:15:00 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	counting_pipes(t_minishell *shell)
 		}
 		if(shell->command[i] == '|' && !ignore)
 			shell->pipes++;
+		if(shell->command[i] == '\0')
+			break ;
 		i++;
 	}
 	return(shell->pipes);

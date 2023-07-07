@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 12:38:09 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:57:59 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 	int	j;
 	//char	*new_str;
 
+	(void)ret;
 	i = 1;
 	flag = 0;
 	while (shell->command_args[i])
@@ -42,39 +43,36 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 		j = i;
 		if(check_redirect(shell->command_args[i]))
 			break ;
-		if (shell->command_args[i][0] == '$')
+		/* if (shell->command_args[i][0] == '$')
 		{
 			ft_echo_es(shell, i);
 			ret = check_dollar_sign(shell->command_args[i], shell);
 			if (ret == 1 || !ret)
 				i++;
-		}
-		else
+		} */
+		if(i == 1 && string_comp(shell->command_args[i], "-n"))
 		{
-			if(i == 1 && string_comp(shell->command_args[i], "-n"))
+			flag = 1;
+			i++;
+			j++;
+		}
+		/* while(shell->command_args[i])
+		{
+			if(check_closed_quotes(shell->command_args[i]) == 1)
 			{
-				flag = 1;
-				i++;
-				j++;
+				write(2, "Error", 5);
+				return (0);
 			}
-			/* while(shell->command_args[i])
-			{
-				if(check_closed_quotes(shell->command_args[i]) == 1)
-				{
-					write(2, "Error", 5);
-					return (0);
-				}
-				i++;
-			}
-			i = j;
-			new_str = quote_remover(shell->command_args[i]);
-			if(!new_str)
-				return (0); */
-			//handle_quotes(shell->command_args[i]);
-			printf("%s", shell->command_args[i]);
-			//free(new_str);
 			i++;
 		}
+		i = j;
+		new_str = quote_remover(shell->command_args[i]);
+		if(!new_str)
+			return (0); */
+		//handle_quotes(shell->command_args[i]);
+		printf("%s", shell->command_args[i]);
+		//free(new_str);
+		i++;
 		if (i < word_num)
 			printf(" ");
 	}

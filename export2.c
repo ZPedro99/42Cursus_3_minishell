@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/19 17:13:35 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:07:33 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,8 @@ int	ft_check_dup2(t_minishell *shell, char *str)
 		head = head->next;
 	}
 	free(search);
+	if(strchr(str, ':'))
+		ft_putstr_fd("Minishell: unset : not a valid identifier", 2);
 	return(1);
 }
 

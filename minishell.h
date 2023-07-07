@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 11:59:42 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:45:33 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ int		check_quotes_on_args(char **args);
 char		**handle_redirects(t_minishell *shell, char *command);
 void		redirect_output(t_minishell *shell, int i);
 void		redirect_input(t_minishell *shell, int i);
-void		redirect_append(t_minishell *shell, int i);
+void		redirect_append(int i, char **args);
 void		here_doc(char *delimiter);
 
 //***********expander***********//

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 12:26:45 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:45:27 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**handle_redirects(t_minishell *shell, char *command)
 			redirect_input(shell, i);
 		if(string_comp(command_args[i], ">>"))
 		{
-			redirect_append(shell, i);
+			redirect_append(i, command_args);
 			if(i == 1)
 			{
 				free(command_args[i]);
@@ -70,11 +70,11 @@ void	redirect_input(t_minishell *shell, int i)
 	close(file_fd);
 }
 
-void	redirect_append(t_minishell *shell, int i)
+void	redirect_append(int i, char **args)
 {
 	int	file_fd;
 
-	file_fd = open(shell->command_args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
+	file_fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
 	dup2(file_fd, STDOUT_FILENO);
 	close(file_fd);
 }
