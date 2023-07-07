@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 14:50:56 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 16:51:22 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	}
 	if(x == -1)
 	{
-		ft_putstr_fd("Minishell: command does not exist.\n", 2);
+		ft_putstr_fd("Minishell: command does not exist in the current paths.\n", 2);
 		free_splited(temp_env);
 		g_exit_status = 127; //nao esta a assumir !!!!
 	}

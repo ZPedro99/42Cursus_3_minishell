@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 15:07:33 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/07 16:44:22 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	ft_check_dup(t_minishell *shell, char *str)
 		{
 			change_value_exp(shell, str, name);
 			change_value_env(shell, str, name);
+
 			return (0);
 		}
 		head = head->next;
@@ -125,6 +126,11 @@ void	change_value_env(t_minishell *shell, char *str, char *name)
 		temp_env = temp_env->next;
 	free(((t_env *)(temp_env->content))->info);
 	((t_env *)(temp_env->content))->info = ft_strdup(temp);
+	if(string_comp(name, "PATH="))
+	{
+		free_splited(shell->paths);
+		shell->paths = save_paths(((t_env *)(temp_env->content))->info);
+	}
 	free(temp);
 	free(name);
 }
