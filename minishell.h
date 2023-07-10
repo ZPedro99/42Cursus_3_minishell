@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 14:12:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:37:43 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_env		*create_exp_node(char *env);
 char		*get_exp_info(char *env);
 char		*get_exp_name(char *env);
 void		place_exp_var(t_minishell *shell, char *str);
+void		change_struct(t_minishell *shell, char *str);
 
 //***********export2***********//
 int			ft_check_dup(t_minishell *shell, char *str);

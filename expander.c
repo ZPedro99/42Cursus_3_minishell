@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 10:10:24 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/10 10:47:34 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:55:54 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	expand_variable(t_minishell *shell, int i)
 	{
 		free(after_ds);
 		g_exit_status = 127;
+		free(shell->command_args[i]);
+		shell->command_args[i] = ft_strdup(" ");
 		return (-1);
 	}
 	else

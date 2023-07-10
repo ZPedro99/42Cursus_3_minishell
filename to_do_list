@@ -28,12 +28,17 @@ commando so com espacos -> leaks -------CHECK
 
 ronda 3
 
-cd '' -> tirar mensagem de erro
-unset '' -> colocar mensagem de erro
-ls > 'a' -> retirar as quotes
+cd '' -> tirar mensagem de erro -------CHECK
+unset '' -> colocar mensagem de erro -------CHECK
+ls > 'a' -> retirar as quotes -------CHECK
 adicionar ao historico um commando inexistente -------CHECK
 unclosed quotes + comando inexistente -> leaks
 leak estranho na mistura de export com unset
-execve a funcionar apos alterar PATH para pastas ao calhas -> nao pode
-expander -> se env var nao existir substituir por espaco
+execve a funcionar apos alterar PATH para pastas ao calhas -> nao pode -------CHECK
+expander -> se env var nao existir substituir por espaco -------CHECK
 
+
+ronda 4
+
+corrigir echo -nnnnnnn -n -n ola ->nao pode ter newline
+checkar redirects!!

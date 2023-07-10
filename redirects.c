@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 10:39:39 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:54:24 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,15 @@ char	**handle_redirects(t_minishell *shell, char *command)
 
 void	redirect_output(int i, char **args)
 {
-	int	file_fd;
+	int		file_fd;
+	char	*temp;
 
+	if(check_closed_quotes(args[i + 1]) == 1)
+	{
+		temp = quote_remover(args[i + 1]);
+		free(args[i + 1]);
+		args[i + 1] = ft_strdup(temp);
+	}
 	file_fd = open(args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	dup2(file_fd, STDOUT_FILENO);
 	close(file_fd);

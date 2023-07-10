@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 15:05:26 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:57:39 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,9 +231,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 	else if (string_comp(command, "unset"))
 		do_unset(shell);
 	else if (string_comp(command, "cd"))
-	{
 		g_exit_status = do_cd(shell);
-	}
 	else if (string_comp(command, "exit"))
 	{
 		if (ft_exit_status(shell) != 1)

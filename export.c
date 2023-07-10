@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:45:06 by emsoares          #+#    #+#             */
-/*   Updated: 2023/06/19 16:43:32 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:51:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,39 @@ void	place_exp_var(t_minishell *shell, char *str)
 			{
 				ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
 				ft_lstadd_back(&shell->env, ft_lstnew(create_env_node(str)));
+				change_struct(shell, str);
 			}
 			return ;
 		}
 	}
+}
+
+void	change_struct(t_minishell *shell, char *str)
+{
+	char	*temp;
+	int		i;
+	int		size;
+
+	i = 0;
+	size = 1;
+	while(str[i] != '=')
+	{
+		size++;
+		i++;
+	}
+	temp = ft_substr(str, 0 ,size);
+	if(string_comp(temp, "PATH=") == 0)
+	{
+		free(temp);
+		return ;
+	}
+	else
+	{
+		free(temp);
+		temp = ft_substr(str, size, (ft_strlen(str) - size));
+		free_splited(shell->paths);
+		shell->paths = ft_split(temp, ':');
+		free(temp);
+	}
+	return ;
 }

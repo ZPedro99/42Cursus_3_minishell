@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 14:35:58 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/29 12:51:59 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:46:07 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	do_unset(t_minishell *shell)
 	{
 		while (shell->command_args[i])
 		{
+			if(ft_strrchr("\"\'", shell->command_args[i][0]))
+			{
+				ft_putstr_fd("bash: unset: not a valid identifier.\n", 2);
+				return ;
+			}
 			if (ft_check_dup2(shell, shell->command_args[i]) == 1)
 				break;
 			if (only_exp(shell->command_args[i], shell) == 1)
