@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 14:45:33 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 14:12:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void		obtain_vars(t_minishell *shell);
 void		read_command(t_minishell *shell);
 char		**save_paths(char *paths);
 int			number_of_paths(char *paths);
+int			check_command(t_minishell *shell);
 
 //***********env***********//
 t_list		*get_env_vars(char **env);
@@ -106,6 +107,7 @@ void		free_struct(t_minishell *shell);
 void		free_splited(char **array);
 void		free_copies(char **copy);
 void		free_eof(t_minishell *shell);
+void		free_struct_multi(t_minishell *shell);
 
 //***********execute***********//
 int			execute_single_cmd(t_minishell *shell, char *command);
@@ -214,8 +216,8 @@ int		check_quotes_on_args(char **args);
 //***********redirects***********//
 
 char		**handle_redirects(t_minishell *shell, char *command);
-void		redirect_output(t_minishell *shell, int i);
-void		redirect_input(t_minishell *shell, int i);
+void		redirect_output(int i, char **args);
+void		redirect_input(int i, char **args);
 void		redirect_append(int i, char **args);
 void		here_doc(char *delimiter);
 

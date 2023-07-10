@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 09:39:59 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:05:26 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		}
 		else
 		{
-			if(other_commands(shell, shell->command_args[0], cmd_args) == 0)
+			if(other_commands(shell, shell->command_args[0], shell->command_args) == 0)
 			{
 				free_struct(shell);
 				free(command);
@@ -130,7 +130,7 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 {
 	int		status;
-	char	**cmd_args;
+	//char	**cmd_args;
 
 	status = 0;
 	//shell->command_args = ft_split(shell->command_splitted[i], ' ');
@@ -139,60 +139,87 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		cmd_args = handle_redirects(shell, command);
+		shell->command_args = handle_redirects(shell, command);
+		ft_expander(shell);
 		through_pipes(shell, i);
 		/* if(i > 0)
 		{
 			dup2(shell->stdin_fd, STDIN_FILENO);
 			dup2(shell->stdout_fd, STDOUT_FILENO);
 		} */
-		if (string_comp(cmd_args[0], "exit"))
+		if (string_comp(shell->command_args[0], "exit"))
 		{
-			free_struct(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(0);
 		}
-		else if (string_comp(cmd_args[0], "pwd"))
+		else if (string_comp(shell->command_args[0], "pwd"))
 		{
 			print_pwd(shell);
-			free_struct(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(0);
 		}
-		else if (string_comp(cmd_args[0], "cd"))
+		else if (string_comp(shell->command_args[0], "cd"))
 		{
-			free_struct(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(0);
 		}
-		else if (string_comp(cmd_args[0], "unset"))
+		else if (string_comp(shell->command_args[0], "unset"))
 		{
-			free_struct(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(0);
 		}
-		else if (string_comp(cmd_args[0], "env"))
+		else if (string_comp(shell->command_args[0], "env"))
 		{
 			g_exit_status = print_env(shell);
-			free_struct(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(g_exit_status);
 		}
-		else if (string_comp(cmd_args[0], "echo"))
+		else if (string_comp(shell->command_args[0], "echo"))
 		{
 			print_echo(shell);
-			free_struct(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(0);
 		}
-		else if (string_comp(cmd_args[0], "export"))
+		else if (string_comp(shell->command_args[0], "export"))
 		{
-			if(!shell->command_args[1])
-				print_exp(shell);
-			free_struct(shell);
+			print_exp(shell);
+			free_struct_multi(shell);
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(0);
 		}
 		else
 		{
-			if(other_commands(shell, cmd_args[0], cmd_args) == 0)//estrutura, commando ("ls") e commando + argumentos
+			if(other_commands(shell, shell->command_args[0], shell->command_args))//estrutura, commando ("ls") e commando + argumentos
 			{
-				free_struct(shell);
+				free_struct_multi(shell);
+				free_splited(shell->command_args);
+				free(command);
+				free_splited(shell->command_splitted_pipe);
 				exit(0);
 			}
+			free_splited(shell->command_args);
+			free(command);
+			free_splited(shell->command_splitted_pipe);
 			exit(g_exit_status);
 		}
 		//free_splited(shell->command_args);
@@ -268,7 +295,7 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	}
 	if(x == -1)
 	{
-		ft_putstr_fd("Minishell: command does not exist in the current paths.\n", 2);
+		ft_putstr_fd("Minishell: command does not exist.\n", 2);
 		free_splited(temp_env);
 		g_exit_status = 127; //nao esta a assumir !!!!
 	}

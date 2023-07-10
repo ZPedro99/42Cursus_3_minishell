@@ -15,7 +15,25 @@ corrigir cd com caminho relativo -------CHECK
 unset $PATH -> leaks (argumentos inexistentes) (com $ erros de expander) -------CHECK
 quando o PATH e alterado, atualizar os paths da estrutura -------CHECK
 erros no append -------CHECK
-cat file | grep something | more > nao funciona
-ls cona.c | grep if -> erro
-ls | cat > a
-verificar exit status de ctrl + c e ctrl + \ num comando em suspenso (ex: cat, grep "algo", etc"
+cat file | grep something | more > nao funciona -------CHECK
+ls cona.c | grep if -> erro -------CHECK
+ls | cat > a -------CHECK
+verificar exit status de ctrl + c e ctrl + \ num comando em suspenso (ex: cat, grep "algo", etc" -------CHECK
+
+
+
+ronda 2
+
+commando so com espacos -> leaks -------CHECK
+
+ronda 3
+
+cd '' -> tirar mensagem de erro
+unset '' -> colocar mensagem de erro
+ls > 'a' -> retirar as quotes
+adicionar ao historico um commando inexistente -------CHECK
+unclosed quotes + comando inexistente -> leaks
+leak estranho na mistura de export com unset
+execve a funcionar apos alterar PATH para pastas ao calhas -> nao pode
+expander -> se env var nao existir substituir por espaco
+

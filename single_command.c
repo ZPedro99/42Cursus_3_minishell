@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 12:34:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 14:30:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@ int	single_command(t_minishell *shell)
 	char	*command;
 
 	command = whitespaces(shell->command);
+	i = 0;
+	while(command[i])
+	{
+		if(command[i] == ' ' || command[i] == '\t')
+			i++;
+		else
+			break;
+	}
+	if(i == (int)ft_strlen(command))
+	{
+		free(command);
+		return(0);
+	}
 	shell->command_args = remove_redirs(command);
 	if(!shell->command_args)
 	{
@@ -34,8 +47,9 @@ int	single_command(t_minishell *shell)
 		free_splited(shell->command_args);
 		return (1);
 	}
-	free(command);
 	get_exit_status(shell);
+	if(!string_comp(shell->command_args[0], "exit"))
+		free(command);
 	free_splited(shell->command_args);
 	return (0);
 }
@@ -51,7 +65,7 @@ char	**remove_redirs(char *command)
 	i = 0;
 	while(command_args[i])
 	{
-		if(check_closed_quotes(command_args[i]) == 1)
+		if(check_closed_quotes(command_args[i]) == 2)
 		{
 			free_splited(command_args);
 			return (0);
@@ -260,12 +274,12 @@ int	check_quotes_on_args(char **args)
 	i = 0;
 	while(args[i])
 	{
-		if(check_closed_quotes(args[i]) == 1)
+		if(check_closed_quotes(args[i]) == 2)
 		{
 			ft_putstr_fd("Minishell: unclosed quotes.\n", 2);
 			return (1);
 		}
-		if(check_closed_quotes(args[i]) == 2)
+		if(check_closed_quotes(args[i]) == 1)
 		{
 			unquoted_cmd = quote_remover(args[i]);
 			free(args[i]);

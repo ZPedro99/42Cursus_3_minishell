@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/06 12:48:43 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 11:27:03 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	get_exit_status(t_minishell *shell)
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-			g_exit_status = 128 + WEXITSTATUS(status);
+			g_exit_status = 128 + WTERMSIG(status);
 		i++;
 	}
 	//printf("status is: %d\n", g_exit_status);
@@ -63,18 +63,18 @@ int	ft_exit_status(t_minishell *shell)
 			g_exit_status = 0;
 			return (g_exit_status);
 		}
-		if (count > 2)
-		{
-			printf("exit\n");
-			printf("minishell: exit: too many arguments\n");
-			g_exit_status = 1;
-			return (g_exit_status);
-		}
 		if (check_arg(shell->command_args[1]) == 0)//se tiver letras
 		{
 			printf("exit\n");
 			printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
 			g_exit_status = 2;
+			return (g_exit_status);
+		}
+		if (count > 2)
+		{
+			printf("exit\n");
+			printf("minishell: exit: too many arguments\n");
+			g_exit_status = 1;
 			return (g_exit_status);
 		}
 		else

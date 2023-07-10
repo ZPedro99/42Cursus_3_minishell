@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 09:40:11 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:04:32 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,13 @@ void	read_command(t_minishell *shell)
 		shell->stdout_fd = 1;
 		handle_signals();
 		shell->command = readline(shell->prompt);
-		if (!shell->command)
-		{
-			printf("exit\n");
-			free_eof(shell);
-			//free_struct(shell);
-			exit (0);
-		}
+		add_history(shell->command);
+		if(check_command(shell))
+			continue ;
 		if (!*shell->command)
-		{
 			free(shell->command);
-		}
 		else
 		{
-			add_history(shell->command);
 			if(counting_pipes(shell) == 0)
 			{
 				shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
@@ -124,4 +117,21 @@ int	number_of_paths(char *paths)
 		i++;
 	}
 	return (number);
+}
+
+int	check_command(t_minishell *shell)
+{
+	if (!shell->command)
+	{
+		printf("exit\n");
+		free_eof(shell);
+		//free_struct(shell);
+		exit (0);
+	}
+	if(check_closed_quotes(shell->command) == 2)
+	{
+		ft_putstr_fd("minishell: error: unclosed quotes\n", 2);
+		return(1);
+	}
+	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 14:45:27 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 10:39:39 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,18 @@ char	**handle_redirects(t_minishell *shell, char *command)
 	while(command_args[i])
 	{
 		if(string_comp(command_args[i], ">"))
-			redirect_output(shell, i);
+		{
+			redirect_output(i, command_args);
+			if(i == 1)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				command_args[i] = 0;
+				return(command_args);
+			}
+		}
 		if(string_comp(command_args[i], "<"))
-			redirect_input(shell, i);
+			redirect_input(i, command_args);
 		if(string_comp(command_args[i], ">>"))
 		{
 			redirect_append(i, command_args);
@@ -52,20 +61,20 @@ char	**handle_redirects(t_minishell *shell, char *command)
 	return(command_args);
 }
 
-void	redirect_output(t_minishell *shell, int i)
+void	redirect_output(int i, char **args)
 {
 	int	file_fd;
 
-	file_fd = open(shell->command_args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	file_fd = open(args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	dup2(file_fd, STDOUT_FILENO);
 	close(file_fd);
 }
 
-void	redirect_input(t_minishell *shell, int i)
+void	redirect_input(int i, char **args)
 {
 	int	file_fd;
 
-	file_fd = open(shell->command_args[i + 1], O_RDONLY);
+	file_fd = open(args[i + 1], O_RDONLY);
 	dup2(file_fd, STDIN_FILENO);
 	close(file_fd);
 }

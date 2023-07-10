@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 14:57:59 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 14:20:10 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 		if(!new_str)
 			return (0); */
 		//handle_quotes(shell->command_args[i]);
+		if(!shell->command_args[i])
+			return(flag);
 		printf("%s", shell->command_args[i]);
 		//free(new_str);
 		i++;
@@ -206,7 +208,7 @@ int	check_closed_quotes(char *str)
 	char	ignore;
 
 	i = 0;
-	flag = 0;
+	flag = 1;
 	ignore = 0;
 	while(str[i])
 	{
@@ -216,15 +218,15 @@ int	check_closed_quotes(char *str)
 			ignore = '\'';
 		else if(str[i] == ignore)
 		{
-			if(flag && str[i] == ignore)
+			if(flag == 2 && str[i] == ignore)
 			{
-				flag = 2;
+				flag = 1;
 				ignore = 0;
 				i++;
 			}
-			if(str[i] && !flag && str[i] == ignore)
+			if(str[i] && flag == 1 && str[i] == ignore)
 			{
-				flag = 1;
+				flag = 2;
 				i++;
 			}
 		}
