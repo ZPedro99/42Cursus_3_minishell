@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 15:52:32 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 17:44:20 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int	single_command(t_minishell *shell)
 		free(command);
 		return(0);
 	}
-	ft_expander(shell);
 	i = 0;
 	if(check_quotes_on_args(shell->command_args))
 		return (0);
+	ft_expander(shell);
 	if(execute_single_cmd(shell, command))
 	{
 		free_splited(shell->command_args);
