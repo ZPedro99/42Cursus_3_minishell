@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 16:51:22 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 09:39:59 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,40 +146,40 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 			dup2(shell->stdin_fd, STDIN_FILENO);
 			dup2(shell->stdout_fd, STDOUT_FILENO);
 		} */
-		if (string_comp(command, "exit"))
+		if (string_comp(cmd_args[0], "exit"))
 		{
 			free_struct(shell);
 			exit(0);
 		}
-		else if (string_comp(command, "pwd"))
+		else if (string_comp(cmd_args[0], "pwd"))
 		{
 			print_pwd(shell);
 			free_struct(shell);
 			exit(0);
 		}
-		else if (string_comp(command, "cd"))
+		else if (string_comp(cmd_args[0], "cd"))
 		{
 			free_struct(shell);
 			exit(0);
 		}
-		else if (string_comp(command, "unset"))
+		else if (string_comp(cmd_args[0], "unset"))
 		{
 			free_struct(shell);
 			exit(0);
 		}
-		else if (string_comp(command, "env"))
+		else if (string_comp(cmd_args[0], "env"))
 		{
 			g_exit_status = print_env(shell);
 			free_struct(shell);
 			exit(g_exit_status);
 		}
-		else if (string_comp(command, "echo"))
+		else if (string_comp(cmd_args[0], "echo"))
 		{
 			print_echo(shell);
 			free_struct(shell);
 			exit(0);
 		}
-		else if (string_comp(command, "export"))
+		else if (string_comp(cmd_args[0], "export"))
 		{
 			if(!shell->command_args[1])
 				print_exp(shell);
@@ -188,7 +188,7 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 		}
 		else
 		{
-			if(other_commands(shell, command, shell->command_args) == 0)
+			if(other_commands(shell, cmd_args[0], cmd_args) == 0)//estrutura, commando ("ls") e commando + argumentos
 			{
 				free_struct(shell);
 				exit(0);

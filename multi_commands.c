@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:36:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/05 10:18:34 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/10 09:32:01 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	multi_commands(t_minishell *shell)
 {
-	int	i;
-	char	*str_nospace;
-	char	*cmd_no_quotes;
+	int		i;
+	char	*command;
+	//char	*str_nospace;
+	//char	*cmd_no_quotes;
 
 	shell->stdin_fd = STDIN_FILENO;
 	shell->stdout_fd = STDOUT_FILENO;
@@ -25,19 +26,21 @@ int	multi_commands(t_minishell *shell)
 	pipe_creation(shell);
 	while(shell->command_splitted_pipe[i])
 	{
-		shell->command_splitted = ft_split(shell->command_splitted_pipe[i], ' ');
+		command = whitespaces(shell->command_splitted_pipe[i]);
+		/* shell->command_splitted = ft_split(shell->command_splitted_pipe[i], ' ');
 		str_nospace = remove_last_space(shell->command_splitted_pipe[i]);
 		shell->command_args = remove_redirs(str_nospace);
 		cmd_no_quotes = quote_remover(shell->command_splitted[0]);
 		//free(shell->command_splitted[0]);
 		shell->command_splitted[0] = ft_strdup(cmd_no_quotes);
-		free(cmd_no_quotes);
-		execute_multi_cmd(shell, shell->command_splitted[0], i);
-		free_splited(shell->command_splitted);
-		free(str_nospace);
-		free_splited(shell->command_splitted_pipe);
+		free(cmd_no_quotes); */
+		execute_multi_cmd(shell, command, i);
+		//free_splited(shell->command_splitted);
+		//free(str_nospace);
+		free(command);
 		i++;
 	}
+	free_splited(shell->command_splitted_pipe);
 	pipe_closing(shell);
 	get_exit_status(shell);
 	return (0);
@@ -95,6 +98,7 @@ void	pipe_closing(t_minishell *shell)
 		close(shell->pipes_fd[i]);
 		i++;
 	}
+	free(shell->pipes_fd);
 }
 
 char	*remove_last_space(char *str)
