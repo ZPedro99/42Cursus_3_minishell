@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirects.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 15:54:24 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:19:39 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,19 @@ char	**handle_redirects(t_minishell *shell, char *command)
 		if(string_comp(command_args[i], ">"))
 		{
 			redirect_output(i, command_args);
-			if(i == 1)
+			if(i == num_words - 2)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				free(command_args[i + 2]);
+				command_args[i] = 0;
+				return(command_args);
+			}
+		}
+		if(string_comp(command_args[i], "<"))
+		{
+			redirect_input(i, command_args);
+			if(i == num_words - 2)
 			{
 				free(command_args[i]);
 				free(command_args[i + 1]);
@@ -34,12 +46,10 @@ char	**handle_redirects(t_minishell *shell, char *command)
 				return(command_args);
 			}
 		}
-		if(string_comp(command_args[i], "<"))
-			redirect_input(i, command_args);
 		if(string_comp(command_args[i], ">>"))
 		{
 			redirect_append(i, command_args);
-			if(i == 1)
+			if(i == num_words - 2)
 			{
 				free(command_args[i]);
 				free(command_args[i + 1]);
