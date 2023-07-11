@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 16:37:43 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 14:05:28 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_minishell
 	int		stdout_fd;
 	char	**command_args;
 	pid_t	*pid;
+	int		**expander_flags;
 }				t_minishell;
 
 typedef struct s_env
@@ -130,6 +131,8 @@ void		handle_quotes(char *str);
 int			check_closed_quotes(char *str);
 int			check_redirect(char *str);
 char		*quotes_middle(char *str, int num_quotes);
+int			check_no_newline_flag(t_minishell *shell);
+int			echo_no_args(t_minishell *shell);
 
 //***********echo_utils***********//
 int			wordcount(char *s, char c);
@@ -209,10 +212,14 @@ char	*remove_last_space(char *str);
 int		single_command(t_minishell *shell);
 char	**ft_splitting(char *command, char delimiter);
 int		countwords(char *str);
-char	**remove_redirs(char *command);
+char	**remove_redirs(char *command, t_minishell *shell);
 char	*whitespaces(char *str);
 int		strlength(char *str);
 int		check_quotes_on_args(char **args);
+int		ft_wordcount_meta(char *str, char c);
+/* static int	ft_wordlen(char *str, char c);
+static char	*get_word(char *s, char c, char **words); */
+char	quote_value(char c, char quote);
 
 //***********redirects***********//
 

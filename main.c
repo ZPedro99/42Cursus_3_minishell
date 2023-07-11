@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 15:04:32 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 12:51:14 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	check_command(t_minishell *shell)
 		//free_struct(shell);
 		exit (0);
 	}
-	if(check_closed_quotes(shell->command) == 2)
+	if(check_closed_quotes(shell->command) == 1)
 	{
 		ft_putstr_fd("minishell: error: unclosed quotes\n", 2);
 		return(1);

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 17:44:20 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 14:05:55 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	single_command(t_minishell *shell)
 		free(command);
 		return(0);
 	}
-	shell->command_args = remove_redirs(command);
+	shell->command_args = remove_redirs(command, shell);
 	if(!shell->command_args)
 	{
 		ft_putstr_fd("Minishell: invalid command.\n", 2);
@@ -54,13 +54,14 @@ int	single_command(t_minishell *shell)
 	return (0);
 }
 
-char	**remove_redirs(char *command)
+char	**remove_redirs(char *command, t_minishell *shell)
 {
 	int		i;
 	int		num_words;
 	char	**command_args;
 
 	num_words = countwords(command);
+	shell->expander_flags = ft_calloc(num_words, sizeof(int));
 	command_args = ft_splitting(command, ' ');
 	i = 0;
 	while(command_args[i])
@@ -101,77 +102,64 @@ char	**remove_redirs(char *command)
 	return (command_args);
 }
 
-char	**ft_splitting(char *command, char delimiter)
+static int	ft_wordlen(char *str, char c)
 {
 	int		i;
-	int		j;
-	int		k;
-	int		l;
-	int		num_words;
-	char	**command_args;
-	char	ignore;
-	int		flag;
+	char	quote;
 
 	i = 0;
-	j = 0;
-	k = 0;
-	l = 0;
-	flag = 0;
-	num_words = countwords(command);
-	command_args = (char **)malloc(sizeof(char *) * (num_words + 1));
-	while(command[i])
+	quote = 0;
+	while ((str[i] && (str[i] != c)) || (str[i] && quote))
 	{
-		while(command[i] == delimiter)
-			i++;
-		if(!command[i])
-			break ;
-		if(command[i] != delimiter)
-		{
-			flag = 0;
-			if(command[i] == '"' || command[i] == '\'')
-			{
-				if(command[i] == '"')
-					ignore = '"';
-				if(command[i] == '\'')
-					ignore = '\'';
-				k = i;
-				k++;
-				while(command[k] != ignore && command[k])
-					k++;
-				if(command[k] == ignore && flag == 0)
-					k++;
-				while(command[k] != ignore && command[k] != delimiter && command[k])
-					k++;
-				command_args[j] = ft_substr(command, i, k - i);
-				i = k;
-				/* if(command[k + 1] == '\0')
-				{
-					command_args[j + 1] = 0;
-					return (command_args);
-				} */
-			}
-			else
-			{
-				l = 0;
-				k = i;
-				while(command[k] != delimiter && command[k])
-					k++;
-				command_args[j] = ft_substr(command, i, k - i);
-				/* while(i < k)
-				{
-					command_args[j][l] = command[i];
-					i++;
-					l++;
-				} */
-				while(command[i] != delimiter && command[i])
-					i++;
-			}
-			//k++;
-		}
-		j++;
+		quote = quote_value(str[i], quote);
+		i++;
 	}
-	command_args[j] = 0;
-	return (command_args);
+	return (i);
+}
+static char	*get_word(char *s, char c, char **words)
+{
+	char	quote;
+
+	quote = 0;
+	*words = ft_substr(s, 0, ft_wordlen(s, c));
+	while ((*s && *s != c) || (*s && quote))
+	{
+		quote = quote_value(*s, quote);
+		s++;
+	}
+	return (s);
+}
+char	**ft_splitting(char *command, char delimiter)
+{
+	char	**words;
+	int		wdcount;
+	int		j;
+
+	j = 0;
+	if (!command)
+		return (0);
+	wdcount = ft_wordcount_meta(command, delimiter);
+	words = (char **)malloc(sizeof(char *) * (wdcount + 1));
+	if (!words)
+		return (0);
+	while (*command)
+	{
+		while (*command && *command == delimiter)
+			command++;
+		if (*command)
+			command = get_word(command, delimiter, &words[j++]);
+	}
+	words[j] = 0;
+	return (words);
+}
+
+char	quote_value(char c, char quote)
+{
+	if (ft_strrchr("\"\'", c) && !quote)
+		return (c);
+	else if (ft_strrchr("\"\'", c) && quote == c)
+		return (0);
+	return (quote);
 }
 
 int	countwords(char *str)
@@ -199,6 +187,29 @@ int	countwords(char *str)
 			i++;
 	}
 	return (count);
+}
+int	ft_wordcount_meta(char *str, char c)
+{
+	int		i;
+	int		wordcount;
+	char	quote;
+
+	i = 0;
+	wordcount = 0;
+	quote = 0;
+	while (str[i])
+	{
+		while (str[i] && str[i] == c)
+			i++;
+		if (str[i])
+			wordcount++;
+		while ((str[i] && str[i] != c) || (str[i] && quote))
+		{
+			quote = quote_value(str[i], quote);
+			i++;
+		}
+	}
+	return (wordcount);
 }
 
 char	*whitespaces(char *str)
@@ -274,17 +285,20 @@ int	check_quotes_on_args(char **args)
 	i = 0;
 	while(args[i])
 	{
-		if(check_closed_quotes(args[i]) == 2)
+		if(ft_strrchr(args[i], '\'') || ft_strrchr(args[i], '"'))
 		{
-			ft_putstr_fd("Minishell: unclosed quotes.\n", 2);
-			return (1);
-		}
-		if(check_closed_quotes(args[i]) == 1)
-		{
-			unquoted_cmd = quote_remover(args[i]);
-			free(args[i]);
-			args[i] = ft_strdup(unquoted_cmd);
-			free(unquoted_cmd);
+			if(check_closed_quotes(args[i]) == 1)
+			{
+				ft_putstr_fd("Minishell: unclosed quotes.\n", 2);
+				return (1);
+			}
+			if(check_closed_quotes(args[i]) == 0)
+			{
+				unquoted_cmd = quote_remover(args[i]);
+				free(args[i]);
+				args[i] = ft_strdup(unquoted_cmd);
+				free(unquoted_cmd);
+			}
 		}
 		i++;
 	}

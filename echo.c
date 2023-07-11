@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 14:20:10 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 12:27:21 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ void	print_echo(t_minishell *shell)
 
 	ret = 0;
 	word_num = wordcount(shell->command, ' ');
+	if(word_num == 1)
+	{
+		printf("\n");
+		return ;
+	}
 	flag = print_echo2(shell, word_num, ret);
 	if (!flag)
 		//write(1, "\n", 1);
@@ -36,8 +41,13 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 	//char	*new_str;
 
 	(void)ret;
-	i = 1;
-	flag = 0;
+	if(echo_no_args(shell) == 1)
+		return(1);
+	i = check_no_newline_flag(shell);
+	if(i == 1)
+		flag = 0;
+	else
+		flag = 1;
 	while (shell->command_args[i])
 	{
 		j = i;
@@ -50,12 +60,12 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 			if (ret == 1 || !ret)
 				i++;
 		} */
-		if(i == 1 && string_comp(shell->command_args[i], "-n"))
+		/* if(i == 1 && string_comp(shell->command_args[i], "-n"))
 		{
 			flag = 1;
 			i++;
 			j++;
-		}
+		} */
 		/* while(shell->command_args[i])
 		{
 			if(check_closed_quotes(shell->command_args[i]) == 1)
@@ -203,39 +213,27 @@ void	handle_quotes(char *str)
 
 int	check_closed_quotes(char *str)
 {
-	int		i;
-	int		flag;
-	char	ignore;
+	char	quote;
 
-	i = 0;
-	flag = 1;
-	ignore = 0;
-	while(str[i])
+	quote = 0;
+	while (*str && !quote)
 	{
-		if(str[i] == '"' && ignore == 0)
-			ignore = '"';
-		else if(str[i] == '\'' && ignore == 0)
-			ignore = '\'';
-		else if(str[i] == ignore)
-		{
-			if(flag == 2 && str[i] == ignore)
-			{
-				flag = 1;
-				ignore = 0;
-				i++;
-			}
-			if(str[i] && flag == 1 && str[i] == ignore)
-			{
-				flag = 2;
-				i++;
-			}
-		}
-		else if(flag == 0 && (str[i] == ')' || str[i] == '('))
-			return (1);
-		else
-			i++;
+		if (ft_strrchr("\"\'", *str))
+			quote = *str;
+		str++;
 	}
-	return(flag);
+	while (*str && quote)
+	{
+		if (*str && *str == quote)
+			quote = 0;
+		str++;
+	}
+	if (*str)
+		return (check_closed_quotes(str));
+	else if (!quote)
+		return (0);
+	else
+		return (1);
 }
 
 int	check_redirect(char *str)
@@ -272,4 +270,66 @@ char	*quotes_middle(char *str, int num_quotes)
 	}
 	new_str[j] = '\0';
 	return(new_str);
+}
+
+int	check_no_newline_flag(t_minishell *shell)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	j = 0;
+	while(shell->command_args[i])
+	{
+		if(shell->command_args[i][0] == '-' && shell->command_args[i][1] == 'n')
+		{
+			j = 2;
+			while(shell->command_args[i][j])
+			{
+				if(shell->command_args[i][j] == ' ')
+					break ;
+				if(shell->command_args[i][j] != 'n')
+					return(i);
+				j++;
+			}
+		}
+		else
+			return(i);
+		i++;
+	}
+	return(i - 1);
+}
+
+int	echo_no_args(t_minishell *shell)
+{
+	int	i;
+	int	j;
+	int	n_count;
+	int	word_num;
+
+	i = 1;
+	j = 0;
+	n_count = 0;
+	word_num = wordcount(shell->command, ' ');
+	while(shell->command_args[i])
+	{
+		if(shell->command_args[i][0] == '-' && shell->command_args[i][1] == 'n')
+		{
+			j = 2;
+			while(shell->command_args[i][j] == 'n')
+			{
+				if(shell->command_args[i][j] == ' ')
+					break ;
+				if(shell->command_args[i][j] != 'n')
+					break ;
+				j++;
+			}
+			if(shell->command_args[i][j] == ' ' || shell->command_args[i][j] == '\0')
+				n_count++;
+		}
+		i++;
+	}
+	if(n_count == word_num - 1)
+		return(1);
+	return(0);
 }
