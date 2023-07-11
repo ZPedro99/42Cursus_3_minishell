@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 10:10:24 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/10 16:55:54 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 15:51:21 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,23 @@ void	ft_expander(t_minishell *shell)
 	i = 0;
 	while (shell->command_args[i])
 	{
-		if (ft_search(shell->command_args[i], '$') == 1)
+		if (shell->expander_flags[i] == 1)
 		{
-			if (expand_variable(shell, i) == -1)
-				return ;
+			not_expand1(shell, i);
+			i++;
 		}
-		i++;
+		else if (shell->expander_flags[i] == 2)
+			i++;
+		else
+		{
+			if (ft_search(shell->command_args[i], '$') == 1)
+			{
+				if (expand_variable(shell, i) == -1)
+					return ;
+			}
+			i++;
+		}
+		
 	}
 }
 
@@ -66,4 +77,13 @@ void	perform_variable_expansion(t_minishell *shell, int i, char *after_ds)
 	shell->command_args[i] = ft_strjoin(before_ds, after_ds);
 	free(after_ds);
 	free(before_ds);
+}
+void	not_expand1(t_minishell *shell, int i)
+{
+	char	*after_ds;
+
+	after_ds = get_after_dollar(shell->command_args[i]);
+	free(shell->command_args[i]);
+	shell->command_args[i] = ft_strdup(after_ds);
+	free(after_ds);
 }

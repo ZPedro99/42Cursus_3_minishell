@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 14:05:28 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 15:44:15 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_minishell
 	int		stdout_fd;
 	char	**command_args;
 	pid_t	*pid;
-	int		**expander_flags;
+	int		*expander_flags;
 }				t_minishell;
 
 typedef struct s_env
@@ -215,12 +215,12 @@ int		countwords(char *str);
 char	**remove_redirs(char *command, t_minishell *shell);
 char	*whitespaces(char *str);
 int		strlength(char *str);
-int		check_quotes_on_args(char **args);
+int		check_quotes_on_args(char **args, t_minishell *shell);
 int		ft_wordcount_meta(char *str, char c);
 /* static int	ft_wordlen(char *str, char c);
 static char	*get_word(char *s, char c, char **words); */
 char	quote_value(char c, char quote);
-
+void	quote_on_expander(char *arg, int i, t_minishell *shell);
 //***********redirects***********//
 
 char		**handle_redirects(t_minishell *shell, char *command);
@@ -233,7 +233,7 @@ void		here_doc(char *delimiter);
 void		ft_expander(t_minishell *shell);
 int			expand_variable(t_minishell *shell, int i);
 void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
-
+void		not_expand1(t_minishell *shell, int i);
 //***********expander2***********//
 char		*get_after_dollar(char *str);
 char		*get_before_dollar(char *str);

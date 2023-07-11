@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 14:05:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:24:22 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	single_command(t_minishell *shell)
 		return(0);
 	}
 	i = 0;
-	if(check_quotes_on_args(shell->command_args))
+	if(check_quotes_on_args(shell->command_args, shell))
 		return (0);
 	ft_expander(shell);
 	if(execute_single_cmd(shell, command))
@@ -51,6 +51,7 @@ int	single_command(t_minishell *shell)
 	if(!string_comp(shell->command_args[0], "exit"))
 		free(command);
 	free_splited(shell->command_args);
+	free(shell->expander_flags);
 	return (0);
 }
 
@@ -61,24 +62,30 @@ char	**remove_redirs(char *command, t_minishell *shell)
 	char	**command_args;
 
 	num_words = countwords(command);
-	shell->expander_flags = ft_calloc(num_words, sizeof(int));
+	shell->expander_flags = ft_calloc(num_words, sizeof(int));//COLOCAR FREES
 	command_args = ft_splitting(command, ' ');
 	i = 0;
 	while(command_args[i])
 	{
 		if(check_closed_quotes(command_args[i]) == 2)
 		{
+			free(shell->expander_flags);
 			free_splited(command_args);
 			return (0);
 		}
 		if(string_comp(command_args[i], ">"))
 		{
-			command_args[i] = 0;
-			break ;
+			if(i == num_words - 2)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				command_args[i] = 0;
+				return(command_args);
+			}
 		}
 		if(string_comp(command_args[i], ">>"))
 		{
-			if(i == 1)
+			if(i == num_words - 2)
 			{
 				free(command_args[i]);
 				free(command_args[i + 1]);
@@ -89,13 +96,23 @@ char	**remove_redirs(char *command, t_minishell *shell)
 		}
 		if(string_comp(command_args[i], "<"))
 		{
-			command_args[i] = 0;
-			break ;
+			if(i == num_words - 2)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				command_args[i] = 0;
+				return(command_args);
+			}
 		}
 		if(string_comp(command_args[i], "<<"))
 		{
-			command_args[i] = 0;
-			break ;
+			if(i == num_words - 2)
+			{
+				free(command_args[i]);
+				free(command_args[i + 1]);
+				command_args[i] = 0;
+				return(command_args);
+			}
 		}
 		i++;
 	}
@@ -277,7 +294,7 @@ int		strlength(char *str)
 	return(len);
 }
 
-int	check_quotes_on_args(char **args)
+int	check_quotes_on_args(char **args, t_minishell *shell)
 {
 	int		i;
 	char	*unquoted_cmd;
@@ -294,6 +311,8 @@ int	check_quotes_on_args(char **args)
 			}
 			if(check_closed_quotes(args[i]) == 0)
 			{
+				if (ft_search(args[i], '$') == 1)
+					quote_on_expander(args[i], i, shell);
 				unquoted_cmd = quote_remover(args[i]);
 				free(args[i]);
 				args[i] = ft_strdup(unquoted_cmd);
@@ -303,4 +322,17 @@ int	check_quotes_on_args(char **args)
 		i++;
 	}
 	return(0);
+}
+
+void	quote_on_expander(char *arg, int i, t_minishell *shell)
+{
+	int y;
+
+	y = 0;
+	while(arg[y] != '$')
+		y++;
+	if(arg[y + 1] == '\'' || arg[y + 1] == '"')
+		shell->expander_flags[i] = 1;
+	else if (arg[y - 1] == '\'' )
+		shell->expander_flags[i] = 2;
 }

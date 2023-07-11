@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 10:59:10 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:24:13 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	free_struct(t_minishell *shell)
 	free(shell->pwd);
 	free(shell->old_pwd);
 	free(shell->home);
+	free(shell->expander_flags);
 	free_export(shell->exp); //por obra do espirito santo nao e preciso este free, cada vez percebo menos
 	free_env(shell->env);
 }
@@ -105,6 +106,7 @@ void	free_struct_multi(t_minishell *shell)
 	free(shell->prompt);
 	free(shell->pwd);
 	free(shell->old_pwd);
+	free(shell->expander_flags);
 	free(shell->home);
 	free_export(shell->exp); //por obra do espirito santo nao e preciso este free, cada vez percebo menos
 	free_env(shell->env);
@@ -127,6 +129,7 @@ void	free_struct_spaces(t_minishell *shell)
 	free(shell->prompt);
 	free(shell->pwd);
 	free(shell->old_pwd);
+	free(shell->expander_flags);
 	free(shell->home);
 	free_export(shell->exp); //por obra do espirito santo nao e preciso este free, cada vez percebo menos
 	free_env(shell->env);
@@ -174,6 +177,7 @@ void	free_eof(t_minishell *shell)
 	free(shell->prompt);
 	free(shell->pwd);
 	free(shell->old_pwd);
+	free(shell->expander_flags);
 	free(shell->home);
 	free_export(shell->exp); //por obra do espirito santo nao e preciso este free, cada vez percebo menos
 	free_env(shell->env);
