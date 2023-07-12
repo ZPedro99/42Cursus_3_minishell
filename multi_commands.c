@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:36:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 16:24:54 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/12 11:01:53 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	multi_commands(t_minishell *shell)
 		i++;
 	}
 	free_splited(shell->command_splitted_pipe);
-	free(shell->expander_flags);
+	//free(shell->expander_flags);
 	pipe_closing(shell);
 	get_exit_status(shell);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 10:10:24 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/11 15:51:21 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/12 15:56:57 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,15 @@ void	ft_expander(t_minishell *shell)
 			if (ft_search(shell->command_args[i], '$') == 1)
 			{
 				if (expand_variable(shell, i) == -1)
+				{
+					free(shell->expander_flags);
 					return ;
+				}
 			}
 			i++;
 		}
-		
 	}
+	free(shell->expander_flags);
 }
 
 int	expand_variable(t_minishell *shell, int i)

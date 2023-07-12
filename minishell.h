@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 15:44:15 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/12 12:29:41 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int			execute_single_cmd(t_minishell *shell, char *command);
 int			execute_multi_cmd(t_minishell *shell, char *command, int i);
 int			other_commands(t_minishell *shell, char *command, char **command_args);
 char		*remove_quotes(char *command);
+void		get_exapander_flags(t_minishell *shell, char *command);
 
 //***********pwd***********//
 void		print_pwd(t_minishell *shell);

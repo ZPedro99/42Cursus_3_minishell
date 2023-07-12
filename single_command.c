@@ -6,7 +6,7 @@
 /*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 16:24:22 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/12 12:27:15 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	single_command(t_minishell *shell)
 	if(!string_comp(shell->command_args[0], "exit"))
 		free(command);
 	free_splited(shell->command_args);
-	free(shell->expander_flags);
 	return (0);
 }
 
@@ -62,7 +61,7 @@ char	**remove_redirs(char *command, t_minishell *shell)
 	char	**command_args;
 
 	num_words = countwords(command);
-	shell->expander_flags = ft_calloc(num_words, sizeof(int));//COLOCAR FREES
+	shell->expander_flags = ft_calloc(num_words, sizeof(int));
 	command_args = ft_splitting(command, ' ');
 	i = 0;
 	while(command_args[i])

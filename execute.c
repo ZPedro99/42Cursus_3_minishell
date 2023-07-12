@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/10 15:57:39 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/12 12:29:17 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ int	execute_multi_cmd(t_minishell *shell, char *command, int i)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		shell->command_args = handle_redirects(shell, command);
-		ft_expander(shell);
+		get_exapander_flags(shell, command);//CRIAR FUNCAO AQUI PARA ALOCAR O SHELL->EXPANDER_FLAGS
+		ft_expander(shell);//AQUI DOU FREE NO SHELL->EXPANDER_FLAGS
 		through_pipes(shell, i);
 		/* if(i > 0)
 		{
@@ -326,3 +327,11 @@ int	other_commands(t_minishell *shell, char *command, char **command_args)
 	str = ft_strdup(command);
 	return (str);
 } */
+
+void	get_exapander_flags(t_minishell *shell, char *command)
+{
+	int	num_words;
+
+	num_words = countwords(command);
+	shell->expander_flags = ft_calloc(num_words, sizeof(int));
+}
