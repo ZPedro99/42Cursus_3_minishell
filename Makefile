@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
+#    By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/07/14 14:53:29 by jomirand         ###   ########.fr        #
+#    Updated: 2023/07/14 18:29:44 by emsoares         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ SRCS = main.c\
 		execute.c\
 		pwd.c\
 		echo.c\
+		echo2.c\
 		echo_utils.c\
-		echo_utils2.c\
 		cd.c\
 		cd2.c\
 		utils.c\
@@ -38,11 +38,14 @@ SRCS = main.c\
 		unset.c\
 		signals.c\
 		exit.c\
+		exit_utils.c\
+		exit_utils2.c\
 		multi_commands.c\
 		single_command.c\
 		redirects.c\
 		expander.c\
 		expander2.c\
+		expander3.c\
 
 OBJS = $(SRCS:%.c=%.o)
 

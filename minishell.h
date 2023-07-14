@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/14 10:21:02 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:31:01 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ char		*get_var_value(char *env);
 char		**env_copy(t_list *lst);
 
 //***********env2**********//
-
-int	print_env(t_minishell *shell);
+int			print_env(t_minishell *shell);
+void		free_temps(char *a, char *b, char *c);
 
 //***********export***********//
 t_list		*get_exp_vars(char **env);
@@ -123,17 +123,17 @@ void		print_pwd(t_minishell *shell);
 
 //***********echo***********//
 void		print_echo(t_minishell *shell);
-int			print_echo2(t_minishell *shell, int	word_num, int ret);
-int			print_normal_words(char *str);
-int			check_pairs(char *str, int quote_count, char quote_type);
-int			print_trimmed_string(char *str, int quote_count, char quote_type, int flag);
+int			print_echo2(t_minishell *shell);
+char		quote_checker(char *str, int i, char quote);
 char		*quote_remover(char *str);
-void		handle_quotes(char *str);
+
+
+//***********echo2***********//
 int			check_closed_quotes(char *str);
 int			check_redirect(char *str);
-char		*quotes_middle(char *str, int num_quotes);
 int			check_no_newline_flag(t_minishell *shell);
 int			echo_no_args(t_minishell *shell);
+int			echo_no_args2(t_minishell *shell, int i);
 
 //***********echo_utils***********//
 int			wordcount(char *s, char c);
@@ -142,14 +142,13 @@ int			counting_quote(char *str, char c);
 int			check_dollar_sign(char *str, t_minishell *shell);
 char		*get_dup_str(char *str);
 
-//***********echo_utils2***********//
-int			ft_echo_es(t_minishell *shell, int i);
-
 //***********cd***********//
 int			do_cd(t_minishell *shell);
+int			do_cd2(t_minishell *shell);
 void		change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
 void		change_exp(t_list *exp, char *old_pwd, char *new_pwd);
 char		*change_dir(t_list *env, char *str);
+
 //***********cd2***********//
 void		change_dir_home(t_minishell *shell);
 void		change_dir_minus(t_minishell *shell);
@@ -189,16 +188,18 @@ void		sighand(int signal);
 void		sigint_on_child(int signal);
 
 //***********exit***********//
-//void	get_exit_status(int status);
-int		ft_exit_status(t_minishell *shell);
-int		ft_word_count(char **str);
-int		check_arg(char *str);
-long long		ft_atol(const char *str);
-/* static char	*posnum(char *str, long long n, int len);
-static char	*negnum(char *str, long long n, int len);
-static int	int_len(long long n) */;
-char	*ft_ltoa(long long n);
-void	get_exit_status(t_minishell *shell);
+void		get_exit_status(t_minishell *shell);
+int			ft_exit_status(t_minishell *shell);
+int			exit_status2(t_minishell *shell, int count);
+int			exit_status3(t_minishell *shell);
+
+//***********exit_utils***********//
+int			ft_word_count(char **str);
+int			check_arg(char *str);
+long long	ft_atol(const char *str);
+
+//***********exit_utils2***********//
+char		*ft_ltoa(long long n);
 
 //***********multi_commands***********//
 
@@ -209,7 +210,6 @@ void	pipe_closing(t_minishell *shell);
 char	*remove_last_space(char *str);
 
 //***********single_commands***********//
-
 int		single_command(t_minishell *shell);
 char	**ft_splitting(char *command, char delimiter);
 int		countwords(char *str);
@@ -218,12 +218,10 @@ char	*whitespaces(char *str);
 int		strlength(char *str);
 int		check_quotes_on_args(char **args, t_minishell *shell);
 int		ft_wordcount_meta(char *str, char c);
-/* static int	ft_wordlen(char *str, char c);
-static char	*get_word(char *s, char c, char **words); */
 char	quote_value(char c, char quote);
 void	quote_on_expander(char *arg, int i, t_minishell *shell);
-//***********redirects***********//
 
+//***********redirects***********//
 char		**handle_redirects(t_minishell *shell, char *command);
 int			redirect_output(int i, char **args);
 int			redirect_input(int i, char **args);
@@ -234,14 +232,18 @@ int			here_doc(char *delimiter);
 void		ft_expander(t_minishell *shell);
 int			expand_variable(t_minishell *shell, int i);
 void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
-void		not_expand1(t_minishell *shell, int i);
 void		expand_multiple(t_minishell *shell, int i);
-int			count_dollars(char *str);
-char		*perform_variable_expansion2(t_minishell *shell, char *after_ds);
+
 //***********expander2***********//
 char		*get_after_dollar(char *str);
 char		*get_before_dollar(char *str);
 int			check_var_true(char *str, t_minishell *shell);
 char		*var_value(char *str, t_minishell *shell);
+
+//***********expander3***********//
+int			count_dollars(char *str);
+char		*perform_variable_expansion2(t_minishell *shell, char *after_ds);
+void		not_expand1(t_minishell *shell, int i);
+int			check_expand_es(t_minishell *shell, int i);
 
 #endif
