@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/12 12:29:41 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/14 10:21:02 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,16 +225,19 @@ void	quote_on_expander(char *arg, int i, t_minishell *shell);
 //***********redirects***********//
 
 char		**handle_redirects(t_minishell *shell, char *command);
-void		redirect_output(int i, char **args);
-void		redirect_input(int i, char **args);
-void		redirect_append(int i, char **args);
-void		here_doc(char *delimiter);
+int			redirect_output(int i, char **args);
+int			redirect_input(int i, char **args);
+int			redirect_append(int i, char **args);
+int			here_doc(char *delimiter);
 
 //***********expander***********//
 void		ft_expander(t_minishell *shell);
 int			expand_variable(t_minishell *shell, int i);
 void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
 void		not_expand1(t_minishell *shell, int i);
+void		expand_multiple(t_minishell *shell, int i);
+int			count_dollars(char *str);
+char		*perform_variable_expansion2(t_minishell *shell, char *after_ds);
 //***********expander2***********//
 char		*get_after_dollar(char *str);
 char		*get_before_dollar(char *str);

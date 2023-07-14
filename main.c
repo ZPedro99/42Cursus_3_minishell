@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 12:51:14 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/14 16:10:50 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,18 @@ void	read_command(t_minishell *shell)
 			free(shell->command);
 		else
 		{
-			if(counting_pipes(shell) == 0)
+			if(counting_pipes(shell) == -1)
+				continue;
+			else if(counting_pipes(shell) == 0)
 			{
 				shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
-				if (single_command(shell))
+				if (single_command(shell) == 1)
 					break ;
 			}
-			else
+			else if(counting_pipes(shell) > 0)
 			{
 				shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
-				if(multi_commands(shell))
+				if(multi_commands(shell) == 1)
 					break ;
 			}
 			free(shell->pid);
@@ -121,6 +123,9 @@ int	number_of_paths(char *paths)
 
 int	check_command(t_minishell *shell)
 {
+	char	**cmd_args;
+	int		i;
+
 	if (!shell->command)
 	{
 		printf("exit\n");
@@ -128,10 +133,24 @@ int	check_command(t_minishell *shell)
 		//free_struct(shell);
 		exit (0);
 	}
+	cmd_args = ft_splitting(shell->command, '|');
 	if(check_closed_quotes(shell->command) == 1)
 	{
 		ft_putstr_fd("minishell: error: unclosed quotes\n", 2);
+		free_splited(cmd_args);
 		return(1);
 	}
+	i = 0;
+	while(cmd_args[i])
+	{
+		if(ft_strrchr("><", cmd_args[i][0]) && i > 0)
+		{
+			free_splited(cmd_args);
+			ft_putstr_fd("Minishell: error near pipe\n", 2);
+			return(1);
+		}
+		i++;
+	}
+	free_splited(cmd_args);
 	return(0);
 }

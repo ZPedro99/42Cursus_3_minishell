@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 10:21:56 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/11 12:27:21 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/14 10:00:47 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 	//char	*new_str;
 
 	(void)ret;
+	(void)word_num;
 	if(echo_no_args(shell) == 1)
 		return(1);
 	i = check_no_newline_flag(shell);
@@ -85,7 +86,7 @@ int	print_echo2(t_minishell *shell, int word_num, int ret)
 		printf("%s", shell->command_args[i]);
 		//free(new_str);
 		i++;
-		if (i < word_num)
+		if (string_comp(shell->command_args[i - 1], "") == 0)
 			printf(" ");
 	}
 	return (flag);

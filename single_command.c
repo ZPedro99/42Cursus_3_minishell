@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:49:12 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/12 12:27:15 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/14 16:34:42 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,12 @@ int	single_command(t_minishell *shell)
 	if(execute_single_cmd(shell, command))
 	{
 		free_splited(shell->command_args);
+		free(command);
 		return (1);
 	}
 	get_exit_status(shell);
+	if(!shell->command_args[0])
+		return(0);
 	if(!string_comp(shell->command_args[0], "exit"))
 		free(command);
 	free_splited(shell->command_args);

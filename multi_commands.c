@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multi_commands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:36:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/12 11:01:53 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/14 13:58:50 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ int	multi_commands(t_minishell *shell)
 	pipe_creation(shell);
 	while(shell->command_splitted_pipe[i])
 	{
+		/* if(ft_strrchr("><", shell->command_splitted_pipe[i][0]))
+		{
+			free_splited(shell->command_splitted_pipe);
+			pipe_closing(shell);
+			//free_struct(shell);
+			ft_putstr_fd("Minishell: error near pipe\n", 2);
+			return(0);
+		} */
 		command = whitespaces(shell->command_splitted_pipe[i]);
 		/* shell->command_splitted = ft_split(shell->command_splitted_pipe[i], ' ');
 		str_nospace = remove_last_space(shell->command_splitted_pipe[i]);

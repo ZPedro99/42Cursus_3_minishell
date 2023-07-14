@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:28:06 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/12 12:29:17 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/14 16:32:20 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,15 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		cmd_args = handle_redirects(shell, command);
+		if(!cmd_args[0])
+		{
+			free_struct(shell);
+			free(command);
+			free(cmd_args);
+			//free_splited(cmd_args);
+			//free_splited(shell->command_args);
+			exit(0);
+		}
 		//through_pipes(shell, i);
 		dup2(shell->stdin_fd, STDIN_FILENO);
 		dup2(shell->stdout_fd, STDOUT_FILENO);
@@ -104,6 +113,8 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 	/* close(shell->pipes_fd[0]);
 	close(shell->pipes_fd[1]); */
 	//get_exit_status(status);
+	if(!shell->command_args[0])
+		return(0);
 	 if (string_comp(shell->command_args[0], "export"))
 		g_exit_status = check_args(shell->command_args, shell);
 	else if (string_comp(shell->command_args[0], "unset"))
@@ -118,6 +129,7 @@ int	execute_single_cmd(t_minishell *shell, char *command)
 		if (ft_exit_status(shell) != 1)
 		{
 			free_struct(shell);
+			free(command);
 			exit(g_exit_status);
 		}
 	}
