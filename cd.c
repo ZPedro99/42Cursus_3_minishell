@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:08:13 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/11 12:36:43 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/14 17:09:49 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,26 @@
 
 int	do_cd(t_minishell *shell)
 {
-	if(!shell->command_args[1])
+	if (!shell->command_args[1])
 	{
 		change_dir_home(shell);
-		return(0);
+		return (0);
 	}
-	if(string_comp(shell->command_args[1], ""))
-		return(0);
+	if (string_comp(shell->command_args[1], ""))
+		return (0);
 	if ((shell->command_args[1] == 0)
 		|| (string_comp(shell->command_args[1], "~")))
 	{
 		change_dir_home(shell);
-		return (0) ;
+		return (0);
 	}
+	if (do_cd2(shell) == 0)
+		return (0);
+	return (1);
+}
+
+int	do_cd2(t_minishell *shell)
+{
 	if (string_comp(shell->command_args[1], "-"))
 	{
 		change_dir_minus(shell);
@@ -37,7 +44,7 @@ int	do_cd(t_minishell *shell)
 		change_dir_dotdot(shell);
 		return (0);
 	}
-	else if(string_comp(shell->command_args[1], "."))
+	else if (string_comp(shell->command_args[1], "."))
 		return (0);
 	else
 	{
