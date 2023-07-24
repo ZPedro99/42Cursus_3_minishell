@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 11:02:21 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/20 11:05:42 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/24 10:19:54 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	print_exp(t_minishell *shell)
 {
 	t_list	*temp;
 	char	**exp_array;
-	//char	*exp_line;
 	int		i;
 	int		size;
 
@@ -31,14 +30,10 @@ void	print_exp(t_minishell *shell)
 		while (temp)
 		{
 			if (string_comp(exp_array[i], ((t_env *)(temp->content))->name))
-			{
-				//exp_line = ft_strjoin(exp_array[i], ((t_env *)(temp->content))->info);
 				break ;
-			}
 			temp = temp->next;
 		}
 		printf("%s%s\n", ((t_env *)(temp->content))->name, ((t_env *)(temp->content))->info);
-		//free(exp_line);
 		temp = shell->exp;
 		i++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/14 18:31:01 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/24 10:24:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ t_env		*create_exp_node(char *env);
 char		*get_exp_info(char *env);
 char		*get_exp_name(char *env);
 void		place_exp_var(t_minishell *shell, char *str);
-void		change_struct(t_minishell *shell, char *str);
 
 //***********export2***********//
+void		change_struct(t_minishell *shell, char *str);
 int			ft_check_dup(t_minishell *shell, char *str);
 void		change_value_exp(t_minishell *shell, char *str, char *exp_name);
 void		change_value_env(t_minishell *shell, char *str, char *name);
@@ -233,12 +233,14 @@ void		ft_expander(t_minishell *shell);
 int			expand_variable(t_minishell *shell, int i);
 void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
 void		expand_multiple(t_minishell *shell, int i);
+char		*continue_expanding(char *temp, char *temp2, char *return_str, int x);
 
 //***********expander2***********//
 char		*get_after_dollar(char *str);
 char		*get_before_dollar(char *str);
 int			check_var_true(char *str, t_minishell *shell);
 char		*var_value(char *str, t_minishell *shell);
+char		*obtain_return_str(char *temp, char *temp2, char *return_str);
 
 //***********expander3***********//
 int			count_dollars(char *str);

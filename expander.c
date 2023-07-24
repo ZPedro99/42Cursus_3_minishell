@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 10:10:24 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/14 18:34:41 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/24 10:27:01 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	ft_expander(t_minishell *shell)
 		}
 		else if (shell->expander_flags[i] == 2)
 			i++;
-		else if(ft_strrchr(shell->command_args[i], '"') || ft_strrchr(shell->command_args[i], '\''))
+		else if (ft_strrchr(shell->command_args[i], '"')
+			|| ft_strrchr(shell->command_args[i], '\''))
 			i++;
 		else
 		{
@@ -48,8 +49,8 @@ int	expand_variable(t_minishell *shell, int i)
 		return (0);
 	else if (count_dollars(shell->command_args[i]) > 1)
 	{
-		expand_multiple(shell, i);
-		return (0); 
+		expand_multiple(shell, i, 0, 0);
+		return (0);
 	}
 	else if (check_var_true(after_ds, shell) == 0)
 	{
@@ -83,55 +84,51 @@ void	perform_variable_expansion(t_minishell *shell, int i, char *after_ds)
 	g_exit_status = 0;
 }
 
-void	expand_multiple(t_minishell *shell, int i)
+void	expand_multiple(t_minishell *sh, int i, int x, int start)
 {
-	int		start = 0;
 	int		end;
 	char	*temp;
-	char 	*temp2;
-	char 	*return_str;
-	int		x = 0;
+	char	*temp2;
+	char	*return_str;
 
-	while (shell->command_args[i][start] != '\0')
+	while (sh->command_args[i][start] != '\0')
 	{
-		while (shell->command_args[i][start] != '$' && shell->command_args[i][start] != '\0')
+		while (sh->command_args[i][start] != '$' && sh->command_args[i][start])
 			start++;
-		if(shell->command_args[i][start] != '\0')
+		if (sh->command_args[i][start] != '\0')
 			start++;
 		end = start;
-		while (shell->command_args[i][end] != '$' && shell->command_args[i][end] != '\0')
+		while (sh->command_args[i][end] != '$' && sh->command_args[i][end])
 			end++;
-		temp = ft_substr(shell->command_args[i], start, end - start);
-		if(check_var_true(temp, shell) == 0)
-		{
-			temp2 = ft_strdup(return_str);
-			free(return_str);
-			return_str = ft_strjoin(temp2, "");
-			free(temp);
-			free(temp2);
-		}
+		temp = ft_substr(sh->command_args[i], start, end - start);
+		if (check_var_true(temp, sh) == 0)
+			return_str = obtain_return_str(temp, temp2, return_str);
 		else
-		{
-			if(x == 0)
-			{
-				x = 1;
-				temp2 = perform_variable_expansion2(shell, temp);
-				return_str = ft_strjoin(temp2, "");
-				free(temp2);
-			}
-			else
-			{
-				temp2 = perform_variable_expansion2(shell, temp);
-				temp = ft_strdup(return_str);
-				free(return_str);
-				return_str = ft_strjoin(temp, temp2);
-				free(temp2);
-				free(temp);
-			}
-		}
+			return_str = continue_expanding(temp, temp2, return_str, x);
 		start = end;
 	}
-	free(shell->command_args[i]);
-	shell->command_args[i] = ft_strdup(return_str);
+	free(sh->command_args[i]);
+	sh->command_args[i] = ft_strdup(return_str);
 	free(return_str);
+}
+
+char	*continue_expanding(char *temp, char *temp2, char *return_str, int x)
+{
+	if (x == 0)
+	{
+		x = 1;
+		temp2 = perform_variable_expansion2(shell, temp);
+		return_str = ft_strjoin(temp2, "");
+		free(temp2);
+	}
+	else
+	{
+		temp2 = perform_variable_expansion2(shell, temp);
+		temp = ft_strdup(return_str);
+		free(return_str);
+		return_str = ft_strjoin(temp, temp2);
+		free(temp2);
+		free(temp);
+	}
+	return (return_str);
 }

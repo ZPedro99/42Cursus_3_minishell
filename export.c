@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:45:06 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/10 16:51:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/24 10:20:15 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	place_exp_var(t_minishell *shell, char *str)
 	value = ft_search(str, '=');
 	if (value == 0)
 	{
-		if (ft_check_dup2(shell, str) == 0)//vai procurar se existe algum node c o nome igual se houver ignora senao coloca apenas no export
+		if (ft_check_dup2(shell, str) == 0)
 			return ;
 		else
 			ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
@@ -85,7 +85,7 @@ void	place_exp_var(t_minishell *shell, char *str)
 	}
 	if(ft_check_dup(shell, str) == 1)
 	{
-		if (value == 1) //colocar export + env
+		if (value == 1)
 		{
 			if(ft_check_exp(shell, str) == 0)
 			{
@@ -96,34 +96,4 @@ void	place_exp_var(t_minishell *shell, char *str)
 			return ;
 		}
 	}
-}
-
-void	change_struct(t_minishell *shell, char *str)
-{
-	char	*temp;
-	int		i;
-	int		size;
-
-	i = 0;
-	size = 1;
-	while(str[i] != '=')
-	{
-		size++;
-		i++;
-	}
-	temp = ft_substr(str, 0 ,size);
-	if(string_comp(temp, "PATH=") == 0)
-	{
-		free(temp);
-		return ;
-	}
-	else
-	{
-		free(temp);
-		temp = ft_substr(str, size, (ft_strlen(str) - size));
-		free_splited(shell->paths);
-		shell->paths = ft_split(temp, ':');
-		free(temp);
-	}
-	return ;
 }

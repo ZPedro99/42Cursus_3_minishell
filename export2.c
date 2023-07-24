@@ -6,11 +6,38 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:10:34 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/07 16:44:22 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/24 10:20:21 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	change_struct(t_minishell *shell, char *str)
+{
+	char	*temp;
+	int		i;
+	int		size;
+
+	i = -1;
+	size = 1;
+	while(str[++i] != '=')
+		size++;
+	temp = ft_substr(str, 0 ,size);
+	if(string_comp(temp, "PATH=") == 0)
+	{
+		free(temp);
+		return ;
+	}
+	else
+	{
+		free(temp);
+		temp = ft_substr(str, size, (ft_strlen(str) - size));
+		free_splited(shell->paths);
+		shell->paths = ft_split(temp, ':');
+		free(temp);
+	}
+	return ;
+}
 
 int	ft_check_dup(t_minishell *shell, char *str)
 {
@@ -42,7 +69,6 @@ int	ft_check_dup(t_minishell *shell, char *str)
 		{
 			change_value_exp(shell, str, name);
 			change_value_env(shell, str, name);
-
 			return (0);
 		}
 		head = head->next;
