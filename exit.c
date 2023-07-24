@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/14 18:05:24 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/24 15:41:10 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_exit_status(t_minishell *shell)
 
 	count = ft_word_count(shell->command_args);
 	wait(&status);
-	if(WIFEXITED(status))
+	if (WIFEXITED(status))
 		return (exit_status2(shell, count));
 	return (0);
 }
@@ -52,17 +52,17 @@ int	exit_status2(t_minishell *shell, int count)
 		g_exit_status = 0;
 		return (g_exit_status);
 	}
-	if (check_arg(shell->command_args[1]) == 0)//se tiver letras
+	if (check_arg(shell->command_args[1]) == 0)
 	{
 		printf("exit\n");
-		printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
+		ft_putstr_fd("minishell: numeric argument required\n", 2);
 		g_exit_status = 2;
 		return (g_exit_status);
 	}
 	if (count > 2)
 	{
 		printf("exit\n");
-		printf("minishell: exit: too many arguments\n");
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_exit_status = 1;
 		return (g_exit_status);
 	}
@@ -80,7 +80,7 @@ int	exit_status3(t_minishell *shell)
 	if (ft_strncmp(str, shell->command_args[1], ft_strlen(str)) != 0)
 	{
 		printf("exit\n");
-		printf("minishell: %s: numeric argument required\n", shell->command_args[1]);
+		ft_putstr_fd("minishell: numeric argument required\n", 2);
 		g_exit_status = 2;
 		free(str);
 		return (g_exit_status);

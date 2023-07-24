@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/24 10:24:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:50:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void		free_splited(char **array);
 void		free_copies(char **copy);
 void		free_eof(t_minishell *shell);
 void		free_struct_multi(t_minishell *shell);
+void		free_child_process(t_minishell *shell, char **cmd_args, char *command);
+void		free_child_process_multi(t_minishell *shell, char *command);
 
 //***********execute***********//
 int			execute_single_cmd(t_minishell *shell, char *command);
@@ -186,6 +188,7 @@ void		unset_only_exp(t_minishell *shell, t_list *temp, int i);
 void		handle_signals(void);
 void		sighand(int signal);
 void		sigint_on_child(int signal);
+void		signal_default(void);
 
 //***********exit***********//
 void		get_exit_status(t_minishell *shell);
@@ -203,23 +206,23 @@ char		*ft_ltoa(long long n);
 
 //***********multi_commands***********//
 
-int		multi_commands(t_minishell *shell);
-int		pipe_creation(t_minishell *shell);
-void	through_pipes(t_minishell *shell, int i);
-void	pipe_closing(t_minishell *shell);
-char	*remove_last_space(char *str);
+int			multi_commands(t_minishell *shell);
+int			pipe_creation(t_minishell *shell);
+void		through_pipes(t_minishell *shell, int i);
+void		pipe_closing(t_minishell *shell);
+char		*remove_last_space(char *str);
 
 //***********single_commands***********//
-int		single_command(t_minishell *shell);
-char	**ft_splitting(char *command, char delimiter);
-int		countwords(char *str);
-char	**remove_redirs(char *command, t_minishell *shell);
-char	*whitespaces(char *str);
-int		strlength(char *str);
-int		check_quotes_on_args(char **args, t_minishell *shell);
-int		ft_wordcount_meta(char *str, char c);
-char	quote_value(char c, char quote);
-void	quote_on_expander(char *arg, int i, t_minishell *shell);
+int			single_command(t_minishell *shell);
+char		**ft_splitting(char *command, char delimiter);
+int			countwords(char *str);
+char		**remove_redirs(char *command, t_minishell *shell);
+char		*whitespaces(char *str);
+int			strlength(char *str);
+int			check_quotes_on_args(char **args, t_minishell *shell);
+int			ft_wordcount_meta(char *str, char c);
+char		quote_value(char c, char quote);
+void		quote_on_expander(char *arg, int i, t_minishell *shell);
 
 //***********redirects***********//
 char		**handle_redirects(t_minishell *shell, char *command);
@@ -227,6 +230,7 @@ int			redirect_output(int i, char **args);
 int			redirect_input(int i, char **args);
 int			redirect_append(int i, char **args);
 int			here_doc(char *delimiter);
+void		redirect(t_minishell *shell);
 
 //***********expander***********//
 void		ft_expander(t_minishell *shell);
@@ -247,5 +251,10 @@ int			count_dollars(char *str);
 char		*perform_variable_expansion2(t_minishell *shell, char *after_ds);
 void		not_expand1(t_minishell *shell, int i);
 int			check_expand_es(t_minishell *shell, int i);
+
+//***********builtins***********//
+int			builtin_check(t_minishell *sh, char **cmd_args, char *cmd);
+void		execute_builtins(t_minishell *shell, char *command);
+void		execute_builtins_multi(t_minishell *shell, char *command);
 
 #endif

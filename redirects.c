@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/14 14:21:16 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:17:57 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ char	**handle_redirects(t_minishell *shell, char *command)
 				free(command);
 				exit(2);
 			}
-			unlink(".heredoc");
 		}
 		i++;
 	}
@@ -190,4 +189,9 @@ int	here_doc(char *delimiter)
 	free(input);
 	close(temp_file);
 	return(0);
+}
+void	redirect(t_minishell *shell)
+{
+	dup2(shell->stdin_fd, STDIN_FILENO);
+	dup2(shell->stdout_fd, STDOUT_FILENO);
 }

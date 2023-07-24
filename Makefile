@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+         #
+#    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/07/14 18:29:44 by emsoares         ###   ########.fr        #
+#    Updated: 2023/07/24 15:32:19 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS = main.c\
 		expander.c\
 		expander2.c\
 		expander3.c\
+		builtins.c\
 
 OBJS = $(SRCS:%.c=%.o)
 
