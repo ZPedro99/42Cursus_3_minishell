@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 10:03:08 by jomirand          #+#    #+#             */
-/*   Updated: 2023/06/13 22:55:42 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:57:57 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*join_quotes(char *str)
 	j = 0;
 	temp = malloc(sizeof(char) * (ft_strlen(str) + 3));
 	temp[0] = '\"';
-	while(str[j])
+	while (str[j])
 	{
 		temp[i] = str[j];
 		i++;
@@ -47,7 +47,7 @@ char	*join_quotes(char *str)
 	temp[i] = '\"';
 	i++;
 	temp[i] = '\0';
-	return(temp);
+	return (temp);
 }
 
 void	get_prompt(t_minishell *shell)

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/14 16:10:50 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 11:27:11 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	main(int argc, char **argv, char **envp)
 	shell.pipes = 0;
 	shell.env = get_env_vars(envp);
 	shell.exp = get_exp_vars(envp);
-	//counting_pipes(shell)
-	//shell.pid = malloc(sizeof(int) * (shell.pipes + 1));
 	obtain_vars(&shell);
 	get_prompt(&shell);
 	read_command(&shell);
@@ -66,32 +64,39 @@ void	read_command(t_minishell *shell)
 		handle_signals();
 		shell->command = readline(shell->prompt);
 		add_history(shell->command);
-		if(check_command(shell))
+		if (check_command(shell))
 			continue ;
 		if (!*shell->command)
 			free(shell->command);
 		else
 		{
-			if(counting_pipes(shell) == -1)
-				continue;
-			else if(counting_pipes(shell) == 0)
-			{
-				shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
-				if (single_command(shell) == 1)
-					break ;
-			}
-			else if(counting_pipes(shell) > 0)
-			{
-				shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
-				if(multi_commands(shell) == 1)
-					break ;
-			}
+			if (counting_pipes(shell) == -1)
+				continue ;
+			else if (read_command2(shell) == 0)
+				break ;
 			free(shell->pid);
 			free(shell->command);
 		}
 	}
 	free_splited(shell->command_args);
 	rl_clear_history();
+}
+
+int	read_command2(t_minishell *shell)
+{
+	if (counting_pipes(shell) == 0)
+	{
+		shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
+		if (single_command(shell) == 1)
+			return (0);
+	}
+	else if (counting_pipes(shell) > 0)
+	{
+		shell->pid = malloc(sizeof(int) * (shell->pipes + 1));
+		if (multi_commands(shell) == 1)
+			return (0);
+	}
+	return (1);
 }
 
 char	**save_paths(char *paths)
@@ -103,54 +108,4 @@ char	**save_paths(char *paths)
 	i = 0;
 	paths_array = ft_split(paths, ':');
 	return (paths_array);
-}
-
-int	number_of_paths(char *paths)
-{
-	int	number;
-	int	i;
-
-	number = 1;
-	i = 0;
-	while (paths[i])
-	{
-		if (paths[i] == ':')
-			number++;
-		i++;
-	}
-	return (number);
-}
-
-int	check_command(t_minishell *shell)
-{
-	char	**cmd_args;
-	int		i;
-
-	if (!shell->command)
-	{
-		printf("exit\n");
-		free_eof(shell);
-		//free_struct(shell);
-		exit (0);
-	}
-	cmd_args = ft_splitting(shell->command, '|');
-	if(check_closed_quotes(shell->command) == 1)
-	{
-		ft_putstr_fd("minishell: error: unclosed quotes\n", 2);
-		free_splited(cmd_args);
-		return(1);
-	}
-	i = 0;
-	while(cmd_args[i])
-	{
-		if(ft_strrchr("><", cmd_args[i][0]) && i > 0)
-		{
-			free_splited(cmd_args);
-			ft_putstr_fd("Minishell: error near pipe\n", 2);
-			return(1);
-		}
-		i++;
-	}
-	free_splited(cmd_args);
-	return(0);
 }

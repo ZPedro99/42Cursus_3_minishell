@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:08:13 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/14 17:09:49 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/25 12:34:12 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int	do_cd2(t_minishell *shell)
 	return (1);
 }
 
-void	change_env_and_exp(t_list *env, t_list *exp,
-	char *old_pwd, char *new_pwd)
+void	change_env_exp(t_list *env, t_list *exp, char *o_pwd, char *n_pwd)
 {
 	t_list	*temp_env;
 
@@ -68,7 +67,7 @@ void	change_env_and_exp(t_list *env, t_list *exp,
 		temp_env = temp_env->next;
 	}
 	free(((t_env *)(temp_env->content))->info);
-	((t_env *)(temp_env->content))->info = ft_strdup(new_pwd);
+	((t_env *)(temp_env->content))->info = ft_strdup(n_pwd);
 	temp_env = env;
 	while (!string_comp(((t_env *)(temp_env->content))->name, "OLDPWD="))
 	{
@@ -77,11 +76,11 @@ void	change_env_and_exp(t_list *env, t_list *exp,
 		temp_env = temp_env->next;
 	}
 	free(((t_env *)(temp_env->content))->info);
-	((t_env *)(temp_env->content))->info = ft_strdup(old_pwd);
-	change_exp(exp, old_pwd, new_pwd);
+	((t_env *)(temp_env->content))->info = ft_strdup(o_pwd);
+	change_exp(exp, o_pwd, n_pwd);
 }
 
-void	change_exp(t_list *exp, char *old_pwd, char *new_pwd)
+void	change_exp(t_list *exp, char *o_pwd, char *n_pwd)
 {
 	t_list	*temp_exp;
 
@@ -94,7 +93,7 @@ void	change_exp(t_list *exp, char *old_pwd, char *new_pwd)
 		temp_exp = temp_exp->next;
 	}
 	free(((t_env *)(temp_exp->content))->info);
-	((t_env *)(temp_exp->content))->info = join_quotes(new_pwd);
+	((t_env *)(temp_exp->content))->info = join_quotes(n_pwd);
 	temp_exp = exp;
 	while (!string_comp(((t_env *)(temp_exp->content))->name,
 		"declare -x OLDPWD="))
@@ -104,7 +103,7 @@ void	change_exp(t_list *exp, char *old_pwd, char *new_pwd)
 		temp_exp = temp_exp->next;
 	}
 	free(((t_env *)(temp_exp->content))->info);
-	((t_env *)(temp_exp->content))->info = join_quotes(old_pwd);
+	((t_env *)(temp_exp->content))->info = join_quotes(o_pwd);
 }
 
 char	*change_dir(t_list *env, char *str)

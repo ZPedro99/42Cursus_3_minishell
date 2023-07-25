@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/14 16:18:58 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 11:51:07 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int	ft_search(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == c)
-			return(1);
+			return (1);
 		i++;
 	}
 	return (0);
@@ -34,217 +34,107 @@ int	counting_pipes(t_minishell *shell)
 	char	**verify_cmds;
 	int		num_words;
 
-	i = 0;
-	shell->pipes = 0;
+	i = -1;
 	ignore = 0;
 	flag = 0;
 	num_words = countwords(shell->command);
 	verify_cmds = ft_splitting(shell->command, ' ');
-	while(i < num_words)
+	while (++i < num_words)
 	{
-		if(i == 0)
-		{
-			if(string_comp(verify_cmds[i], "|") && !verify_cmds[i + 1])
-			{
-				ft_putstr_fd("Minishell: no command after or before a pipe.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-			if(ft_strrchr("<>", verify_cmds[i][0]) &&  !verify_cmds[i + 1])
-			{
-				ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-			if(string_comp(verify_cmds[i], ">>") &&  !verify_cmds[i + 1])
-			{
-				ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-			if(string_comp(verify_cmds[i], "<<") && !verify_cmds[i + 1])
-			{
-				ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-		}
+		if (i == 0)
+			if (check_pipe1(verify_cmds, i) == -1)
+				return (-1);
 		else if (i == num_words - 1)
-		{
-			if(string_comp(verify_cmds[i], "|") && (!verify_cmds[i - 1] || !verify_cmds[i + 1]))
-			{
-				ft_putstr_fd("Minishell: no command after or before a pipe.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-			if(ft_strrchr("<>", verify_cmds[i][0]) && (!verify_cmds[i - 1] || !verify_cmds[i + 1]))
-			{
-				ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-			if(string_comp(verify_cmds[i], ">>") && (!verify_cmds[i - 1] || !verify_cmds[i + 1]))
-			{
-				ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-			if(string_comp(verify_cmds[i], "<<") && !verify_cmds[i + 1])
-			{
-				ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
-				free_splited(verify_cmds);
-				return(-1);
-			}
-		}
-		i++;
+			if (check_pipe2(verify_cmds, i) == -1)
+				return (-1);
 	}
 	free_splited(verify_cmds);
 	i = 0;
-	while(shell->command[i])
+	shell_pipes_count(shell, i, flag, ignore);
+	return (shell->pipes);
+}
+
+int	check_pipe1(char **verify_cmds, int i)
+{
+	if (string_comp(verify_cmds[i], "|") && !verify_cmds[i + 1])
 	{
-		if((shell->command[i] == '"' || shell->command[i] == '\'') && !flag)
+		ft_putstr_fd("Minishell: no command after or before a pipe.\n", 2);
+		free_splited(verify_cmds);
+		return (-1);
+	}
+	if (ft_strrchr("<>", verify_cmds[i][0]) && !verify_cmds[i + 1])
+	{
+		ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
+		free_splited(verify_cmds);
+		return (-1);
+	}
+	if (string_comp(verify_cmds[i], ">>") && !verify_cmds[i + 1])
+	{
+		ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
+		free_splited(verify_cmds);
+		return (-1);
+	}
+	if (string_comp(verify_cmds[i], "<<") && !verify_cmds[i + 1])
+	{
+		ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
+		free_splited(verify_cmds);
+		return (-1);
+	}
+	return (0);
+}
+
+int	check_pipe2(char **ver_cmd, int i)
+{
+	if (string_comp(ver_cmd[i], "|") && (!ver_cmd[i - 1] || !ver_cmd[i + 1]))
+	{
+		ft_putstr_fd("Minishell: no command after or before a pipe.\n", 2);
+		free_splited(ver_cmd);
+		return (-1);
+	}
+	if (ft_strrchr("<>", ver_cmd[i][0]) && (!ver_cmd[i - 1] || !ver_cmd[i + 1]))
+	{
+		ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
+		free_splited(ver_cmd);
+		return (-1);
+	}
+	if (string_comp(ver_cmd[i], ">>") && (!ver_cmd[i - 1] || !ver_cmd[i + 1]))
+	{
+		ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
+		free_splited(ver_cmd);
+		return (-1);
+	}
+	if (string_comp(ver_cmd[i], "<<") && !ver_cmd[i + 1])
+	{
+		ft_putstr_fd("Minishell: no command after or before a redirect.\n", 2);
+		free_splited(ver_cmd);
+		return (-1);
+	}
+	return (0);
+}
+
+void	shell_pipes_count(t_minishell *shell, int i, int flag, char ignore)
+{
+	shell->pipes = 0;
+	while (shell->command[i])
+	{
+		if ((shell->command[i] == '"' || shell->command[i] == '\'') && !flag)
 		{
 			ignore = '"';
 			flag = 1;
 			i++;
 		}
-		if((shell->command[i] == '"' || shell->command[i] == '\'') && flag)
+		if ((shell->command[i] == '"' || shell->command[i] == '\'') && flag)
 		{
 			ignore = 0;
 			flag = 0;
 			i++;
-			if(shell->command[i] == '\0')
+			if (shell->command[i] == '\0')
 				break ;
 		}
-		if(shell->command[i] == '|' && !ignore)
+		if (shell->command[i] == '|' && !ignore)
 			shell->pipes++;
-		if(shell->command[i] == '\0')
+		if (shell->command[i] == '\0')
 			break ;
 		i++;
-	}
-	return(shell->pipes);
-}
-
-int	check_available_paths(t_list *env)
-{
-	t_list	*temp;
-
-	temp = env;
-	while(temp)
-	{
-		if(string_comp(((t_env *)(temp->content))->name, "PATH="))
-			return (0);
-		temp = temp->next;
-	}
-	return (1);
-}
-
-int	check_equal(char *str, int i)
-{
-	char temp;
-	int count;
-
-	count = 0;
-	temp = str[i];
-	if(temp == '\'')
-	{
-			while(str[i])
-			{
-				if (str[i] == '"')
-					return(0);
-				if (str[i] == '\'')
-					count++;
-				i++;
-			}
-			if(count % 2 == 0)
-				return (1);
-			else
-				return (-1);
-	}
-	else if(temp == '"')
-	{
-		while(str[i])
-		{
-			if (str[i] == '\'')
-				return(0);
-			if (str[i] == '"')
-				count++;
-			i++;
-		}
-		if(count % 2 == 0)
-			return (1);
-		else
-			return (-1);
-	}
-	return(0);
-}
-
-int	check_args(char **command, t_minishell *shell)
-{
-	int	i;
-	int	x;
-	int	status;
-	char	*str;
-
-	i = 1;
-	x = 0;
-	wait(&status);
-
-	while (command[i] != NULL)
-		i++;
-	if (WIFEXITED(status))
-		g_exit_status = WEXITSTATUS(status);
-	if(g_exit_status != 2)
-	{
-		if(i >= 2)
-		{
-			i = 1;
-			while(command[i])
-			{
-				if(check_exp_quotes(command[i]) == 0)
-				{
-					printf("Error in export variable, check quotes!\n");//se tiver quotes diferentes
-					return(1);
-				}
-				if(check_exp_quotes(command[i]) == -1)
-				{
-					printf("Error in export variable, quote must have their pair!\n");
-					return (1);
-				}
-				if(check_exp_quotes(command[i]) == 1)
-				{
-					str = quote_remover_exp(command[i]);
-					if(check_exp_input(str) == 0)
-					{
-						x = 1;
-						//free(str);
-						printf("minishell: export: `%s': not a valid identifier\n", str);
-					}
-					else
-						place_exp_var(shell, str);
-					free(str);
-				}
-				i++;
-			}
-		}
-	}
-	if (x == 0)
-		return (0);
-	return (1);
-}
-
-void	check_export_args(t_minishell *shell)
-{
-	int	i;
-
-	i = 0;
-	while(shell->command_args[i])
-		i++;
-	if(i == 1)
-		print_exp(shell);
-	else if(i > 1)
-	{
-		//error handling
-		return ;
 	}
 }

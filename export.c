@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:45:06 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/24 10:20:15 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 10:24:16 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ t_env	*create_exp_node(char *env)
 
 	exp_var = malloc(sizeof(t_env));
 	exp_var->name = get_exp_name(env);
-	if(ft_search(env, '=') == 0)
+	if (ft_search(env, '=') == 0)
 	{
 		exp_var->info = ft_strdup(" ");
-		return(exp_var);
+		return (exp_var);
 	}
 	exp_var->info = get_exp_info(env);
 	return (exp_var);
@@ -77,17 +77,17 @@ void	place_exp_var(t_minishell *shell, char *str)
 	value = ft_search(str, '=');
 	if (value == 0)
 	{
-		if (ft_check_dup2(shell, str) == 0)
+		if (ft_check_dup(shell, str) == 0)
 			return ;
 		else
 			ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
 		return ;
 	}
-	if(ft_check_dup(shell, str) == 1)
+	if (ft_check_dup(shell, str) == 1)
 	{
 		if (value == 1)
 		{
-			if(ft_check_exp(shell, str) == 0)
+			if (ft_check_exp(shell, str) == 0)
 			{
 				ft_lstadd_back(&shell->exp, ft_lstnew(create_exp_node(str)));
 				ft_lstadd_back(&shell->env, ft_lstnew(create_env_node(str)));

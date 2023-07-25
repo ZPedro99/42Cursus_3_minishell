@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/24 12:50:46 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 12:50:53 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,60 @@ typedef struct s_env
 	char	*info;
 }				t_env;
 
-
 //***********main***********//
 int			main(int argc, char **argv, char **envp);
 void		obtain_vars(t_minishell *shell);
 void		read_command(t_minishell *shell);
+int			read_command2(t_minishell *shell);
 char		**save_paths(char *paths);
+
+//***********main2***********//
 int			number_of_paths(char *paths);
 int			check_command(t_minishell *shell);
+int			check_command2(char **cmd_args);
+
+//***********builtins***********//
+int			builtin_check(t_minishell *sh, char **cmd_args, char *cmd);
+int			builtin_check2(t_minishell *sh, char **cmd_args, char *cmd);
+int			builtin_check_multi(t_minishell *sh, char *cmd);
+int			builtin_check_multi2(t_minishell *sh, char *cmd);
+
+//***********builtins2***********//
+void		execute_builtins(t_minishell *shell, char *command);
+void		execute_builtins_multi(t_minishell *shell, char *command);
+
+//***********cd***********//
+int			do_cd(t_minishell *shell);
+int			do_cd2(t_minishell *shell);
+void		change_env_exp(t_list *env, t_list *exp, char *o_pwd, char *n_pwd);
+void		change_exp(t_list *exp, char *old_pwd, char *new_pwd);
+char		*change_dir(t_list *env, char *str);
+
+//***********cd2***********//
+void		change_dir_home(t_minishell *shell);
+void		change_dir_minus(t_minishell *shell);
+void		change_dir_dotdot(t_minishell *shell);
+int			change_dir_rest(t_minishell *shell);
+
+//***********echo_utils***********//
+int			wordcount(char *s, char c);
+int			check_flag(char *flag);
+int			counting_quote(char *str, char c);
+int			check_dollar_sign(char *str, t_minishell *shell);
+char		*get_dup_str(char *str);
+
+//***********echo***********//
+void		print_echo(t_minishell *shell);
+int			print_echo2(t_minishell *shell);
+char		quote_checker(char *str, int i, char quote);
+char		*quote_remover(char *str);
+
+//***********echo2***********//
+int			check_closed_quotes(char *str);
+int			check_redirect(char *str);
+int			check_no_newline_flag(t_minishell *shell);
+int			echo_no_args(t_minishell *shell);
+int			echo_no_args2(t_minishell *shell, int i);
 
 //***********env***********//
 t_list		*get_env_vars(char **env);
@@ -78,6 +124,47 @@ char		**env_copy(t_list *lst);
 int			print_env(t_minishell *shell);
 void		free_temps(char *a, char *b, char *c);
 
+//***********execute***********//
+int			execute_single_cmd(t_minishell *shell, char *command);
+int			execute_multi_cmd(t_minishell *shell, char *command, int i);
+int			other_cmds(t_minishell *shell, char *command, char **command_args);
+int			e_execve(t_minishell *sh, char *cmd, char **cmd_args, char *cmd_tp);
+void		get_exapander_flags(t_minishell *shell, char *command);
+
+//***********exit_utils***********//
+int			ft_word_count(char **str);
+int			check_arg(char *str);
+long long	ft_atol(const char *str);
+
+//***********exit_utils2***********//
+char		*ft_ltoa(long long n);
+
+//***********exit***********//
+void		get_exit_status(t_minishell *shell);
+int			ft_exit_status(t_minishell *shell);
+int			exit_status2(t_minishell *shell, int count);
+int			exit_status3(t_minishell *shell);
+
+//***********expander***********//
+void		ft_expander(t_minishell *shell);
+int			expand_variable(t_minishell *shell, int i);
+void		perform_var_expansion(t_minishell *shell, int i, char *after_ds);
+char		*perform_var_expansion2(t_minishell *shell, char *after_ds);
+
+//***********expander2***********//
+char		*get_after_dollar(char *str);
+char		*get_before_dollar(char *str);
+int			check_var_true(char *str, t_minishell *shell);
+char		*var_value(char *str, t_minishell *shell);
+void		var_false(t_minishell *shell, int i, char *after_ds);
+
+//***********expander3***********//
+void		not_expand1(t_minishell *shell, int i);
+int			count_dollars(char *str);
+void		expand_multiple(t_minishell *sh, int i, int x, int start);
+char		*expand_multiple2(t_minishell *shell, char *temp, int x);
+char		*expand_multiple3(char *temp);
+
 //***********export***********//
 t_list		*get_exp_vars(char **env);
 t_env		*create_exp_node(char *env);
@@ -88,76 +175,116 @@ void		place_exp_var(t_minishell *shell, char *str);
 //***********export2***********//
 void		change_struct(t_minishell *shell, char *str);
 int			ft_check_dup(t_minishell *shell, char *str);
+int			ft_check_dup2(t_minishell *shell, char *str, char *name);
 void		change_value_exp(t_minishell *shell, char *str, char *exp_name);
-void		change_value_env(t_minishell *shell, char *str, char *name);
-int			ft_check_dup2(t_minishell *shell, char *str);
-int			ft_check_exp(t_minishell *shell, char *str);
+char		*get_temp(char *str, int i, int j);
 
 //***********export3***********//
+void		change_value_env(t_minishell *shell, char *str, char *name);
+void		change_value_env2(t_minishell *shell, char *name, char *temp);
+int			ft_check_dup3(t_minishell *shell, char *str);
+int			ft_check_dup4(t_minishell *shell, char *str);
+int			ft_check_exp(t_minishell *shell, char *str);
 
+//***********export4***********//
+int			ft_check_exp2(t_minishell *shell, char *temp2);
 void		print_exp(t_minishell *shell);
 char		**sort_exp(t_list *lst, t_list *head);
+char		**sort_exp2(char **exp_array, int i, int size);
 int			check_exp_quotes(char *original);
+
+//***********export5***********//
 int			check_exp_input(char *str);
+int			check_exp_input2(char *temp);
 char		*quote_remover_exp(char *original);
+char		*quote_remover_exp2(char *str, char temp);
 
 //***********free***********//
 void		free_env(t_list *lst);
 void		free_export(t_list *lst);
 void		free_export1(t_list *lst);
 void		free_struct(t_minishell *shell);
+void		free_struct_multi(t_minishell *shell);
+
+//***********free2***********//
+void		free_struct_spaces(t_minishell *shell);
 void		free_splited(char **array);
 void		free_copies(char **copy);
 void		free_eof(t_minishell *shell);
-void		free_struct_multi(t_minishell *shell);
-void		free_child_process(t_minishell *shell, char **cmd_args, char *command);
-void		free_child_process_multi(t_minishell *shell, char *command);
+int			free_child_p(t_minishell *shell, char **cmd_args, char *command);
 
-//***********execute***********//
-int			execute_single_cmd(t_minishell *shell, char *command);
-int			execute_multi_cmd(t_minishell *shell, char *command, int i);
-int			other_commands(t_minishell *shell, char *command, char **command_args);
-char		*remove_quotes(char *command);
-void		get_exapander_flags(t_minishell *shell, char *command);
+//***********free2***********//
+int			free_child_process_multi(t_minishell *shell, char *command);
+
+//***********multi_commands***********//
+int			multi_commands(t_minishell *shell);
+int			pipe_creation(t_minishell *shell);
+void		through_pipes(t_minishell *shell, int i);
+void		pipe_closing(t_minishell *shell);
+char		*remove_last_space(char *str);
 
 //***********pwd***********//
 void		print_pwd(t_minishell *shell);
 
-//***********echo***********//
-void		print_echo(t_minishell *shell);
-int			print_echo2(t_minishell *shell);
-char		quote_checker(char *str, int i, char quote);
-char		*quote_remover(char *str);
+//***********redirects***********//
+char		**handle_redirects(t_minishell *shell, char *command);
+int			redirect_output(int i, char **args);
+int			redirect_input(int i, char **args);
+int			redirect_append(int i, char **args);
+int			here_doc(char *delimiter);
 
+//***********redirects2***********//
+char		**place_null(int i, int num_words, char **command_args);
+void		handle_output(t_minishell *sh, int i, char **cmd_args, char *cmd);
+void		handle_input(t_minishell *sh, int i, char **cmd_args, char *cmd);
+void		handle_append(t_minishell *sh, int i, char **cmd_args, char *cmd);
+void		handle_heredoc(t_minishell *sh, int i, char **cmd_args, char *cmd);
 
-//***********echo2***********//
-int			check_closed_quotes(char *str);
-int			check_redirect(char *str);
-int			check_no_newline_flag(t_minishell *shell);
-int			echo_no_args(t_minishell *shell);
-int			echo_no_args2(t_minishell *shell, int i);
+//***********redirects3***********//
+void		double_sign(t_minishell *shell, int i, char **cmd_args, char *cmd);
+void		redirect(t_minishell *shell);
 
-//***********echo_utils***********//
-int			wordcount(char *s, char c);
-int			check_flag(char *flag);
-int			counting_quote(char *str, char c);
-int			check_dollar_sign(char *str, t_minishell *shell);
-char		*get_dup_str(char *str);
+//***********signals***********//
+void		handle_signals(void);
+void		sighand(int signal);
+void		sigint_on_child(int signal);
+void		signal_default(void);
 
-//***********cd***********//
-int			do_cd(t_minishell *shell);
-int			do_cd2(t_minishell *shell);
-void		change_env_and_exp(t_list *env, t_list *exp, char *old_pwd, char *new_pwd);
-void		change_exp(t_list *exp, char *old_pwd, char *new_pwd);
-char		*change_dir(t_list *env, char *str);
+//***********single_command***********//
 
-//***********cd2***********//
-void		change_dir_home(t_minishell *shell);
-void		change_dir_minus(t_minishell *shell);
-void		change_dir_dotdot(t_minishell *shell);
-int			change_dir_rest(t_minishell *shell);
+int			single_command(t_minishell *shell);
+int			single_command2(t_minishell *shell, char *command);
+char		**remove_redirs(char *command, t_minishell *shell);
+int			check_closed(t_minishell *shell, int i, char **com_args);
+char		quote_value(char c, char quote);
+
+//***********single_command2***********//
+
+char		**ft_splitting(char *command, char delimiter);
+int			countwords(char *str);
+int			ft_wordcount_meta(char *str, char c);
+static int	ft_wordlen(char *str, char c);
+
+//***********single_command3***********//
+
+char		*whitespaces(char *str);
+char		*whitespaces2(char *new_str, char *str, int *i, int *j);
+int			strlength(char *str);
+int			check_quotes_on_args(char **args, t_minishell *shell);
+void		quote_on_expander(char *arg, int i, t_minishell *shell);
+
+//***********unset***********//
+void		do_unset(t_minishell *shell);
+int			only_exp(char *str, t_minishell *shell);
+void		unset_env(t_minishell *shell, t_list *temp, int i);
+void		unset_exp(t_minishell *shell, t_list *temp, int i);
+void		unset_only_exp(t_minishell *shell, t_list *temp, int i);
+
+//***********unset2***********//
+char		*adjust_name_env(char *str);
+char		*adjust_name_exp(char *str);
+
 //***********utils***********//
-
 int			string_comp(char *s1, char *s2);
 int			len_compare(char *s1, char *s2);
 char		*join_quotes(char *str);
@@ -171,90 +298,5 @@ int			check_available_paths(t_list *env);
 int			check_equal(char *str, int i);
 int			check_args(char **command, t_minishell *shell);
 void		check_export_args(t_minishell *shell);
-
-//***********unset***********//
-
-void		do_unset(t_minishell *shell);
-int			only_exp(char *str, t_minishell *shell);
-char		*adjust_name_exp(char *str);
-char		*adjust_name_env(char *str);
-void		unset_env(t_minishell *shell, t_list *temp, int i);
-void		unset_exp(t_minishell *shell, t_list *temp, int i);
-void		unset_only_exp(t_minishell *shell, t_list *temp, int i);
-
-
-//***********signals***********//
-
-void		handle_signals(void);
-void		sighand(int signal);
-void		sigint_on_child(int signal);
-void		signal_default(void);
-
-//***********exit***********//
-void		get_exit_status(t_minishell *shell);
-int			ft_exit_status(t_minishell *shell);
-int			exit_status2(t_minishell *shell, int count);
-int			exit_status3(t_minishell *shell);
-
-//***********exit_utils***********//
-int			ft_word_count(char **str);
-int			check_arg(char *str);
-long long	ft_atol(const char *str);
-
-//***********exit_utils2***********//
-char		*ft_ltoa(long long n);
-
-//***********multi_commands***********//
-
-int			multi_commands(t_minishell *shell);
-int			pipe_creation(t_minishell *shell);
-void		through_pipes(t_minishell *shell, int i);
-void		pipe_closing(t_minishell *shell);
-char		*remove_last_space(char *str);
-
-//***********single_commands***********//
-int			single_command(t_minishell *shell);
-char		**ft_splitting(char *command, char delimiter);
-int			countwords(char *str);
-char		**remove_redirs(char *command, t_minishell *shell);
-char		*whitespaces(char *str);
-int			strlength(char *str);
-int			check_quotes_on_args(char **args, t_minishell *shell);
-int			ft_wordcount_meta(char *str, char c);
-char		quote_value(char c, char quote);
-void		quote_on_expander(char *arg, int i, t_minishell *shell);
-
-//***********redirects***********//
-char		**handle_redirects(t_minishell *shell, char *command);
-int			redirect_output(int i, char **args);
-int			redirect_input(int i, char **args);
-int			redirect_append(int i, char **args);
-int			here_doc(char *delimiter);
-void		redirect(t_minishell *shell);
-
-//***********expander***********//
-void		ft_expander(t_minishell *shell);
-int			expand_variable(t_minishell *shell, int i);
-void		perform_variable_expansion(t_minishell *shell, int i, char *after_ds);
-void		expand_multiple(t_minishell *shell, int i);
-char		*continue_expanding(char *temp, char *temp2, char *return_str, int x);
-
-//***********expander2***********//
-char		*get_after_dollar(char *str);
-char		*get_before_dollar(char *str);
-int			check_var_true(char *str, t_minishell *shell);
-char		*var_value(char *str, t_minishell *shell);
-char		*obtain_return_str(char *temp, char *temp2, char *return_str);
-
-//***********expander3***********//
-int			count_dollars(char *str);
-char		*perform_variable_expansion2(t_minishell *shell, char *after_ds);
-void		not_expand1(t_minishell *shell, int i);
-int			check_expand_es(t_minishell *shell, int i);
-
-//***********builtins***********//
-int			builtin_check(t_minishell *sh, char **cmd_args, char *cmd);
-void		execute_builtins(t_minishell *shell, char *command);
-void		execute_builtins_multi(t_minishell *shell, char *command);
 
 #endif

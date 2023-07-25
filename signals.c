@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:05:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/24 11:16:43 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:51:47 by emsoares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	handle_signals(void)
 {
-	struct	sigaction	sa;
+	struct sigaction	sa;
 
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
@@ -35,6 +35,7 @@ void	sighand(int signal)
 		g_exit_status = 130;
 	}
 }
+
 void	sigint_on_child(int signal)
 {
 	if (signal == SIGINT)
@@ -44,6 +45,7 @@ void	sigint_on_child(int signal)
 		rl_replace_line("", 0);
 	}
 }
+
 void	signal_default(void)
 {
 	signal(SIGINT, SIG_DFL);
