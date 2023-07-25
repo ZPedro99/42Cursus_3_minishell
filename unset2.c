@@ -6,11 +6,11 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 10:37:27 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 12:24:55 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:15:02 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mminishell.h"
+#include "minishell.h"
 
 char	*adjust_name_env(char *str)
 {

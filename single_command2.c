@@ -6,25 +6,11 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 10:44:43 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 12:49:49 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:13:26 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*get_word(char *s, char c, char **words)
-{
-	char	quote;
-
-	quote = 0;
-	*words = ft_substr(s, 0, ft_wordlen(s, c));
-	while ((*s && *s != c) || (*s && quote))
-	{
-		quote = quote_value(*s, quote);
-		s++;
-	}
-	return (s);
-}
 
 static int	ft_wordlen(char *str, char c)
 {
@@ -39,6 +25,20 @@ static int	ft_wordlen(char *str, char c)
 		i++;
 	}
 	return (i);
+}
+
+static char	*get_word(char *s, char c, char **words)
+{
+	char	quote;
+
+	quote = 0;
+	*words = ft_substr(s, 0, ft_wordlen(s, c));
+	while ((*s && *s != c) || (*s && quote))
+	{
+		quote = quote_value(*s, quote);
+		s++;
+	}
+	return (s);
 }
 
 char	**ft_splitting(char *command, char delimiter)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:41:59 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 11:53:39 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:22:40 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	check_args(char **command, t_minishell *shell)
 
 	i = 1;
 	x = 0;
+	str = 0;
 	wait(&status);
 	while (command[i] != NULL)
 		i++;
@@ -95,7 +96,7 @@ int	check_args(char **command, t_minishell *shell)
 	return (1);
 }
 
-int	check_args2(int *x, char *cmd, char *str, t_minishell *shell)
+int	check_args2(int *x, char **cmd, char *str, t_minishell *shell)
 {
 	int	i;
 

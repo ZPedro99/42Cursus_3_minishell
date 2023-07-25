@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_command3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 10:45:13 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 10:52:23 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:14:46 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*whitespaces(char *str)
 		else if ((str[i] == '\'' || str[i] == '"') && quote == str[i])
 			quote = 0;
 		if (!quote && (str[i] == '>' || str[i] == '<'))
-			new_str = whitespace2(new_str, str, &i, &j);
+			new_str = whitespaces2(new_str, str, &i, &j);
 		new_str[j] = str[i];
 		j++;
 		i++;

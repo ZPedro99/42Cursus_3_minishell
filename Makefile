@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/07/25 12:43:11 by jomirand         ###   ########.fr        #
+#    Updated: 2023/07/25 16:33:41 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,10 @@ CFLAGS = -Wall -Wextra -Werror
 RFLAG = -lreadline
 RM = rm -rf
 LIBFT = ./libft/libft.a
-SRCS = builtins.c \
+
+SRCS = main.c \
+		builtins.c \
+		builtins2.c \
 		cd.c \
 		cd2.c \
 		echo_utils.c \
@@ -39,7 +42,6 @@ SRCS = builtins.c \
 		free.c \
 		free2.c \
 		free3.c \
-		main.c \
 		main2.c \
 		multi_commands.c \
 		pwd.c \

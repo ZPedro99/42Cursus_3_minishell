@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 12:50:53 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:33:27 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,6 @@ char		quote_value(char c, char quote);
 char		**ft_splitting(char *command, char delimiter);
 int			countwords(char *str);
 int			ft_wordcount_meta(char *str, char c);
-static int	ft_wordlen(char *str, char c);
 
 //***********single_command3***********//
 
@@ -294,9 +293,19 @@ char		*get_prompt2(int i, int j, char *temp);
 //***********utils2***********//
 int			ft_search(char *str, char c);
 int			counting_pipes(t_minishell *shell);
+int			check_pipe1(char **verify_cmds, int i);
+int			check_pipe2(char **ver_cmd, int i);
+void		shell_pipes_count(t_minishell *shell, int i, int flag, char ignore);
+
+//***********utils3***********//
 int			check_available_paths(t_list *env);
 int			check_equal(char *str, int i);
+int			check_equal2(char *str, int i, int count);
 int			check_args(char **command, t_minishell *shell);
-void		check_export_args(t_minishell *shell);
+int			check_args2(int *x, char **cmd, char *str, t_minishell *shell);
+
+//***********utils4***********//
+void	check_export_args(t_minishell *shell);
+
 
 #endif

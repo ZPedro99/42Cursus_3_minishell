@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 11:51:07 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:16:47 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,15 @@ int	counting_pipes(t_minishell *shell)
 	while (++i < num_words)
 	{
 		if (i == 0)
+		{
 			if (check_pipe1(verify_cmds, i) == -1)
 				return (-1);
+		}
 		else if (i == num_words - 1)
+		{
 			if (check_pipe2(verify_cmds, i) == -1)
 				return (-1);
+		}
 	}
 	free_splited(verify_cmds);
 	i = 0;
