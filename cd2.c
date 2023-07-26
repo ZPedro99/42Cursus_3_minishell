@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 15:00:18 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 12:46:17 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:59:04 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	change_dir_rest(t_minishell *shell)
 	if (chdir(shell->command_args[1]) == -1)
 	{
 		printf("%s: No such file or directory\n", shell->command_args[1]);
+		g_exit_status = 1;
+		shell->exit_flag = 1;
 		return (1);
 	}
 	free(shell->pwd);

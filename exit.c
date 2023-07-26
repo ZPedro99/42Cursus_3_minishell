@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 12:17:30 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/24 15:41:10 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:48:00 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,21 @@ int	exit_status2(t_minishell *shell, int count)
 	{
 		printf("exit\n");
 		g_exit_status = 0;
-		return (g_exit_status);
+		return (0);
 	}
 	if (check_arg(shell->command_args[1]) == 0)
 	{
 		printf("exit\n");
 		ft_putstr_fd("minishell: numeric argument required\n", 2);
 		g_exit_status = 2;
-		return (g_exit_status);
+		return (0);
 	}
 	if (count > 2)
 	{
 		printf("exit\n");
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_exit_status = 1;
-		return (g_exit_status);
+		return (1);
 	}
 	else
 		return (exit_status3(shell));
@@ -83,11 +83,11 @@ int	exit_status3(t_minishell *shell)
 		ft_putstr_fd("minishell: numeric argument required\n", 2);
 		g_exit_status = 2;
 		free(str);
-		return (g_exit_status);
+		return (0);
 	}
 	free(str);
 	printf("exit\n");
 	num = ft_atol(shell->command_args[1]);
 	g_exit_status = (num % 256);
-	return (g_exit_status);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emsoares <emsoares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 11:54:14 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/24 16:43:11 by emsoares         ###   ########.fr       */
+/*   Updated: 2023/07/26 09:30:42 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	free_struct(t_minishell *shell)
 	free(shell->old_pwd);
 	free(shell->home);
 	free_export(shell->exp);
+	free_env(shell->env);
 }
 
 void	free_struct_multi(t_minishell *shell)

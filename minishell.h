@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 16:33:27 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:13:35 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_minishell
 	char	**command_args;
 	pid_t	*pid;
 	int		*expander_flags;
+	int		exit_flag;
 }				t_minishell;
 
 typedef struct s_env
@@ -241,7 +242,7 @@ void		handle_append(t_minishell *sh, int i, char **cmd_args, char *cmd);
 void		handle_heredoc(t_minishell *sh, int i, char **cmd_args, char *cmd);
 
 //***********redirects3***********//
-void		double_sign(t_minishell *shell, int i, char **cmd_args, char *cmd);
+char		**double_sign(t_minishell *sh, int i, char **cmd_args, char *cmd);
 void		redirect(t_minishell *shell);
 
 //***********signals***********//
@@ -305,7 +306,7 @@ int			check_args(char **command, t_minishell *shell);
 int			check_args2(int *x, char **cmd, char *str, t_minishell *shell);
 
 //***********utils4***********//
-void	check_export_args(t_minishell *shell);
-
+void		check_export_args(t_minishell *shell);
+int			check_pipe(int i, char **verify_cmds, int num_words);
 
 #endif

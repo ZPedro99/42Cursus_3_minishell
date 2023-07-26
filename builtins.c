@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 11:03:13 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 12:45:44 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 10:17:13 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	builtin_check(t_minishell *sh, char **cmd_args, char *cmd)
 	}
 	if (string_comp(sh->command_args[0], "pwd"))
 	{
+		print_pwd(sh);
 		free_child_p(sh, cmd_args, cmd);
 		exit(0);
 	}

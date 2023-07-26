@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 11:33:53 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:51:29 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,16 @@ char	**handle_redirects(t_minishell *shell, char *command)
 		if (string_comp(command_args[i], ">"))
 		{
 			handle_output(shell, i, command_args, command);
-			place_null(i, num_words, command_args);
+			return (place_null(i, num_words, command_args), command_args);
 		}
 		if (string_comp(command_args[i], "<"))
 		{
 			handle_input(shell, i, command_args, command);
-			place_null(i, num_words, command_args);
+			return (place_null(i, num_words, command_args), command_args);
 		}
-		double_sign(shell, i, command_args, command);
+		command_args = double_sign(shell, i, command_args, command);
+		if (!command_args[i])
+			return (command_args);
 	}
 	return (command_args);
 }

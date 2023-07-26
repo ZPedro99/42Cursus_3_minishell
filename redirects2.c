@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 10:48:09 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 12:48:27 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 09:27:16 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**place_null(int i, int num_words, char **command_args)
 		command_args[i] = 0;
 		return (command_args);
 	}
-	return(command_args);
+	return (command_args);
 }
 
 void	handle_output(t_minishell *sh, int i, char **cmd_args, char *cmd)

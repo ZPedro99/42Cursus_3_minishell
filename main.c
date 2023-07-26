@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/25 11:27:11 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:45:09 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	read_command(t_minishell *shell)
 		shell->pipes = 0;
 		shell->stdin_fd = 0;
 		shell->stdout_fd = 1;
+		shell->exit_flag = 0;
 		handle_signals();
 		shell->command = readline(shell->prompt);
 		add_history(shell->command);

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:47:25 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 16:16:47 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 09:48:40 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,12 @@ int	counting_pipes(t_minishell *shell)
 	i = -1;
 	ignore = 0;
 	flag = 0;
-	num_words = countwords(shell->command);
+	num_words = ft_wordcount_meta(shell->command, ' ');
 	verify_cmds = ft_splitting(shell->command, ' ');
 	while (++i < num_words)
 	{
-		if (i == 0)
-		{
-			if (check_pipe1(verify_cmds, i) == -1)
-				return (-1);
-		}
-		else if (i == num_words - 1)
-		{
-			if (check_pipe2(verify_cmds, i) == -1)
-				return (-1);
-		}
+		if (check_pipe(i, verify_cmds, num_words) == -1)
+			return (-1);
 	}
 	free_splited(verify_cmds);
 	i = 0;
