@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:37:53 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/26 12:13:35 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 17:35:01 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_minishell
 	pid_t	*pid;
 	int		*expander_flags;
 	int		exit_flag;
+	int		expander_flag;
 }				t_minishell;
 
 typedef struct s_env
@@ -165,6 +166,11 @@ int			count_dollars(char *str);
 void		expand_multiple(t_minishell *sh, int i, int x, int start);
 char		*expand_multiple2(t_minishell *shell, char *temp, int x);
 char		*expand_multiple3(char *temp);
+
+//***********expander4***********//
+char		*join_vars(t_minishell *shell, char *initial_str, char *return_str);
+int			obtain_end(t_minishell *sh, int i, int *st);
+void		expand_multiple_end(t_minishell *sh, int i, char *return_str);
 
 //***********export***********//
 t_list		*get_exp_vars(char **env);

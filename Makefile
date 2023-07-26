@@ -6,7 +6,7 @@
 #    By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/19 15:54:12 by emsoares          #+#    #+#              #
-#    Updated: 2023/07/25 16:33:41 by jomirand         ###   ########.fr        #
+#    Updated: 2023/07/26 14:28:28 by jomirand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS = main.c \
 		expander.c \
 		expander2.c \
 		expander3.c \
+		expander4.c \
 		export.c \
 		export2.c \
 		export3.c \

@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:17:01 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 10:05:16 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 17:35:54 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	check_var_true(char *str, t_minishell *shell)
 	t_list	*head;
 	char	*temp;
 
+	if (str[0] == '?')
+		return (1);
 	temp = ft_strjoin(str, "=");
 	head = shell->env;
 	while (head)

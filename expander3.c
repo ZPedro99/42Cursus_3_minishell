@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 10:07:23 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/26 12:54:47 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 17:35:07 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,28 @@ void	expand_multiple(t_minishell *sh, int i, int x, int st)
 	int		end;
 	char	*temp;
 	char	*return_str;
+	char	*temp_str;
 
 	return_str = 0;
+	sh->expander_flag = 0;
 	while (sh->command_args[i][st] != '\0')
 	{
-		while (sh->command_args[i][st] != '$' && sh->command_args[i][st])
-			st++;
-		if (sh->command_args[i][st] != '\0')
-			st++;
-		end = st;
+		end = obtain_end(sh, i, &st);
 		while (sh->command_args[i][end] != '$' && sh->command_args[i][end])
 			end++;
 		temp = ft_substr(sh->command_args[i], st, end - st);
-		if (check_var_true(temp, sh) == 0)
-			return_str = expand_multiple3(temp);
+		if (check_var_true(temp, sh) == 1)
+			temp_str = expand_multiple2(sh, temp, x);
 		else
-			return_str = expand_multiple2(sh, temp, x);
+		{
+			sh->expander_flag++;
+			free(temp);
+			continue ;
+		}
 		st = end;
+		return_str = join_vars(sh, temp_str, return_str);
 	}
-	free(sh->command_args[i]);
-	sh->command_args[i] = ft_strdup(return_str);
-	free(return_str);
+	expand_multiple_end(sh, i, return_str);
 }
 
 char	*expand_multiple2(t_minishell *shell, char *temp, int x)
@@ -72,6 +73,8 @@ char	*expand_multiple2(t_minishell *shell, char *temp, int x)
 	char	*temp2;
 
 	return_str = 0;
+	if (temp[0] == '?')
+		return (free(temp), ft_itoa(g_exit_status));
 	if (x == 0)
 	{
 		x = 1;

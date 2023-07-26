@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 15:23:20 by jomirand          #+#    #+#             */
-/*   Updated: 2023/07/26 12:51:29 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 15:38:57 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	redirect_output(int i, char **args)
 	int		file_fd;
 	char	*temp;
 
+	if (!args[i + 1])
+		return (1);
 	if (check_closed_quotes(args[i + 1]) == 1)
 	{
 		temp = quote_remover(args[i + 1]);

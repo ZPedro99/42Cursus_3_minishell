@@ -6,7 +6,7 @@
 /*   By: jomirand <jomirand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 10:10:24 by emsoares          #+#    #+#             */
-/*   Updated: 2023/07/25 12:36:40 by jomirand         ###   ########.fr       */
+/*   Updated: 2023/07/26 16:41:59 by jomirand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	expand_variable(t_minishell *shell, int i)
 	{
 		free(after_ds);
 		expand_multiple(shell, i, 0, 0);
+		shell->expander_flag = 0;
 	}
 	else if (check_var_true(after_ds, shell) == 0)
 		return (var_false(shell, i, after_ds), -1);
