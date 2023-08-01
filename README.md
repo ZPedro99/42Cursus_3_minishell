@@ -10,6 +10,8 @@ Made together with [ZPedro99](https://github.com/ZPedro99).
 
 ## Little Demo On How The Project Works
 
+![ezgif com-video-to-gif](https://github.com/RafaSoares1/42Cursus_3_minishell/assets/103336451/28a81b0a-5da0-4c5a-b92f-7b5bf87cea95)
+
 ## Main Goal
 
 This project was a significant milestone for me, representing both the most extensive undertaking and my initial experience working collaboratively within a group.<br />
