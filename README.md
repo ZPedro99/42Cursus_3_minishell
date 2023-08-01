@@ -8,6 +8,8 @@ Made together with [ZPedro99](https://github.com/ZPedro99).
 
 ⚠️***This is Minishell and not Bash 2.0, it is possible to find small errors in the project***⚠️
 
+## Little Demo On How The Project Works
+
 ## Main Goal
 
 This project was a significant milestone for me, representing both the most extensive undertaking and my initial experience working collaboratively within a group.<br />
