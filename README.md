@@ -6,6 +6,8 @@ Welcome to the realm of shells with MiniShell, your gateway to the world of text
 This was without any doubt the most challenging project so far, because Shelly encompass distinct and well-defined behaviors in nearly every scenario, demanding careful handling.
 Made together with [ZPedro99](https://github.com/ZPedro99).
 
+⚠️***This is Minishell and not Bash 2.0, it is possible to find small errors in the project***⚠️
+
 ## Main Goal
 
 This project was a significant milestone for me, representing both the most extensive undertaking and my initial experience working collaboratively within a group.<br />
@@ -52,3 +54,16 @@ Here's how Bash works:
 6. **Scripting**: Bash is not limited to interactive use; it also supports scripting. Users can write scripts, which are essentially a sequence of commands saved in a file with the ".sh" extension. These scripts can be executed just like any other command, and they enable users to automate tasks and create more complex sequences of actions.
 
 In summary, Bash is a powerful and versatile shell that facilitates interaction with the operating system and allows users to perform a wide range of tasks, from simple command execution to complex scripting and automation. It provides a foundational layer for many system administration tasks, programming, and software development on Unix-based systems.
+
+## Installation
+
+After cloning the repository, the program is compiled into a ***minishell*** executable using:
+```sh
+make 
+```
+or
+```sh
+make all
+```
+## Final Grade
+![Screenshot 2023-08-01 at 13-57-37 Intra Projects minishell](https://github.com/RafaSoares1/42Cursus_3_minishell/assets/103336451/6c3d244e-fa29-4001-8972-0b5a66a0050b)
