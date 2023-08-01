@@ -32,3 +32,23 @@ Throughout the process, we delved into understanding how bash handles arguments,
 
 ## What is Shell an how does it work?
 
+For the realisation of the project we have used this [guide](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf) several times to help us in the construction of our project.<br />
+But in a summarised way, the Shell Bash, often referred to simply as Bash, is a Unix shell and command language. It is the default shell for most Linux distributions and macOS systems, and it is also available on various other Unix-based operating systems. Bash stands for "Bourne Again SHell," a pun on "Bourne Shell," which was an earlier Unix shell.<br />
+
+At its core, Bash is a command-line interface that allows users to interact with the operating system through textual commands. It acts as an intermediary between the user and the operating system, accepting user input (commands) and translating them into actions that the operating system can execute.
+
+Here's how Bash works:
+
+1. **Command Interpretation**: When you open a terminal or command prompt and type a command, Bash reads that input and interprets it. The command can be a simple one-liner like "ls" to list files in the current directory or a more complex script with multiple commands and logic.
+
+2. **Parsing and Tokenization**: Bash parses the input command, breaking it down into individual components or tokens. It separates the command and its arguments, identifies special characters like pipes (|) for creating pipelines, input/output redirection symbols (<, >), and other elements that affect how the command is executed.
+
+3. **Command Execution**: After parsing and tokenization, Bash identifies the appropriate command to execute based on the input. If it is a built-in command (e.g., cd for changing directories), Bash handles it directly. If it is an external command (e.g., ls, grep, etc.), Bash searches for the executable binary in the directories listed in the system's PATH variable and then launches the corresponding program.
+
+4. **I/O Redirection and Pipelines**: Bash manages input/output redirection and pipelines. For instance, when you use ">" to redirect the output of a command to a file, or ">>" to append output to a file, Bash handles these operations. Similarly, when you use "|" to connect multiple commands together, forming a pipeline, Bash manages the flow of data between them.
+
+5. **Environment Variables**: Bash allows users to set and access environment variables. These variables store information that can be used by the shell or by programs executed from the shell. Environment variables help configure the shell's behavior and provide useful information like the current working directory (PWD), user information (USER), and more.
+
+6. **Scripting**: Bash is not limited to interactive use; it also supports scripting. Users can write scripts, which are essentially a sequence of commands saved in a file with the ".sh" extension. These scripts can be executed just like any other command, and they enable users to automate tasks and create more complex sequences of actions.
+
+In summary, Bash is a powerful and versatile shell that facilitates interaction with the operating system and allows users to perform a wide range of tasks, from simple command execution to complex scripting and automation. It provides a foundational layer for many system administration tasks, programming, and software development on Unix-based systems.
